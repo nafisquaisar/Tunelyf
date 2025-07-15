@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".Activity.PrivacyPolicy">
+
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/settingtoolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/toolbarbg"
+        app:title="Privacy Policy"
+        app:titleTextColor="@color/white"
+        app:navigationIcon="@drawable/back_arrow"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Scrollable Content -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/privacyScroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@android:color/white"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/settingtoolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/privacyTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TuneLyf – Privacy Policy"
+                android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:paddingBottom="8dp"/>
+
+            <!-- Effective Date -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Effective Date: July 12, 2025"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                android:textColor="#555555"
+                android:gravity="center"
+                android:paddingBottom="16dp" />
+
+            <!-- 1 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1. Information We Collect"
+                style="@style/TextAppearance.Material3.TitleMedium"
+                android:textStyle="bold"
+                android:paddingTop="12dp"
+                android:paddingBottom="4dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="We collect the following personal information when you register or sign in to the app:"
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:paddingBottom="4dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="• Full Name\n• Email Address\n• Mobile Number (optional)\n• Password (encrypted)\n• Google Account Info (if using Google Sign-In)\n\nWe do not collect or store any sensitive information beyond what is required to provide the core features of the app."
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:paddingBottom="12dp" />
+
+            <!-- 2 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="2. How We Use Your Information"
+                style="@style/TextAppearance.Material3.TitleMedium"
+                android:textStyle="bold"
+                android:paddingTop="12dp"
+                android:paddingBottom="4dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Your information is used to:"
+                style="@style/TextAppearance.Material3.BodyMedium" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="• Authenticate your login (email/password or Google)\n• Personalize your experience (favorites, playlists)\n• Maintain your account and playback preferences\n• Allow you to delete your data when requested\n\nWe do not share, sell, or rent your personal data to any third parties."
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:paddingBottom="12dp" />
+
+            <!-- 3 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="3. Data Storage &amp; Security"
+                style="@style/TextAppearance.Material3.TitleMedium"
+                android:textStyle="bold"
+                android:paddingTop="12dp"
+                android:paddingBottom="4dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="We use Firebase Authentication and Firebase Realtime Database or Firestore to store and manage user data securely.\n\nPasswords are encrypted and never stored in plain text."
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:paddingBottom="12dp" />
+
+            <!-- 4 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="4. Third-Party Services"
+                style="@style/TextAppearance.Material3.TitleMedium"
+                android:textStyle="bold"
+                android:paddingTop="12dp"
+                android:paddingBottom="4dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="We use the Audius API to stream music content. While we do not collect or store any music files, please note:"
+                style="@style/TextAppearance.Material3.BodyMedium" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="• All songs are streamed via the Audius platform\n• We do not claim ownership over any music content\n• Usage of this app implies acceptance of Audius’ content licenses and streaming limitations\n• We do not use any third-party analytics or advertising services at this time."
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:paddingBottom="12dp" />
+
+            <!-- 5 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="5. Account Deletion"
+                style="@style/TextAppearance.Material3.TitleMedium"
+                android:textStyle="bold"
+                android:paddingTop="12dp"
+                android:paddingBottom="4dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="You may request to delete your account  by contacting us at:\n\n📧 tunelyfmusic@gmail.com"
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:paddingBottom="12dp" />
+
+            <!-- 6 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="6. Children's Privacy"
+                style="@style/TextAppearance.Material3.TitleMedium"
+                android:textStyle="bold"
+                android:paddingTop="12dp"
+                android:paddingBottom="4dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="This app is not intended for children under the age of 13. If you are under 13, please do not use this app or provide any personal information."
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:paddingBottom="12dp" />
+
+            <!-- 7 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="7. Changes to this Privacy Policy"
+                style="@style/TextAppearance.Material3.TitleMedium"
+                android:textStyle="bold"
+                android:paddingTop="12dp"
+                android:paddingBottom="4dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="We may update this policy occasionally. All changes will be notified through the app or via email (if applicable). Continued use of the app implies agreement with the latest version of the policy."
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:paddingBottom="12dp" />
+
+            <!-- 8 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="8. Contact Us"
+                style="@style/TextAppearance.Material3.TitleMedium"
+                android:textStyle="bold"
+                android:paddingTop="12dp"
+                android:paddingBottom="4dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="If you have any questions about this Privacy Policy or your data, please contact us at:\n\n📧 tunelyfmusic@gmail.com"
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:paddingBottom="24dp" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

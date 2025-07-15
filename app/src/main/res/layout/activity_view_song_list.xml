@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.ViewSongListActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/hometoolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/toolbarbg"
+        app:layout_collapseMode="pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:titleTextColor="@color/white" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:text="song"
+        android:textSize="@dimen/_18sdp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/hometoolbar"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/musicListRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:clipToPadding="false"
+        android:visibility="gone"
+        android:paddingBottom="72dp"
+        app:layout_constraintTop_toBottomOf="@id/textView2"
+        app:layout_constraintBottom_toTopOf="@id/bottomLoader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/music_layout" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/emptyAnimation"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="24dp"
+        android:visibility="gone"
+        app:lottie_rawRes="@raw/musicanimation"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:layout_constraintTop_toBottomOf="@id/textView2"
+        app:layout_constraintBottom_toTopOf="@id/bottomLoader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:shimmer_auto_start="true"
+        app:shimmer_duration="1000">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:orientation="vertical">
+
+            <!-- 🎵 Shimmer Item 1 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/shimmer_background"
+                android:padding="8dp">
+
+                <!-- 🎵 Icon Placeholder -->
+                <View
+                    android:id="@+id/shimmerIcon"
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- 📝 Title -->
+                <View
+                    android:id="@+id/shimmerTitle"
+                    android:layout_width="150dp"
+                    android:layout_height="12dp"
+                    android:layout_marginStart="12dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintStart_toEndOf="@id/shimmerIcon"
+                    app:layout_constraintTop_toTopOf="@id/shimmerIcon" />
+
+                <!-- 🗒 Subtitle -->
+                <View
+                    android:id="@+id/shimmerSubtitle"
+                    android:layout_width="100dp"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintStart_toStartOf="@id/shimmerTitle"
+                    app:layout_constraintTop_toBottomOf="@id/shimmerTitle" />
+
+                <!-- ⏱ Duration -->
+                <View
+                    android:id="@+id/shimmerDuration"
+                    android:layout_width="32dp"
+                    android:layout_height="10dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/shimmerTitle" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- 🎵 Shimmer Item 2 (Repeat this block as needed) -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/shimmer_background"
+                android:padding="8dp">
+
+                <View
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="150dp"
+                    android:layout_height="12dp"
+                    android:layout_marginStart="12dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintStart_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="100dp"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="parent" />
+
+                <View
+                    android:layout_width="32dp"
+                    android:layout_height="10dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- 🎵 Shimmer Item 3 (Repeat this block as needed) -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/shimmer_background"
+                android:padding="8dp">
+
+                <View
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="150dp"
+                    android:layout_height="12dp"
+                    android:layout_marginStart="12dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintStart_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="100dp"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="parent" />
+
+                <View
+                    android:layout_width="32dp"
+                    android:layout_height="10dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- 🎵 Shimmer Item 4 (Repeat this block as needed) -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/shimmer_background"
+                android:padding="8dp">
+
+                <View
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="150dp"
+                    android:layout_height="12dp"
+                    android:layout_marginStart="12dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintStart_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="100dp"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="parent" />
+
+                <View
+                    android:layout_width="32dp"
+                    android:layout_height="10dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- 🎵 Shimmer Item 5 (Repeat this block as needed) -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/shimmer_background"
+                android:padding="8dp">
+
+                <View
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="150dp"
+                    android:layout_height="12dp"
+                    android:layout_marginStart="12dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintStart_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="100dp"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="parent" />
+
+                <View
+                    android:layout_width="32dp"
+                    android:layout_height="10dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- 🎵 Shimmer Item 6 (Repeat this block as needed) -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/shimmer_background"
+                android:padding="8dp">
+
+                <View
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="150dp"
+                    android:layout_height="12dp"
+                    android:layout_marginStart="12dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintStart_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="100dp"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="parent" />
+
+                <View
+                    android:layout_width="32dp"
+                    android:layout_height="10dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- 🎵 Shimmer Item 7 (Repeat this block as needed) -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/shimmer_background"
+                android:padding="8dp">
+
+                <View
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="150dp"
+                    android:layout_height="12dp"
+                    android:layout_marginStart="12dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintStart_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="100dp"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="parent" />
+
+                <View
+                    android:layout_width="32dp"
+                    android:layout_height="10dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="@drawable/shimmer_placeholder_rounded"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <ProgressBar
+        android:id="@+id/bottomLoader"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/musicListRecyclerView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

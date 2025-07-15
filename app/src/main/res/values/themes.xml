@@ -2,19 +2,26 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.BlissfulVibes" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-         <item name="colorPrimary">@color/secondary_deep_blue</item>
+        <item name="colorPrimary">@color/secondary_deep_blue</item>
     </style>
 
     <style name="Theme.BlissfulVibes" parent="Base.Theme.BlissfulVibes" />
 
-<!--    // popup style-->
+    <!--    // popup style-->
     <style name="CustomPopupMenu" parent="Widget.AppCompat.PopupMenu">
         <item name="android:textSize">12sp</item>
         <item name="android:padding">4dp</item>
         <item name="android:minWidth">80dp</item>
         <item name="android:maxWidth">100dp</item>
-        <item name="android:textColor">?android:attr/textColorPrimary</item> <!-- Ensure text color is set -->
-        <item name="android:background">?android:attr/windowBackground</item> <!-- Ensure background is set -->
+        <item name="android:textColor">?android:attr/textColorPrimary
+        </item> <!-- Ensure text color is set -->
+        <item name="android:background">?android:attr/windowBackground
+        </item> <!-- Ensure background is set -->
+    </style>
+
+    <style name="ShapeAppearanceOverlay.App.CornerSize8" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
     </style>
 
 

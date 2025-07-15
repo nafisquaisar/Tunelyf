@@ -1,0 +1,15 @@
+<!-- res/drawable/white_top_halfcircle.xml -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="360dp"
+    android:height="@dimen/_40sdp"
+    android:viewportWidth="360"
+    android:viewportHeight="100">
+
+    <!-- Pure smooth half-circle arc -->
+    <path
+        android:fillColor="@color/activitybg"
+        android:pathData="M0,100
+                      A180,100 0 0 1 360,100
+                      L360,100 L0,100 Z" />
+
+</vector>

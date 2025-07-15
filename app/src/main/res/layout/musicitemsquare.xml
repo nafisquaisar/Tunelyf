@@ -1,0 +1,45 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/_100sdp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:layout_margin="@dimen/_5sdp"
+    android:gravity="center_horizontal"
+    android:background="@drawable/music_item_bg">
+
+    <!-- Cover Image -->
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/musicCover"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_80sdp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/logo"
+        android:layout_marginBottom="8dp"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize8" />
+
+    <!-- Song Title -->
+    <TextView
+        android:id="@+id/musicTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Song Title"
+        android:textSize="12sp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:gravity="center_horizontal" />
+
+    <!-- Album Name -->
+    <TextView
+        android:id="@+id/musicArtist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Album Name"
+        android:textSize="10sp"
+        android:textColor="@android:color/darker_gray"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:gravity="center_horizontal" />
+</LinearLayout>

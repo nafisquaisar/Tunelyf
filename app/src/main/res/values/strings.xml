@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Blissful Vibes</string>
+    <string name="app_name">TuneLyf</string>
     <string name="music_End_time">05:00</string>
     <string name="music_start_time">00:00</string>
     <string name="shuffle_btn">Shuffle</string>
@@ -73,5 +73,6 @@
     <string name="cancel">Cancel</string>
     <string name="create">Create</string>
     <string name="default_web_client_id">763312949086-5gdgarq8irjuslrj0hn8dals27rjsr7j.apps.googleusercontent.com</string>
+    <string name="add_to_playlist_btn">add to playlist\n</string>
 
 </resources>

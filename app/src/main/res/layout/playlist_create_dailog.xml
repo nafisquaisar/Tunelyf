@@ -3,9 +3,10 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    app:cardCornerRadius="3dp"
+    app:cardCornerRadius="@dimen/_23sdp"
     app:strokeColor="@color/icon_color"
     app:strokeWidth="2dp"
+    android:layout_margin="@dimen/_2sdp"
     android:layout_height="wrap_content">
 
   <LinearLayout
@@ -15,6 +16,7 @@
       android:padding="10dp"
       >
       <TextView
+          android:id="@+id/title"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="Create new Playlist"

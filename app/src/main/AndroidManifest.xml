@@ -3,22 +3,46 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" /> <!-- Audio Permission for android 13 or higher -->
-    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" /> <!-- Notification -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- Notification Permission for Android 14 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".ApplicationClass"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/music_icon"
+        android:icon="@mipmap/logo_round"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/music_round_icon"
+        android:roundIcon="@mipmap/logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BlissfulVibes"
         tools:targetApi="31">
+        <activity
+            android:name=".Activity.RecentPlayList"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.About"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.PrivacyPolicy"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.Help"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.PlaylistSongView"
+            android:exported="false"
+            android:theme="@style/Theme.BlissfulVibes" />
+        <activity
+            android:name=".Activity.PlayMusicStreamActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ViewSongListActivity"
+            android:exported="false" />
         <activity
             android:name=".Activity.OtpActivity"
             android:exported="false" />
@@ -35,16 +59,15 @@
             android:name=".Activity.DashBoard"
             android:exported="false" />
         <activity
-            android:name=".add_song_playlist"
-            android:exported="false" />
-        <activity
-            android:name=".PlaylistMusicListActivity"
-            android:exported="false" />
+            android:name=".AddSongPlaylistActivity"
+            android:exported="false" /> <!-- <activity -->
+        <!-- android:name=".PlaylistMusicListActivity" -->
+        <!-- android:exported="false" /> -->
         <activity
             android:name=".BaseSetting"
             android:exported="false" />
         <activity
-            android:name=".AppSetting"
+            android:name=".Activity.AppSetting"
             android:exported="false" />
         <activity
             android:name=".PlayNextOperation"
@@ -54,9 +77,6 @@
             android:exported="false" />
         <activity
             android:name=".PlayList"
-            android:exported="false" />
-        <activity
-            android:name=".PlaymusicList"
             android:exported="false" />
         <activity
             android:name=".splash_screen"
@@ -72,23 +92,19 @@
             android:exported="false" />
 
         <service
-            android:name=".Service.MusicService"
+            android:name=".Service.MusicServiceOnline"
             android:exported="true"
-            android:foregroundServiceType="mediaPlayback">
-            <intent-filter>
-                <action android:name="com.example.nafis.nf.blissfulvibes.ACTION_PLAY" />
-            </intent-filter>
-        </service>
+            android:foregroundServiceType="mediaPlayback" />
 
         <receiver
-            android:name=".BroadReciver.NotificationReciver"
+            android:name=".BroadReciver.ExoPlaybackReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.example.nafis.nf.blissfulvibes.ApplicationClass.PLAY" />
-                <action android:name="com.example.nafis.nf.blissfulvibes.ApplicationClass.NEXT" />
-                <action android:name="com.example.nafis.nf.blissfulvibes.ApplicationClass.PREVIOUS" />
-                <action android:name="com.example.nafis.nf.blissfulvibes.ApplicationClass.EXIT" />
+                <action android:name="com.song.nafis.nf.blissfulvibes.ACTION_PLAY_PAUSE" />
+                <action android:name="com.song.nafis.nf.blissfulvibes.EXOPLAYER_ACTION_NEXT" />
+                <action android:name="com.song.nafis.nf.blissfulvibes.EXOPLAYER_ACTION_PREV" />
+                <action android:name="com.song.nafis.nf.blissfulvibes.EXOPLAYER_ACTION_EXIT" />
             </intent-filter>
         </receiver>
     </application>

@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Blissful Vibes"
+rootProject.name = "TuneLyf"
 include(":app")
  

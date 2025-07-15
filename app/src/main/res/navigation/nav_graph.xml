@@ -6,23 +6,23 @@
 
     <fragment
         android:id="@+id/musicSearchFragment"
-        android:name="com.song.nafis.nf.blissfulvibes.Fragment.MusicSearchFragment"
+        android:name="com.song.nafis.nf.TuneLyf.Fragment.MusicSearchFragment"
         android:label="fragment_music_search"
         tools:layout="@layout/fragment_music_search" />
     <fragment android:id="@+id/placeholder" />
     <fragment
         android:id="@+id/playListFragment"
-        android:name="com.song.nafis.nf.blissfulvibes.Fragment.PlayListFragment"
+        android:name="com.song.nafis.nf.TuneLyf.Fragment.PlayListFragment"
         android:label="fragment_play_list"
         tools:layout="@layout/fragment_play_list" />
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.song.nafis.nf.blissfulvibes.Fragment.HomeFragment"
+        android:name="com.song.nafis.nf.TuneLyf.Fragment.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.song.nafis.nf.blissfulvibes.Fragment.ProfileFragment"
+        android:name="com.song.nafis.nf.TuneLyf.Fragment.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>

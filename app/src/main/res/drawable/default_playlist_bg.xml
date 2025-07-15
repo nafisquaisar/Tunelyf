@@ -1,0 +1,16 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#F0F0F0" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
+
+    <!-- Center Icon -->
+    <item android:gravity="center">
+        <bitmap
+            android:src="@drawable/musicicon"
+            android:gravity="center" />
+    </item>
+</layer-list>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="black">#FFFFFFFF</color>
+    <color name="white">#F0000000 </color>
+    <color name="alwayswhite">#FFFFFFFF</color>
+    <color name="deepwhite">#A6FFFFFF</color>
+
+    <color name="primary_purple">#BF6DF8</color>
+    <color name="white_purple">#E1D3EA</color>
+    <color name="primary_deep_purple">#C983F4</color>
+    <color name="primary_dark_purple">#B233FF</color>
+    <color name="secondary_blue">#1f2a40</color>
+    <color name="secondary_deep_blue">#1f2a40</color>
+    <color name="icon_color">#1f2a40</color>
+    <color name="secondary_dark_blue">#1E0094</color>
+
+<!--    <color name="activitybg">#FFFFFFFF</color>-->
+        <color name="activitybg">#141E30</color>
+
+<!--    <color name="cardbg">#D6D6DE</color>-->
+        <color name="cardbg">#1f2a40</color>
+
+
+    <color name="very_light_purple">#616377</color>
+
+</resources>

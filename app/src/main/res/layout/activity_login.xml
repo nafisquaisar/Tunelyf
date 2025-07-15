@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Login"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/topCurve"
@@ -225,16 +225,16 @@
                 android:textSize="@dimen/_14ssp" />
 
             <!-- Create New Account -->
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnCreateUsingPhone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/outline_button_purple"
-                android:elevation="@dimen/_10sdp"
-                android:text="Login Using Number"
-                android:textColor="@color/icon_color"
-                android:textSize="@dimen/_14ssp" />
+<!--            <androidx.appcompat.widget.AppCompatButton-->
+<!--                android:id="@+id/btnCreateUsingPhone"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:background="@drawable/outline_button_purple"-->
+<!--                android:elevation="@dimen/_10sdp"-->
+<!--                android:text="Login Using Number"-->
+<!--                android:textColor="@color/icon_color"-->
+<!--                android:textSize="@dimen/_14ssp" />-->
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

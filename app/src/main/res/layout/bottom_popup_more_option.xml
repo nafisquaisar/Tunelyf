@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="@drawable/bg_dialog_top_rounded"
     android:padding="16dp">
 
     <TextView
@@ -13,8 +14,14 @@
         android:drawablePadding="8dp"
         android:padding="12dp"
         android:text="@string/add_song"
+        android:drawableTint="@color/black"
         android:textAppearance="?attr/textAppearanceListItem"
         app:drawableLeftCompat="@drawable/add_song" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#DDDDDD" />
 
     <TextView
         android:id="@+id/removeall"
@@ -25,5 +32,22 @@
         android:text="@string/remove_all"
         android:textAppearance="?attr/textAppearanceListItem"
         app:drawableLeftCompat="@drawable/remove_all" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#DDDDDD" />
+
+
+    <TextView
+        android:id="@+id/selectDelete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="8dp"
+        android:padding="12dp"
+        android:text="Select and Remove Songs"
+        android:textAppearance="?attr/textAppearanceListItem"
+        app:drawableLeftCompat="@drawable/delete"
+        app:drawableTint="@color/black" />
 
 </LinearLayout>

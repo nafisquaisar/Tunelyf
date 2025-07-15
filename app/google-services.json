@@ -8,6 +8,43 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:763312949086:android:22f338f2b25c0aa06631cf",
+        "android_client_info": {
+          "package_name": "com.song.nafis.nf.TuneLyf"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "763312949086-bqclg02hm1ig66ka02kj669f98jdet4h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.song.nafis.nf.TuneLyf",
+            "certificate_hash": "70e0d41027d164df30dde22609cbec8dd72adc0e"
+          }
+        },
+        {
+          "client_id": "763312949086-l26pd1msp4bgqiqcpd4f0k4csllpiab6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkDEN6dlOj_JAJZpRdLCkTP-3yDvthodw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "763312949086-l26pd1msp4bgqiqcpd4f0k4csllpiab6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:763312949086:android:53d0a39cf7d3cd7e6631cf",
         "android_client_info": {
           "package_name": "com.song.nafis.nf.blissfulvibes"

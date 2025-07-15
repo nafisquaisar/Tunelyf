@@ -31,71 +31,6 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/hometoolbar">
-
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="none">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/Homeshufflebtn"
-                        style="@style/Widget.AppCompat.Button.Borderless"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:drawableTop="@drawable/shuffle"
-                        android:text="Shuffle"
-                        android:layout_marginTop="5dp"
-                        android:textAllCaps="false"
-                        android:textColor="@color/black" />
-
-                    <Button
-                        android:id="@+id/homefavrouteBtn"
-                        style="@style/Widget.AppCompat.Button.Borderless"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:drawableTop="@drawable/favorite"
-                        android:text="Favorite"
-                        android:layout_marginTop="5dp"
-                        android:textAllCaps="false"
-                        android:textColor="@color/black" />
-
-                    <Button
-                        android:id="@+id/homePlaylisttbtn"
-                        style="@style/Widget.AppCompat.Button.Borderless"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:drawableTop="@drawable/playlist"
-                        android:text="Playlist"
-                        android:textAllCaps="false"
-                        android:textColor="@color/black" />
-
-                    <Button
-                        android:id="@+id/Homenextplaybtn"
-                        style="@style/Widget.AppCompat.Button.Borderless"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:drawableTop="@drawable/nextplay"
-                        android:text="Next Play"
-                        android:textAllCaps="false"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-            </HorizontalScrollView>
-
-        </LinearLayout>
 
        <LinearLayout
            android:id="@+id/totalsongLinearL"
@@ -106,7 +41,7 @@
            app:layout_constraintHorizontal_bias="0.039"
            app:layout_constraintStart_toStartOf="parent"
            android:layout_margin="5dp"
-           app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+           app:layout_constraintTop_toBottomOf="@+id/hometoolbar"
            >
            <TextView
                android:id="@+id/totalsong"
@@ -142,18 +77,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/totalsongLinearL" />
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/NowPlaying"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/LocalShufflebtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Shuffle"
+            app:icon="@drawable/shuffle"
+            app:iconSize="30dp"
+            app:iconTint="@color/white"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/icon_color"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:name="com.song.nafis.nf.blissfulvibes.NowPlaying"
-            android:layout="@layout/fragment_now_playing"
-            />
-
-
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

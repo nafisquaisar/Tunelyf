@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/activitybg"
     tools:context=".Fragment.ProfileFragment">
 
     <!-- Header Layout -->
@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="fitXY"
-                android:src="@drawable/curve2"
+                android:src="@drawable/drawcurvebg"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -71,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Profile"
-                android:textColor="@color/white"
+                android:textColor="@color/alwayswhite"
                 android:textSize="@dimen/_22ssp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/frameLayout"
@@ -129,6 +129,18 @@
             android:visibility="visible" />
     </LinearLayout>
 
+    <!-- ✅ SCROLLABLE MENU SECTION -->
+    <ScrollView
+        android:id="@+id/scrollViewMenu"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:overScrollMode="never"
+        android:scrollbars="vertical"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout7"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
     <!-- Menu Items -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -157,7 +169,8 @@
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
-                android:src="@drawable/notification_music_img" />
+                android:src="@drawable/notification_music_img"
+                app:tint="@color/black" />
 
             <TextView
                 android:layout_width="0dp"
@@ -188,7 +201,8 @@
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
-                android:src="@drawable/baseline_settings_24" />
+                android:src="@drawable/baseline_settings_24"
+                app:tint="@color/black" />
 
             <TextView
                 android:layout_width="0dp"
@@ -205,9 +219,68 @@
                 app:tint="@color/black" />
         </LinearLayout>
 
-        <!-- About -->
+        <!-- Favorites / Liked Songs -->
         <LinearLayout
-            android:id="@+id/suffle"
+            android:id="@+id/favoritesSongs"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/_10sdp">
+            <ImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:src="@drawable/favoritefull"
+                app:tint="@color/black" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Favorites"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14ssp" />
+            <ImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/half_right_arrow"
+                app:tint="@color/black" />
+        </LinearLayout>
+
+
+        <!-- Recently Played -->
+        <LinearLayout
+            android:id="@+id/recentlyPlayed"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/_10sdp">
+            <ImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:src="@drawable/recent_play"
+                app:tint="@color/black"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Recently Played"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14ssp" />
+            <ImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/half_right_arrow"
+                app:tint="@color/black" />
+        </LinearLayout>
+
+        <!-- Help / Support -->
+        <LinearLayout
+            android:id="@+id/helpSupport"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             android:background="?attr/selectableItemBackground"
@@ -217,19 +290,103 @@
 
             <ImageView
                 android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
+                android:layout_height="26dp"
                 android:layout_marginEnd="@dimen/_10sdp"
-                android:src="@drawable/shuffle"
+                android:src="@drawable/help"
                 app:tint="@color/black" />
-
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Shuffle"
+                android:text="Help"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_14ssp" />
+            <ImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/half_right_arrow"
+                app:tint="@color/black" />
+        </LinearLayout>
 
+        <!-- Privacy Policy -->
+        <LinearLayout
+            android:id="@+id/privacyPolicy"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/_10sdp">
+            <ImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:src="@drawable/privacy_tip_24px"
+                app:tint="@color/black" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Privacy Policy"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14ssp" />
+            <ImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/half_right_arrow"
+                app:tint="@color/black" />
+        </LinearLayout>
+
+<!--        &lt;!&ndash; Terms of Use &ndash;&gt;-->
+<!--        <LinearLayout-->
+<!--            android:id="@+id/termsOfUse"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="@dimen/_40sdp"-->
+<!--            android:background="?attr/selectableItemBackground"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:paddingHorizontal="@dimen/_10sdp">-->
+<!--            <ImageView-->
+<!--                android:layout_width="@dimen/_20sdp"-->
+<!--                android:layout_height="@dimen/_20sdp"-->
+<!--                android:layout_marginEnd="@dimen/_10sdp"-->
+<!--                android:src="@drawable/contract_24px" />-->
+<!--            <TextView-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="Terms of Use"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="@dimen/_14ssp" />-->
+<!--            <ImageView-->
+<!--                android:layout_width="@dimen/_20sdp"-->
+<!--                android:layout_height="@dimen/_20sdp"-->
+<!--                android:src="@drawable/half_right_arrow"-->
+<!--                app:tint="@color/black" />-->
+<!--        </LinearLayout>-->
+
+        <!-- About App -->
+        <LinearLayout
+            android:id="@+id/aboutApp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/_10sdp">
+            <ImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:src="@drawable/info_24px"
+                app:tint="@color/black" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="About App"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14ssp" />
             <ImageView
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
@@ -251,7 +408,8 @@
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
-                android:src="@drawable/baseline_exit_to_app_24" />
+                android:src="@drawable/baseline_exit_to_app_24"
+                app:tint="@color/black" />
 
             <TextView
                 android:layout_width="0dp"
@@ -271,4 +429,5 @@
 
     </LinearLayout>
 
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
