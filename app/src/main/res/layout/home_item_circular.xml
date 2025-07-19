@@ -6,11 +6,12 @@
     android:layout_margin="8dp"
     app:cardCornerRadius="@dimen/_5sdp"
     app:cardElevation="4dp"
-    android:background="@android:color/white">
+    android:backgroundTint="@color/cardbg2">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/cardbg2"
         android:padding="8dp">
 
         <!-- Circular Cover Image -->
@@ -37,7 +38,7 @@
             android:layout_marginTop="12dp"
             android:gravity="center"
             android:text="Chill Vibes"
-            android:textColor="#111111"
+            android:textColor="@color/black"
             android:textSize="@dimen/_12ssp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -51,7 +52,7 @@
             android:layout_height="wrap_content"
             android:text="Relax &amp; chill"
             android:textSize="@dimen/_8ssp"
-            android:textColor="#666666"
+            android:textColor="@color/darker_gray"
             android:gravity="center"
             android:maxLines="2"
             android:ellipsize="end"

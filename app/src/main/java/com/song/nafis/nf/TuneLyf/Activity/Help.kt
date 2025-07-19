@@ -40,5 +40,8 @@ class Help : AppCompatActivity() {
             intent.data = Uri.parse("tel:+919801999829")
             startActivity(intent)
         }
+
+        setSupportActionBar(binding.helpToolbar)
+        binding.helpToolbar.setNavigationOnClickListener { finish() }
     }
 }

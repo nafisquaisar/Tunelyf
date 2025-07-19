@@ -1,14 +1,31 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.BlissfulVibes" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <resources xmlns:tools="http://schemas.android.com/tools">
+        <!-- Base application theme. -->
+        <style name="Base.Theme.BlissfulVibes" parent="Theme.Material3.DayNight.NoActionBar">
+            <!-- Customize your dark theme here. -->
+            <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+            <item name="colorPrimary">@color/secondary_deep_blue</item>
+            <item name="android:statusBarColor">@color/icon_color</item> <!-- or transparent -->
+            <item name="android:navigationBarColor">@color/icon_color</item>
+            <item name="android:windowLightStatusBar">false</item>
+            <item name="android:fitsSystemWindows">true</item>
+            <item name="android:windowDrawsSystemBarBackgrounds">true</item>
 
-    </style>
+        </style>
 
-    <style name="ShapeAppearanceOverlay.App.CornerSize8" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">8dp</item>
-    </style>
+        <style name="ShapeAppearanceOverlay.App.CornerSize8" parent="">
+            <item name="cornerFamily">rounded</item>
+            <item name="cornerSize">8dp</item>
+        </style>
 
-</resources>
+
+        <style name="ToolbarPopupTheme" parent="ThemeOverlay.AppCompat.Light">
+            <item name="colorControlNormal">@android:color/white</item>
+            <item name="android:textColorPrimary">@android:color/white</item>
+            <item name="android:textColorHint">@android:color/white</item>
+        </style>
+
+        <style name="AppTheme.Toolbar" parent="ThemeOverlay.AppCompat.Light">
+            <item name="android:textColorPrimary">@android:color/white</item>
+            <item name="android:textColorSecondary">@android:color/white</item>
+        </style>
+    </resources>

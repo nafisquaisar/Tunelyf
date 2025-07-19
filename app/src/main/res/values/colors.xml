@@ -13,6 +13,7 @@
     <color name="secondary_blue">#1f2a40</color>
     <color name="secondary_deep_blue">#1f2a40</color>
     <color name="icon_color">#1f2a40</color>
+    <color name="secondary_icon_color">#1f2a40</color>
     <color name="secondary_dark_blue">#1E0094</color>
 
     <color name="activitybg">#FFFFFFFF</color>
@@ -21,7 +22,12 @@
     <color name="cardbg">#D6D6DE</color>
 <!--    <color name="cardbg">#1f2a40</color>-->
 
+    <color name="cardbg2">#FFFFFF</color>
 
+    <color name="darker_gray">#aaa</color>
+
+
+    <color name="checkbox">#00164E</color>
     <color name="very_light_purple">#616377</color>
 
 </resources>

@@ -71,7 +71,7 @@ class MusicViewModel @Inject constructor(
             viewModelScope.launch {
                 val finalSong = getResolvedSong(song) ?: return@launch
                 
-                MusicServiceOnline.isServiceStopped = false
+//                MusicServiceOnline.isServiceStopped = false
                 startMusicService(context, finalSong)
                 isPlaying.postValue(true)
             }
@@ -87,7 +87,7 @@ class MusicViewModel @Inject constructor(
             val finalSong = getResolvedSong(song) ?: return@launch
 
             if (playerRepository.shouldStartNewSession()) {
-                MusicServiceOnline.isServiceStopped = false
+//                MusicServiceOnline.isServiceStopped = false
                 startMusicService(context, finalSong)
             } else {
                 playerRepository.playPause()

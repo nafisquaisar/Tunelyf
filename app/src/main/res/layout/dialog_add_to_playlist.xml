@@ -24,7 +24,7 @@
             android:text="Select Playlist"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="@android:color/black" />
+            android:textColor="@color/black" />
 
         <ImageView
             android:id="@+id/ivCloseDialog"
@@ -35,7 +35,7 @@
             android:padding="2dp"
             android:clickable="true"
             android:focusable="true"
-            app:tint="@android:color/black" />
+            app:tint="@color/black" />
     </LinearLayout>
 
     <!-- Playlist List -->
@@ -59,6 +59,7 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:padding="12dp"
+        android:backgroundTint="@color/cardbg"
         app:cardCornerRadius="@dimen/_5sdp"
         app:cardElevation="@dimen/_4sdp">
 
@@ -67,6 +68,7 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/_7sdp"
             android:orientation="horizontal"
+
             android:gravity="center_vertical">
 
             <ImageView
@@ -74,7 +76,8 @@
                 android:layout_height="24dp"
                 android:layout_marginStart="@dimen/_4sdp"
                 android:layout_marginEnd="@dimen/_5sdp"
-                android:src="@drawable/create_playlist" />
+                android:src="@drawable/create_playlist"
+                app:tint="@color/black" />
 
             <TextView
                 android:id="@+id/tvCreatePlaylist"
@@ -83,7 +86,7 @@
                 android:layout_weight="1"
                 android:text="Create New Playlist"
                 android:textSize="16sp"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/black" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

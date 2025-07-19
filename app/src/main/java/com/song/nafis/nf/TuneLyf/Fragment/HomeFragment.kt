@@ -53,7 +53,7 @@ class HomeFragment : Fragment() {
 
 
         val videoView = binding.bannerVideo
-        val videoUri = Uri.parse("android.resource://${requireContext().packageName}/raw/homebanner")
+        val videoUri = Uri.parse("android.resource://${requireContext().packageName}/raw/homebanner3")
         videoView.setBackgroundColor(Color.WHITE)
 
         videoView.setVideoURI(videoUri)

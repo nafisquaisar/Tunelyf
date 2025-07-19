@@ -72,6 +72,8 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-storage-ktx")
     implementation ("com.google.firebase:firebase-appcheck-playintegrity:18.0.0")
+    implementation("com.google.firebase:firebase-database-ktx")
+
 
     // Google Sign-In
     implementation("com.google.android.gms:play-services-auth:21.3.0")
@@ -86,9 +88,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
     // Dagger - Hilt
-    implementation("com.google.firebase:firebase-database:21.0.0")
-    implementation("com.google.firebase:firebase-firestore:25.1.4")
-    implementation("com.google.firebase:firebase-storage:21.0.1")
+
     implementation("androidx.activity:activity:1.10.1")
     implementation("com.google.dagger:hilt-android:2.56.2")
     implementation("androidx.navigation:navigation-fragment:2.9.0")
@@ -144,5 +144,9 @@ dependencies {
 
     // lotti animation
     implementation("com.airbnb.android:lottie:6.0.0")
+
+
+    // Add this line if missing
+    implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
 }

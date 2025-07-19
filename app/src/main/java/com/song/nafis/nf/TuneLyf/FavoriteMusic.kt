@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.song.nafis.nf.TuneLyf.Activity.PlayMusicStreamActivity
 import com.song.nafis.nf.TuneLyf.Model.UnifiedMusic
@@ -36,6 +37,17 @@ class FavoriteMusic : AppCompatActivity() {
 
         setupObserver()
         setupRecyclerView()
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            favoriteViewModel.refreshFavorites()
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
+
+        binding.swipeRefreshLayout.setColorSchemeResources(
+            R.color.secondary_dark_blue,
+            R.color.icon_color,
+            android.R.color.holo_green_light
+        )
+
 
         binding.favoriteShufflebtn.setOnClickListener {
             if (favoriteList.isNotEmpty()) {
@@ -51,14 +63,19 @@ class FavoriteMusic : AppCompatActivity() {
         }
     }
 
+
+
+
     private fun setupObserver() {
         favoriteViewModel.allFavorites.observe(this) { favEntities ->
             val converted = favEntities.map { it.toJamendoTrack().toUnifiedMusic() }
             favoriteList = converted
             adapter.submitList(favoriteList)
 
-            binding.favoriteShufflebtn.visibility =
-                if (favoriteList.isEmpty()) View.INVISIBLE else View.VISIBLE
+            val isEmpty = favoriteList.isEmpty()
+            binding.favoriteShufflebtn.visibility = if (isEmpty) View.INVISIBLE else View.VISIBLE
+            binding.FavoriteRecyclerView.visibility = if (isEmpty) View.GONE else View.VISIBLE
+            binding.emptyStateWrapper.visibility = if (isEmpty) View.VISIBLE else View.GONE
         }
     }
 
@@ -82,7 +99,35 @@ class FavoriteMusic : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.playlist_menu, menu)
-        val searchView = menu?.findItem(R.id.search_playlist)?.actionView as SearchView
+        val searchItem = menu?.findItem(R.id.search_playlist)
+        val searchView = searchItem?.actionView as androidx.appcompat.widget.SearchView
+
+        // Get views inside the SearchView
+        val searchEditText = searchView.findViewById<android.widget.EditText>(androidx.appcompat.R.id.search_src_text)
+        val closeButton = searchView.findViewById<android.widget.ImageView>(androidx.appcompat.R.id.search_close_btn)
+        val magIcon = searchView.findViewById<android.widget.ImageView>(androidx.appcompat.R.id.search_mag_icon)
+        val searchGoButton = searchView.findViewById<android.widget.ImageView>(androidx.appcompat.R.id.search_go_btn)
+        val collapseIcon = searchView.findViewById<android.widget.ImageView>(androidx.appcompat.R.id.search_button)
+        val searchPlate = searchView.findViewById<View>(androidx.appcompat.R.id.search_plate)
+
+        collapseIcon.setOnClickListener {
+            Toast.makeText(this,"Back", Toast.LENGTH_SHORT).show()
+        }
+
+        // ✅ Set white text and hint
+        searchEditText.setTextColor(ContextCompat.getColor(this, android.R.color.white))
+        searchEditText.setHintTextColor(ContextCompat.getColor(this, android.R.color.white))
+
+        // ✅ Tint all icons to white
+        closeButton.setColorFilter(ContextCompat.getColor(this, android.R.color.white))
+        magIcon.setColorFilter(ContextCompat.getColor(this, android.R.color.white))
+        searchGoButton?.setColorFilter(ContextCompat.getColor(this, android.R.color.white))
+        collapseIcon.setColorFilter(ContextCompat.getColor(this, android.R.color.white))
+
+        // ✅ Remove the gray underline
+        searchPlate?.setBackgroundColor(ContextCompat.getColor(this, android.R.color.transparent))
+
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean = true
             override fun onQueryTextChange(newText: String?): Boolean {

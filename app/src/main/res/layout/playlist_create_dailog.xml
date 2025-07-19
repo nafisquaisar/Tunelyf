@@ -6,6 +6,7 @@
     app:cardCornerRadius="@dimen/_23sdp"
     app:strokeColor="@color/icon_color"
     app:strokeWidth="2dp"
+    android:backgroundTint="@color/activitybg"
     android:layout_margin="@dimen/_2sdp"
     android:layout_height="wrap_content">
 
@@ -21,7 +22,7 @@
           android:layout_height="wrap_content"
           android:text="Create new Playlist"
           android:textSize="24sp"
-          android:textColor="@color/icon_color"
+          android:textColor="@color/secondary_icon_color"
           android:layout_gravity="center"
           />
 
@@ -33,7 +34,7 @@
           <ImageView
               android:layout_width="50dp"
               android:layout_height="50dp"
-              android:src="@mipmap/music_icon"
+              android:src="@mipmap/logo"
               android:layout_margin="5dp"
               android:layout_gravity="center_vertical"
               />
@@ -43,6 +44,7 @@
               android:layout_height="wrap_content"
               style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox"
               android:hint="Enter the Playlist Name"
+              app:hintTextColor="@color/secondary_icon_color"
               >
               <EditText
                   android:layout_width="match_parent"
@@ -63,7 +65,7 @@
               android:layout_height="wrap_content"
               android:text="@string/cancel"
               android:background="@color/icon_color"
-              android:textColor="@color/white"
+              android:textColor="@color/alwayswhite"
               android:textSize="16sp"
               android:layout_margin="10dp"
              android:layout_weight="1"
@@ -74,7 +76,7 @@
               android:layout_height="wrap_content"
               android:text="@string/create"
               android:background="@color/icon_color"
-              android:textColor="@color/white"
+              android:textColor="@color/alwayswhite"
               android:textSize="16sp"
               android:layout_weight="1"
               android:layout_margin="10dp"

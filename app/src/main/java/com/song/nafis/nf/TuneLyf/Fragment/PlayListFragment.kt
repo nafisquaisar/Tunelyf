@@ -102,7 +102,16 @@ class PlayListFragment : Fragment() {
         // Observe playlists LiveData
         viewModel.allPlaylists.observe(viewLifecycleOwner) { playlists ->
             playlistAdapter.updateList(playlists)
+
+            if (playlists.isNullOrEmpty()) {
+                binding.recyclerPlaylists.visibility = View.GONE
+                binding.emptyStateWrapper.visibility = View.VISIBLE
+            } else {
+                binding.recyclerPlaylists.visibility = View.VISIBLE
+                binding.emptyStateWrapper.visibility = View.GONE
+            }
         }
+
 
         return binding.root
     }

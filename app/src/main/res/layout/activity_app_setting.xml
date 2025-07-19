@@ -64,10 +64,17 @@
                     android:id="@+id/switchTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:thumbTint="@color/icon_color"
-                    android:trackTint="#3399ff" />
+                    android:thumbTint="@color/secondary_icon_color"
+                    android:trackTint="@color/secondary_icon_color" />
             </LinearLayout>
-
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#BBBBBB"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                />
             <!-- Equalizer -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -92,9 +99,16 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@android:drawable/ic_menu_manage"
-                    app:tint="@color/icon_color" />
+                    app:tint="@color/secondary_icon_color" />
             </LinearLayout>
-
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#BBBBBB"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                />
             <!-- Audio Quality -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -120,9 +134,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="High"
-                    android:textColor="@color/icon_color" />
+                    android:textColor="@color/secondary_icon_color" />
             </LinearLayout>
-
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#BBBBBB"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                />
             <!-- About -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -165,7 +186,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Version 1.0.0"
-        android:textColor="#aaa"
+        android:textColor="@color/secondary_icon_color"
         android:textSize="14sp"
         android:paddingTop="8dp"
         android:paddingBottom="16dp"

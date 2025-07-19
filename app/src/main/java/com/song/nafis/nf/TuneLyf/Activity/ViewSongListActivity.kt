@@ -52,7 +52,7 @@ class ViewSongListActivity : AppCompatActivity() {
 
     private fun setupToolbar() {
         binding.hometoolbar.setNavigationIcon(R.drawable.back_arrow)
-        binding.hometoolbar.setTitleTextColor(resources.getColor(R.color.white))
+        binding.hometoolbar.setTitleTextColor(resources.getColor(R.color.alwayswhite))
         binding.hometoolbar.setNavigationOnClickListener { onBackPressed() }
     }
 

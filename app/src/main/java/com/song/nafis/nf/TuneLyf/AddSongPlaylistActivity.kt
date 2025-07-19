@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -85,32 +86,28 @@ class  AddSongPlaylistActivity  : AppCompatActivity() {
         // Local songs
         val localList = fetchLocalMusic()
 
-        // Streaming songs passed from Intent
-//        val onlineList = intent.getParcelableArrayListExtra<UnifiedMusic>("STREAM_SONGS") ?: arrayListOf()
-
-        // Combine both
-//        fullUnifiedList = ArrayList(localList + onlineList)
+        // Assign to fullUnifiedList so search and UI toggle can use it
+        fullUnifiedList = ArrayList(localList)
 
         adapter = UnifiedMusicAdapter(
             context = this,
-            songs = localList,
+            songs = fullUnifiedList,
             isSelectionMode = true,
             onSongClick = { clickedIndex ->
                 // handle click if needed
             },
-            isSquareLayout = false // or true if you want square layout
+            isSquareLayout = false
         )
-
-
 
         binding.PlaylistRecylerView.apply {
             setHasFixedSize(true)
             setItemViewCacheSize(13)
             layoutManager = LinearLayoutManager(this@AddSongPlaylistActivity)
-            this.adapter = this@AddSongPlaylistActivity.adapter
+            adapter = this@AddSongPlaylistActivity.adapter
         }
 
-//        binding.totalsong.text = "Total Songs : ${adapter.itemCount}"
+        // Correctly check based on actual song list
+        toggleEmptyStateAndDoneButton(fullUnifiedList.isEmpty())
     }
 
     private fun setupSearch() {
@@ -123,6 +120,9 @@ class  AddSongPlaylistActivity  : AppCompatActivity() {
                     it.musicTitle.lowercase().contains(query)
                 }
                 adapter.updateSongs(filtered)
+
+                // 🔥 Show/hide views based on filtered list
+                toggleEmptyStateAndDoneButton(filtered.isEmpty())
                 return true
             }
         })
@@ -184,5 +184,9 @@ class  AddSongPlaylistActivity  : AppCompatActivity() {
         }
     }
 
+    private fun toggleEmptyStateAndDoneButton(isEmpty: Boolean) {
+        binding.emptyStateWrapper.visibility = if (isEmpty) View.VISIBLE else View.GONE
+        binding.doneaddsong.visibility = if (isEmpty) View.GONE else View.VISIBLE
+    }
 
 }

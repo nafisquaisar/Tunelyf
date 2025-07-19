@@ -10,9 +10,18 @@ import javax.inject.Inject
 @HiltViewModel
 class FavoriteViewModel @Inject constructor(
     private val repository: FavoriteRepository
-): ViewModel() {
+) : ViewModel() {
 
-    val allFavorites = repository.getAllFavorites()
+    private val refreshTrigger = MutableLiveData(Unit) // triggers refresh
+
+    val allFavorites: LiveData<List<FavoriteEntity>> =
+        refreshTrigger.switchMap {
+            repository.getAllFavorites()
+        }
+
+    fun refreshFavorites() {
+        refreshTrigger.value = Unit
+    }
 
     fun isFavorite(id: String): LiveData<Boolean> = repository.isFavorite(id)
 
@@ -24,3 +33,4 @@ class FavoriteViewModel @Inject constructor(
         repository.removeFavorite(song)
     }
 }
+

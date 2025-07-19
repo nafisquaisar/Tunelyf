@@ -3,6 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:backgroundTint="@color/activitybg"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity.PlayMusicStreamActivity">
@@ -25,7 +27,8 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:src="@drawable/down_arrow"
-            android:contentDescription="@string/back_music_btn" />
+            android:contentDescription="@string/back_music_btn"
+            app:tint="@color/secondary_icon_color" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -33,6 +36,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/app_name"
+            android:textColor="@color/secondary_icon_color"
             android:textSize="22sp"
             android:textStyle="bold" />
 
@@ -50,9 +54,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/base_setting"
             android:contentDescription="@string/equiliser_btn"
-            />
+            android:src="@drawable/base_setting"
+            app:tint="@color/secondary_icon_color" />
 
 <!--        <ImageButton-->
 <!--            android:id="@+id/moreInMusic"-->
@@ -88,6 +92,7 @@
         android:layout_marginTop="40dp"
         android:text="@string/song_name"
         android:textSize="20sp"
+        android:textColor="@color/secondary_icon_color"
         android:layout_marginHorizontal="10dp"
         android:singleLine="true"
         android:textStyle="bold"
@@ -126,7 +131,6 @@
                 android:id="@+id/playPauseContainer"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-
                 android:layout_marginStart="30dp">
 
                 <ImageButton
@@ -186,6 +190,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
                 android:text="@string/music_start_time"
+                android:textColor="@color/secondary_icon_color"
                 android:textSize="22sp" />
 
             <androidx.appcompat.widget.AppCompatSeekBar
@@ -193,6 +198,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+
                 android:layout_weight="1" />
 
             <TextView
@@ -201,6 +207,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:text=""
+                android:textColor="@color/secondary_icon_color"
                 android:textSize="22sp" />
         </LinearLayout>
 
@@ -221,7 +228,7 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/baseline_repeat_24"
                 android:contentDescription="@string/shuffle_btn"
-                />
+                app:tint="@color/secondary_icon_color" />
 
             <ImageButton
                 android:id="@+id/stopTimer"
@@ -232,7 +239,7 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/stop_play_timer"
                 android:contentDescription="@string/timer_btn"
-                />
+                app:tint="@color/secondary_icon_color" />
 
             <ImageButton
                 android:id="@+id/volumeBtn"
@@ -243,7 +250,7 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/sound_increace"
                 android:contentDescription="@string/volume_btn"
-                />
+                app:tint="@color/secondary_icon_color" />
             <!-- New button to add song to playlist -->
             <ImageButton
                 android:id="@+id/addToPlaylistBtn"
@@ -253,7 +260,8 @@
                 android:background="@android:color/transparent"
                 android:scaleType="centerCrop"
                 android:src="@drawable/create_playlist"
-                android:contentDescription="@string/add_to_playlist_btn" />
+                android:contentDescription="@string/add_to_playlist_btn"
+                app:tint="@color/secondary_icon_color" />
 
             <ImageButton
                 android:id="@+id/sharebtn"
@@ -264,7 +272,7 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/sharebtn"
                 android:contentDescription="@string/share_btn"
-                />
+                app:tint="@color/secondary_icon_color" />
                  </LinearLayout>
 
     </LinearLayout>

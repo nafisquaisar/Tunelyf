@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:text="Song Title"
         android:textSize="12sp"
-        android:textColor="@android:color/black"
+        android:textColor="@color/black"
         android:textStyle="bold"
         android:maxLines="1"
         android:ellipsize="end"

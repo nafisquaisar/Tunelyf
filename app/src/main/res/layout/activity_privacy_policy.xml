@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/activitybg"
     tools:context=".Activity.PrivacyPolicy">
 
     <!-- Toolbar -->
@@ -15,7 +15,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@drawable/toolbarbg"
         app:title="Privacy Policy"
-        app:titleTextColor="@color/white"
+        app:titleTextColor="@color/alwayswhite"
         app:navigationIcon="@drawable/back_arrow"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +26,6 @@
         android:id="@+id/privacyScroll"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@android:color/white"
         android:padding="16dp"
         app:layout_constraintTop_toBottomOf="@id/settingtoolbar"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -45,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:text="TuneLyf – Privacy Policy"
                 android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:paddingBottom="8dp"/>
@@ -56,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:text="Effective Date: July 12, 2025"
                 android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                android:textColor="#555555"
+                android:textColor="@color/secondary_icon_color"
                 android:gravity="center"
                 android:paddingBottom="16dp" />
 

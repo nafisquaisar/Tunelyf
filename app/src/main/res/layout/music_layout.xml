@@ -12,7 +12,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:src="@mipmap/music_icon" />
+        android:src="@mipmap/logo" />
 
 
     <LinearLayout
@@ -29,6 +29,7 @@
                 android:layout_height="30dp"
                 android:textStyle="bold"
                 android:textSize="20dp"
+                android:textColor="@color/black"
                 android:singleLine="true"
                 android:gravity="center_vertical"
                 android:text="Music Name"
@@ -38,6 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:gravity="center_vertical"
+            android:textColor="@color/black"
 
             android:textSize="16dp"
             android:singleLine="true"
@@ -52,6 +54,7 @@
             android:layout_marginTop="5dp"
             android:textSize="16dp"
             android:gravity="center"
+            android:textColor="@color/black"
             android:layout_alignParentEnd="true"
             android:text="00:00"
             android:layout_marginHorizontal="5dp"

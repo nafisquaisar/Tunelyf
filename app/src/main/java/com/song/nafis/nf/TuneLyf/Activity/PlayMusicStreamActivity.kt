@@ -75,6 +75,7 @@
             val currentSong = viewModel.currentUnifiedSong.value
             val currentPlaylist = viewModel.playlistLiveData.value
 
+            observeData()
             val isSameSong = currentSong?.musicId == incomingSong?.musicId
             val isSamePlaylist = currentPlaylist?.map { it.musicId } == songList.map { it.musicId }
 
@@ -84,7 +85,6 @@
             }
 
 
-            observeData()
             setupUI(songArtwork,songTitle)
 
             // In PlayMusicStreamActivity's onCreate()
@@ -290,9 +290,9 @@
 
             viewModel.timerRunning.observe(this) { isRunning ->
                 if (isRunning) {
-                    binding.stopTimer.setColorFilter(ContextCompat.getColor(this, R.color.primary_dark_purple))
+                    binding.stopTimer.setColorFilter(ContextCompat.getColor(this, R.color.secondary_dark_blue))
                 } else {
-                    binding.stopTimer.setColorFilter(ContextCompat.getColor(this, R.color.icon_color))
+                    binding.stopTimer.setColorFilter(ContextCompat.getColor(this, R.color.secondary_icon_color))
                 }
             }
 
@@ -368,7 +368,7 @@
             fun setTimer(minutes: Int) {
                 Toast.makeText(this, "Music will stop after $minutes minutes", Toast.LENGTH_SHORT).show()
                 viewModel.startStopTimer(minutes)
-                binding.stopTimer.setColorFilter(ContextCompat.getColor(this, R.color.primary_dark_purple))
+                binding.stopTimer.setColorFilter(ContextCompat.getColor(this, R.color.secondary_dark_blue))
                 dialog.dismiss()
             }
 

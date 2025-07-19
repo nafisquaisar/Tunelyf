@@ -52,7 +52,8 @@ class AppSetting : AppCompatActivity() {
 
         // Toolbar back button
         binding.settingtoolbar.setNavigationOnClickListener { onBackPressed() }
-
+        val currentQuality = sharedPreferences.getString("audio_quality", "High")
+        findViewById<TextView>(R.id.audioQualityValue).text = currentQuality
         // Version display
         val versionName = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             packageManager.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0)).versionName

@@ -1,7 +1,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
 
-    <solid android:color="#4D607D8B" /> <!-- Blue Gray 500 with 30% opacity -->
+    <solid android:color="#80607D8B" /> <!-- 50% opacity -->
     <corners android:radius="12dp" />
 
 </shape>

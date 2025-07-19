@@ -5,318 +5,154 @@ import android.content.*
 import android.graphics.BitmapFactory
 import android.media.AudioFocusRequest
 import android.media.AudioManager
+import android.net.Uri
 import android.os.Build
 import android.os.IBinder
+import androidx.media.session.MediaButtonReceiver
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import android.util.Log
-import androidx.annotation.RequiresApi
+import android.view.KeyEvent
 import androidx.core.app.NotificationCompat
 import androidx.media.app.NotificationCompat.MediaStyle
-import androidx.media3.common.Player
-import androidx.media3.exoplayer.ExoPlayer
-import com.song.nafis.nf.TuneLyf.ApplicationClass
+import com.song.nafis.nf.TuneLyf.BroadReciver.ExoPlaybackReceiver
 import com.song.nafis.nf.TuneLyf.R
+import com.song.nafis.nf.TuneLyf.Repository.PlayerRepository
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
+import timber.log.Timber
 import java.net.URL
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MusicServiceOnline : Service() {
 
     companion object {
         const val CHANNEL_ID = "MusicPlaybackChannel"
         const val NOTIFICATION_ID = 101
-        var isServiceStopped = false
 
-        const val ACTION_PLAY_PAUSE = "com.song.nafis.nf.blissfulvibes.ACTION_PLAY_PAUSE"
-        const val ACTION_NEXT = "com.song.nafis.nf.blissfulvibes.EXOPLAYER_ACTION_NEXT"
-        const val ACTION_PREV = "com.song.nafis.nf.blissfulvibes.EXOPLAYER_ACTION_PREV"
-        const val ACTION_EXIT = "com.song.nafis.nf.blissfulvibes.EXOPLAYER_ACTION_EXIT"
+        const val ACTION_PLAY_PAUSE = "com.song.nafis.nf.TuneLyf.ACTION_PLAY_PAUSE"
+        const val ACTION_NEXT = "com.song.nafis.nf.TuneLyf.ACTION_NEXT"
+        const val ACTION_PREV = "com.song.nafis.nf.TuneLyf.ACTION_PREV"
+        const val ACTION_EXIT = "com.song.nafis.nf.TuneLyf.ACTION_EXIT"
     }
 
+    @Inject lateinit var playerRepository: PlayerRepository
+
     private lateinit var mediaSession: MediaSessionCompat
-    private lateinit var controlReceiver: BroadcastReceiver
-
-    private lateinit var audioManager: AudioManager
+    private var audioManager: AudioManager? = null
     private var focusRequest: AudioFocusRequest? = null
+    private val notificationScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
-
-    val exoPlayer: ExoPlayer
-        get() = (applicationContext as ApplicationClass).exoPlayer
-
-    private var isPlaying = false
-    private var songTitle = "Unknown"
-    private var songArtist = "Unknown"
-    private var songImage: String? = null
-    private var progressUpdateJob: Job? = null
-
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate() {
         super.onCreate()
-        mediaSession = MediaSessionCompat(this, "BlissfulVibesSession").apply {
-            isActive = true
-            setCallback(object : MediaSessionCompat.Callback() {
-                override fun onPlay() {
-                    togglePlayPause()
-                }
+        mediaSession = MediaSessionCompat(this, "TuneLyfSession")
+        // ⬆️ This line is crucial for collapsed button behavior
+        mediaSession.setMediaButtonReceiver(
+            PendingIntent.getBroadcast(
+                this,
+                0,
+                Intent(Intent.ACTION_MEDIA_BUTTON).setClass(this, MediaButtonReceiver::class.java),
+                PendingIntent.FLAG_IMMUTABLE
+            )
+        )
 
-                override fun onPause() {
-                    togglePlayPause()
-                }
+        mediaSession.setCallback(object : MediaSessionCompat.Callback() {
+            override fun onPlay() {
+                Timber.e("onPlay Triggered")
+                playerRepository.playPause()
+            }
 
-                override fun onSkipToNext() {
-                    handleNext()
-                }
+            override fun onPause() {
+                Timber.e("onPause Triggered")
+                playerRepository.playPause()
+            }
 
-                override fun onSkipToPrevious() {
-                    handlePrev()
-                }
+            override fun onSkipToNext() {
+                Timber.e("onSkipToNext Triggered")
+                playerRepository.nextSong()
+            }
 
-                override fun onStop() {
-                    stopAndExit()
-                }
-
-                override fun onMediaButtonEvent(mediaButtonEvent: Intent?): Boolean {
-                    togglePlayPause()
-                    return super.onMediaButtonEvent(mediaButtonEvent)
-                }
-
-                override fun onSeekTo(pos: Long) {
-                    exoPlayer.seekTo(pos)
-                }
-            })
-        }
-
-        createNotificationChannel()
-        registerControlReceiver()
-
-
-
-        exoPlayer.addListener(object : Player.Listener {
-            override fun onIsPlayingChanged(isActuallyPlaying: Boolean) {
-                isPlaying = isActuallyPlaying
-                showMediaNotification()
-                sendBroadcast(Intent("MUSIC_PLAYBACK_STATE_CHANGED").putExtra("isPlaying", isPlaying))
+            override fun onSkipToPrevious() {
+                Timber.e("onSkipToPrevious Triggered")
+                playerRepository.previousSong()
             }
         })
 
-
-        audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val audioAttributes = android.media.AudioAttributes.Builder()
-                .setUsage(android.media.AudioAttributes.USAGE_MEDIA)
-                .setContentType(android.media.AudioAttributes.CONTENT_TYPE_MUSIC)
-                .build()
-
-            focusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
-                .setAudioAttributes(audioAttributes)
-                .setAcceptsDelayedFocusGain(true)
-                .setOnAudioFocusChangeListener { focusChange ->
-                    when (focusChange) {
-                        AudioManager.AUDIOFOCUS_LOSS -> {
-                            exoPlayer.pause() // lost focus, pause playback
-                        }
-                        AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
-                            exoPlayer.pause() // temp pause
-                        }
-                        AudioManager.AUDIOFOCUS_GAIN -> {
-                            exoPlayer.play() // resume
-                        }
-                    }
-                }
-                .build()
-
-            val result = audioManager.requestAudioFocus(focusRequest!!)
-            if (result != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-                Log.w("MusicService", "Audio focus not granted!")
-            }
-        } else {
-            @Suppress("DEPRECATION")
-            val result = audioManager.requestAudioFocus(
-                { focusChange ->
-                    when (focusChange) {
-                        AudioManager.AUDIOFOCUS_LOSS -> exoPlayer.pause()
-                        AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> exoPlayer.pause()
-                        AudioManager.AUDIOFOCUS_GAIN -> exoPlayer.play()
-                    }
-                },
-                AudioManager.STREAM_MUSIC,
-                AudioManager.AUDIOFOCUS_GAIN
-            )
-            if (result != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-                Log.w("MusicService", "Audio focus not granted (pre-O)!")
-            }
-        }
-
+        mediaSession.isActive = true
+        createNotificationChannel()
+        observePlayback()
+        requestAudioFocus()
     }
 
-    private fun registerControlReceiver() {
-        controlReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                Log.d("MusicService", "Received broadcast: ${intent?.action}")
-
-                when (intent?.action) {
-                    ACTION_NEXT -> handleNext()
-                    ACTION_PREV -> handlePrev()
-                    ACTION_EXIT -> stopAndExit()
-                    ACTION_PLAY_PAUSE -> togglePlayPause()
-                }
-            }
-        }
-
-        val filter = IntentFilter().apply {
-            addAction(ACTION_NEXT)
-            addAction(ACTION_PREV)
-            addAction(ACTION_PLAY_PAUSE)
-            addAction(ACTION_EXIT)
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(controlReceiver, filter, RECEIVER_NOT_EXPORTED)
-        } else {
-            @Suppress("DEPRECATION")
-            registerReceiver(controlReceiver, filter)
-        }
-    }
 
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        isServiceStopped = false // ✅ Reset when service restarts
-        intent?.getStringExtra("title")?.let { songTitle = it }
-        intent?.getStringExtra("artist")?.let { songArtist = it }
-        intent?.getStringExtra("image")?.let { songImage = it }
+        Timber.e("Service Started")
 
-        showMediaNotification()
-
-        intent?.getStringExtra("url")?.let { url ->
-            exoPlayer.stop()
-            exoPlayer.clearMediaItems()
-
-            val mediaItem = androidx.media3.common.MediaItem.fromUri(url)
-            exoPlayer.setMediaItem(mediaItem)
-            exoPlayer.prepare()
-            exoPlayer.play()
-        }
-
+        MediaButtonReceiver.handleIntent(mediaSession, intent)
 
         when (intent?.action) {
-            ACTION_PLAY_PAUSE -> togglePlayPause()
-            ACTION_NEXT -> handleNext()
-            ACTION_PREV -> handlePrev()
+            ACTION_PLAY_PAUSE -> playerRepository.playPause()
+            ACTION_NEXT -> playerRepository.nextSong()
+            ACTION_PREV -> playerRepository.previousSong()
             ACTION_EXIT -> stopAndExit()
         }
-
+        showNotification()
         return START_STICKY
     }
 
-    private fun togglePlayPause() {
-        if (exoPlayer.isPlaying) {
-            exoPlayer.pause()
-            stopProgressUpdater()
-        } else {
-            exoPlayer.play()
-            startProgressUpdater()
-        }
-        isPlaying = exoPlayer.isPlaying
-        sendBroadcast(Intent(ACTION_PLAY_PAUSE).putExtra("isPlaying", isPlaying))
-        showMediaNotification()
+    private fun observePlayback() {
+        playerRepository.isPlaying.observeForever { showNotification() }
+        playerRepository.currentSong.observeForever { showNotification() }
+        playerRepository.currentPositionMillis.observeForever { showNotification() }
+        playerRepository.currentDurationMillis.observeForever { showNotification() }
     }
 
-    private fun handleNext() {
-        exoPlayer.seekToNextMediaItem()
-        // Add this to update artwork/title in notification:
-        val newIntent = Intent(this, MusicServiceOnline::class.java).apply {
-            putExtra("title", songTitle) // update to next song's title
-            putExtra("artist", songArtist)
-            putExtra("image", songImage)
-        }
-        onStartCommand(newIntent, 0, 0)
-    }
+    private fun showNotification() {
+        val song = playerRepository.getCurrentSong()
+        val title = song?.musicTitle ?: "Unknown Title"
+        val artist = song?.musicArtist ?: "Unknown Artist"
+        val artworkUrl = song?.imgUri
+        val isPlaying = playerRepository.isPlaying.value == true
 
-
-    private fun handlePrev() {
-        exoPlayer.seekToPreviousMediaItem()
-        sendBroadcast(Intent("MUSIC_PLAYBACK_STATE_CHANGED").putExtra("isPlaying", true))
-        showMediaNotification()
-    }
-
-    private fun stopAndExit() {
-        isServiceStopped = true  // ✅ Set flag
-
-        exoPlayer.stop()
-        exoPlayer.clearMediaItems()
-        stopForeground(true)
-        stopSelf()
-//        sendBroadcast(Intent(ACTION_EXIT).setPackage(packageName))
-        sendBroadcast(Intent("MUSIC_PLAYBACK_STATE_CHANGED").putExtra("isPlaying", false))
-    }
-
-    private fun getNotificationProgress(): Pair<Int, Int> {
-        val duration = exoPlayer.duration
-        val position = exoPlayer.currentPosition
-        return if (duration > 0) Pair(position.toInt(), duration.toInt()) else Pair(0, 0)
-    }
-
-    private fun startProgressUpdater() {
-        progressUpdateJob?.cancel()
-        progressUpdateJob = CoroutineScope(Dispatchers.Main).launch {
-            while (isPlaying) {
-                sendBroadcast(Intent("MUSIC_PROGRESS_UPDATED").apply {
-                    putExtra("progress", exoPlayer.currentPosition.toInt())
-                    putExtra("duration", exoPlayer.duration.toInt())
-                })
-                delay(1000)
-            }
-        }
-    }
-
-    private fun stopProgressUpdater() {
-        progressUpdateJob?.cancel()
-        progressUpdateJob = null
-    }
-
-    private fun showMediaNotification() {
         val playPauseIcon = if (isPlaying) R.drawable.pause_notification else R.drawable.play_notificaiton
+        val flag = PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
 
-        // Use ContextCompat for better compatibility
         val playPauseIntent = PendingIntent.getBroadcast(
-            this,
-            1,
-            Intent(ACTION_PLAY_PAUSE).setPackage(packageName),
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            this, 1, Intent(ACTION_PLAY_PAUSE).apply {
+                component = ComponentName(this@MusicServiceOnline, ExoPlaybackReceiver::class.java)
+            }, flag
         )
 
         val nextIntent = PendingIntent.getBroadcast(
-            this,
-            2,
-            Intent(ACTION_NEXT).setPackage(packageName),
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            this, 2, Intent(ACTION_NEXT).apply {
+                component = ComponentName(this@MusicServiceOnline, ExoPlaybackReceiver::class.java)
+            }, flag
         )
 
         val prevIntent = PendingIntent.getBroadcast(
-            this,
-            3,
-            Intent(ACTION_PREV).setPackage(packageName),
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            this, 3, Intent(ACTION_PREV).apply {
+                component = ComponentName(this@MusicServiceOnline, ExoPlaybackReceiver::class.java)
+            }, flag
         )
 
         val exitIntent = PendingIntent.getBroadcast(
-            this,
-            4,
-            Intent(ACTION_EXIT).setPackage(packageName),
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            this, 4, Intent(ACTION_EXIT).apply {
+                component = ComponentName(this@MusicServiceOnline, ExoPlaybackReceiver::class.java)
+            }, flag
         )
-
 
         mediaSession.setMetadata(
             MediaMetadataCompat.Builder()
-                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, songTitle)
-                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, songArtist)
-                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, exoPlayer.duration)
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, title)
+                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, artist)
+                .putLong(
+                    MediaMetadataCompat.METADATA_KEY_DURATION,
+                    playerRepository.currentDurationMillis.value ?: 0
+                )
                 .build()
         )
-
 
         mediaSession.setPlaybackState(
             PlaybackStateCompat.Builder()
@@ -330,22 +166,28 @@ class MusicServiceOnline : Service() {
                 )
                 .setState(
                     if (isPlaying) PlaybackStateCompat.STATE_PLAYING else PlaybackStateCompat.STATE_PAUSED,
-                    exoPlayer.currentPosition, 1.0f
+                    playerRepository.currentPositionMillis.value ?: 0,
+                    1.0f
                 )
                 .build()
         )
 
+        mediaSession.setCallback(object : MediaSessionCompat.Callback() {
+            override fun onSeekTo(pos: Long) {
+                playerRepository.seekTo(pos)
+            }
+        })
 
-        CoroutineScope(Dispatchers.Main).launch {
+
+
+        notificationScope.launch {
             val largeIcon = withContext(Dispatchers.IO) {
                 try {
-                    songImage?.let {
+                    artworkUrl?.let {
                         if (it.startsWith("content://")) {
-                            // Local image via content URI
-                            val inputStream = contentResolver.openInputStream(android.net.Uri.parse(it))
+                            val inputStream = contentResolver.openInputStream(Uri.parse(it))
                             BitmapFactory.decodeStream(inputStream)
                         } else if (it.startsWith("http")) {
-                            // Online URL image
                             BitmapFactory.decodeStream(URL(it).openStream())
                         } else {
                             BitmapFactory.decodeResource(resources, R.drawable.notification_music_img)
@@ -356,62 +198,79 @@ class MusicServiceOnline : Service() {
                 }
             }
 
-
-            val (progress, max) = getNotificationProgress()
+            val progress = playerRepository.currentPositionMillis.value?.toInt() ?: 0
+            val duration = playerRepository.currentDurationMillis.value?.toInt() ?: 100
 
             val notification = NotificationCompat.Builder(this@MusicServiceOnline, CHANNEL_ID)
-                .setContentTitle(songTitle)
-                .setContentText(songArtist)
+                .setContentTitle(title)
+                .setContentText(artist)
                 .setSmallIcon(R.drawable.music_img)
                 .setLargeIcon(largeIcon)
-                .addAction(R.drawable.previous_notification, "Previous", prevIntent)
-                .addAction(playPauseIcon, "Play/Pause", playPauseIntent)
+                .addAction(R.drawable.previous_notification, "Prev", prevIntent)
+                .addAction(playPauseIcon, "PlayPause", playPauseIntent)
                 .addAction(R.drawable.nextplay_notification, "Next", nextIntent)
                 .addAction(R.drawable.baseline_exit_to_app_24, "Exit", exitIntent)
-                .setStyle(
-                    MediaStyle()
-                        .setMediaSession(mediaSession.sessionToken)
-                        .setShowActionsInCompactView(0, 1, 2) // Show Previous(0), Play/Pause(1), Next(2)
-                        .setShowCancelButton(true) // Optional: Adds a cancel button
-                )
-                .setOnlyAlertOnce(true)
+                .setStyle(MediaStyle().setMediaSession(mediaSession.sessionToken).setShowActionsInCompactView(0, 1, 2))
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setOnlyAlertOnce(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setProgress(max, progress, false)
+                .setProgress(duration, progress, false)
                 .build()
 
             startForeground(NOTIFICATION_ID, notification)
         }
     }
 
-    override fun onDestroy() {
-        unregisterReceiver(controlReceiver)
-        // exoPlayer.release() ❌ hata do
-        exoPlayer.stop()
-        exoPlayer.clearMediaItems()
-        mediaSession.release()
+    private fun stopAndExit() {
+        playerRepository.stopCurrentSong()
         stopForeground(true)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            focusRequest?.let { audioManager.abandonAudioFocusRequest(it) }
-        } else {
-            @Suppress("DEPRECATION")
-            audioManager.abandonAudioFocus(null)
-        }
-
-        super.onDestroy()
+        stopSelf()
     }
-
 
     override fun onBind(intent: Intent?): IBinder? = null
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                CHANNEL_ID,
-                "Music Playback Channel",
-                NotificationManager.IMPORTANCE_HIGH
-            )
+            val channel = NotificationChannel(CHANNEL_ID, "TuneLyf Playback", NotificationManager.IMPORTANCE_HIGH)
             getSystemService(NotificationManager::class.java)?.createNotificationChannel(channel)
         }
+    }
+
+    private fun requestAudioFocus() {
+        audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val audioAttributes = android.media.AudioAttributes.Builder()
+                .setUsage(android.media.AudioAttributes.USAGE_MEDIA)
+                .setContentType(android.media.AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build()
+
+            focusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+                .setAudioAttributes(audioAttributes)
+                .setOnAudioFocusChangeListener {
+                    if (it == AudioManager.AUDIOFOCUS_LOSS) playerRepository.playPause()
+                }
+                .build()
+
+            audioManager?.requestAudioFocus(focusRequest!!)
+        } else {
+            @Suppress("DEPRECATION")
+            audioManager?.requestAudioFocus(
+                { if (it == AudioManager.AUDIOFOCUS_LOSS) playerRepository.playPause() },
+                AudioManager.STREAM_MUSIC,
+                AudioManager.AUDIOFOCUS_GAIN
+            )
+        }
+    }
+
+    override fun onDestroy() {
+
+        mediaSession.release()
+        notificationScope.cancel()
+        focusRequest?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                audioManager?.abandonAudioFocusRequest(it)
+            }
+        }
+        super.onDestroy()
     }
 }

@@ -134,7 +134,25 @@ class PlayerRepository @Inject constructor(
     ) {
         prepareListener = onReady
 
-        val mediaItem = MediaItem.fromUri(Uri.parse(songUrl))
+        if (songUrl.isBlank()) {
+            Timber.e("❌ preparePlayer aborted: URL is blank for ${song.musicTitle}")
+            onReady(false)
+            return
+        }
+
+        val uri = Uri.parse(songUrl)
+
+// Reject file:// paths that don’t exist
+        if (uri.scheme == "file") {
+            val file = java.io.File(uri.path!!)
+            if (!file.exists()) {
+                Timber.e("❌ File does not exist: ${uri.path}")
+                onReady(false)
+                return
+            }
+        }
+
+        val mediaItem = MediaItem.fromUri(uri)
         exoPlayer.stop()
         exoPlayer.clearMediaItems()
         exoPlayer.setMediaItem(mediaItem, true)
@@ -234,7 +252,8 @@ class PlayerRepository @Inject constructor(
     }
 
     fun shouldStartNewSession(): Boolean {
-        return exoPlayer.mediaItemCount == 0 || MusicServiceOnline.isServiceStopped
+        return exoPlayer.mediaItemCount == 0
+//                || MusicServiceOnline.isServiceStopped
     }
 
 

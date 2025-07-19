@@ -80,25 +80,31 @@
                         isLocal = it.isLocal
                     )
                 }
+
                 songList = unifiedSongs
                 adapter.submitList(songList)
                 binding.totalPlaylistsong.text = "Total songs: ${songList.size}"
-                binding.PlaylistShufflebtn.visibility = if (songList.isNotEmpty()) View.VISIBLE else View.GONE
 
-                // ✅ ✅ Load image here when data is ready
-                if (songList.isNotEmpty()) {
-                    Glide.with(this)
-                        .load(songList[0].imgUri)
-                        .apply(RequestOptions().placeholder(R.drawable.bg_playlist_image).centerCrop())
-                        .into(binding.playlistImg)
+                // 🔁 Handle empty state
+                if (songList.isEmpty()) {
+                    binding.PlaylistShufflebtn.visibility = View.GONE
+                    binding.emptyStateWrapper.visibility = View.VISIBLE
+                    binding.PlaylistmusicRecyclerView.visibility = View.GONE
                 } else {
-                    Glide.with(this)
-                        .load(R.drawable.bg_playlist_image)
-                        .apply(RequestOptions().centerCrop())
-                        .into(binding.playlistImg)
+                    binding.PlaylistShufflebtn.visibility = View.VISIBLE
+                    binding.emptyStateWrapper.visibility = View.GONE
+                    binding.PlaylistmusicRecyclerView.visibility = View.VISIBLE
                 }
+
+                // ✅ Load playlist image
+                val playlistImage = songList.firstOrNull()?.imgUri
+                Glide.with(this)
+                    .load(playlistImage ?: R.drawable.bg_playlist_image)
+                    .apply(RequestOptions().centerCrop())
+                    .into(binding.playlistImg)
             }
         }
+
 
         private fun setupToolbar() {
             setSupportActionBar(binding.playlisttoolbar)

@@ -5,6 +5,9 @@
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+<!--        <item name="android:fitsSystemWindows">true</item>-->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+
     </style>
 
     <style name="ShapeAppearanceOverlay.App.CornerSize8" parent="">

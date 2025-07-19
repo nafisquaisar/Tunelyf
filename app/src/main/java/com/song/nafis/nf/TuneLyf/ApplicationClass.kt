@@ -5,20 +5,27 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
+import com.song.nafis.nf.TuneLyf.Repository.PlayerRepository
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltAndroidApp
 class ApplicationClass: Application() {
 
     lateinit var exoPlayer: ExoPlayer
+    lateinit var playerRepository: PlayerRepository
+
+    @Inject
+    lateinit var injectedRepository: PlayerRepository
 
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
         exoPlayer = ExoPlayer.Builder(this).build()
 
-
+        // Assign injected repo
+        playerRepository = injectedRepository
 
         FirebaseApp.initializeApp(this)
         val firebaseAppCheck = FirebaseAppCheck.getInstance()

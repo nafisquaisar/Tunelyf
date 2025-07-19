@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/activitybg"
     tools:context=".Activity.PlaylistSongView">
 
     <!-- Toolbar -->
@@ -18,7 +18,7 @@
         android:elevation="4dp"
         app:navigationIcon="@drawable/back_arrow"
         app:menu="@menu/more_option"
-        app:titleTextColor="@color/white"
+        app:titleTextColor="@color/alwayswhite"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -110,10 +110,42 @@
         android:text="Shuffle"
         app:icon="@drawable/shuffle"
         app:iconSize="30dp"
-        app:iconTint="@color/white"
-        android:textColor="@color/white"
+        app:iconTint="@color/alwayswhite"
+        android:textColor="@color/alwayswhite"
         app:backgroundTint="@color/icon_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <LinearLayout
+        android:id="@+id/emptyStateWrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.39">
+
+        <!-- Lottie Animation View -->
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/emptyAnimation"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/nodatafound" />
+
+        <!-- Empty message -->
+        <TextView
+            android:id="@+id/emptyMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:text="No Song yet.\nTap the three dot to add the song"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

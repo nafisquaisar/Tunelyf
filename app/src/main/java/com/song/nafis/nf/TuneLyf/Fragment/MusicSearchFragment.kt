@@ -13,6 +13,7 @@ import com.song.nafis.nf.TuneLyf.UI.AudiusViewModel
 import com.song.nafis.nf.TuneLyf.UI.JamendoViewModel
 import com.song.nafis.nf.TuneLyf.UI.MusicViewModel
 import com.song.nafis.nf.TuneLyf.Model.UnifiedMusic
+import com.song.nafis.nf.TuneLyf.R
 import com.song.nafis.nf.TuneLyf.adapter.SongAdapter
 import com.song.nafis.nf.TuneLyf.adapter.SuggestionAdapter
 import com.song.nafis.nf.TuneLyf.databinding.FragmentMusicSearchBinding
@@ -123,12 +124,9 @@ class MusicSearchFragment : Fragment() {
                 return@launch
             }
 
-            // ✅ Update the ViewModel playlist before launching player
-            musicViewModel.setPlaylist(currentList)
-            musicViewModel.setInitialIndex(trackIndex,requireContext())
-
             Loading.hide()
 
+            // ✅ Just launch with intent. Don't set in ViewModel directly.
             val intent = Intent(requireContext(), PlayMusicStreamActivity::class.java).apply {
                 putExtra("SONG_INDEX", trackIndex)
                 putParcelableArrayListExtra("SONG_LIST", ArrayList(currentList))
@@ -137,6 +135,11 @@ class MusicSearchFragment : Fragment() {
         }
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        val searchItem = menu.findItem(R.id.search_playlist)
+        searchItem?.isVisible = false // Hide search in this fragment
+    }
 
 //
 //    private fun showSuggestions(suggestions: List<String>) {

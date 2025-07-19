@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.Menu
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -55,6 +56,7 @@ class MainActivity : AppCompatActivity() {
 
         toolbar = binding.hometoolbar
         setSupportActionBar(toolbar)
+        supportActionBar?.title="My Music"
         toolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.back_arrow)
         toolbar.setNavigationOnClickListener {
             finish()
@@ -156,6 +158,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.totalsong.text = "Total Songs : ${adapter.itemCount}"
+
+        // 🟡 Empty state toggle
+        val isEmpty = musiclist.isEmpty()
+        binding.homeRecycler.visibility = if (isEmpty) View.GONE else View.VISIBLE
+        binding.totalsongLinearL.visibility = if (isEmpty) View.GONE else View.VISIBLE
+        binding.LocalShufflebtn.visibility = if (isEmpty) View.GONE else View.VISIBLE
+        binding.emptyStateWrapper.visibility = if (isEmpty) View.VISIBLE else View.GONE
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -201,6 +210,10 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(this@MainActivity, "No songs available to shuffle", Toast.LENGTH_SHORT).show()
                 }
+            }
+            binding.swipeRefresh.setOnRefreshListener {
+                adapterset()
+                binding.swipeRefresh.isRefreshing = false
             }
 
 

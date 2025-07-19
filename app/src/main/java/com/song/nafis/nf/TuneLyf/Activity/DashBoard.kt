@@ -39,6 +39,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import nl.psdcompany.duonavigationdrawer.widgets.DuoDrawerToggle
 import timber.log.Timber
 import android.Manifest
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import com.song.nafis.nf.TuneLyf.FavoriteMusic
+import com.song.nafis.nf.TuneLyf.MainActivity
 import com.song.nafis.nf.TuneLyf.Service.MusicServiceOnline
 
 
@@ -58,6 +64,11 @@ class DashBoard : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding= ActivityDashBoardBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+            insets
+        }
 
         toolbar = binding.hometoolbar
         setSupportActionBar(toolbar)
@@ -100,10 +111,18 @@ class DashBoard : AppCompatActivity() {
         }
 
 
+        versionSet()
+    }
 
-
-
-
+    private fun versionSet() {
+        val versionName = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            packageManager.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0)).versionName
+        } else {
+            @Suppress("DEPRECATION")
+            packageManager.getPackageInfo(packageName, 0).versionName
+        }
+        val appName = getString(R.string.app_name)
+        binding.drawerVersion.text = "$appName v$versionName"
 
     }
 
@@ -228,14 +247,29 @@ class DashBoard : AppCompatActivity() {
     private fun clickbtn() {
         binding.apply {
 
-            llBase.setOnClickListener {
-                startActivity(Intent(this@DashBoard, BaseSetting::class.java))
+            drawermymusic.setOnClickListener {
+                startActivity(Intent(this@DashBoard, MainActivity::class.java))
             }
             llSetting.setOnClickListener {
                 startActivity(Intent(this@DashBoard, AppSetting::class.java))
             }
-            llShuffle.setOnClickListener {
-                startActivity(Intent(this@DashBoard, PlayMusicStreamActivity::class.java))
+            DrawerFavorites.setOnClickListener {
+                startActivity(Intent(this@DashBoard, FavoriteMusic::class.java))
+            }
+
+            DrawerHelp.setOnClickListener {
+                startActivity(Intent(this@DashBoard, Help::class.java))
+            }
+
+            DrawerAbout.setOnClickListener {
+                startActivity(Intent(this@DashBoard, About::class.java))
+            }
+
+            DrawerPrivacy.setOnClickListener {
+                startActivity(Intent(this@DashBoard, PrivacyPolicy::class.java))
+            }
+            DrawerRecentPlay.setOnClickListener {
+                startActivity(Intent(this@DashBoard, RecentPlayList::class.java))
             }
             llExit.setOnClickListener {
                 val builder = MaterialAlertDialogBuilder(this@DashBoard)
@@ -249,7 +283,7 @@ class DashBoard : AppCompatActivity() {
 // Stop playback in repository
                         musicViewModel.cancelStopTimer()
                         musicViewModel.playerRepository.stopCurrentSong()
-                        MusicServiceOnline.isServiceStopped = true
+//                        MusicServiceOnline.isServiceStopped = true
                         musicViewModel.isPlaying.postValue(false)
 
                         viewModel.logout()
@@ -284,14 +318,14 @@ class DashBoard : AppCompatActivity() {
                 super.onDrawerOpened(drawerView)
                 // Change to back arrow and tint it white
                 toolbar.navigationIcon = ContextCompat.getDrawable(this@DashBoard, R.drawable.back_arrow)?.mutate()
-                toolbar.navigationIcon?.setTint(ContextCompat.getColor(this@DashBoard, R.color.white))
+                toolbar.navigationIcon?.setTint(ContextCompat.getColor(this@DashBoard, R.color.alwayswhite))
             }
 
             override fun onDrawerClosed(drawerView: android.view.View) {
                 super.onDrawerClosed(drawerView)
                 // Change to hamburger icon and tint it white
                 toolbar.navigationIcon = ContextCompat.getDrawable(this@DashBoard, R.drawable.drawer_icon)?.mutate()
-                toolbar.navigationIcon?.setTint(ContextCompat.getColor(this@DashBoard, R.color.white))
+                toolbar.navigationIcon?.setTint(ContextCompat.getColor(this@DashBoard, R.color.alwayswhite))
             }
         }
 
@@ -299,7 +333,7 @@ class DashBoard : AppCompatActivity() {
         drawerToggle.syncState()
         // ✅ Set white color to the initial navigation icon here
         toolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.drawer_icon)?.mutate()
-        toolbar.navigationIcon?.setTint(ContextCompat.getColor(this, R.color.white))
+        toolbar.navigationIcon?.setTint(ContextCompat.getColor(this, R.color.alwayswhite))
 
     }
 

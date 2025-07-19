@@ -68,7 +68,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=""
-                            android:textColor="@color/white"
+                            android:textColor="@color/alwayswhite"
                             android:textSize="@dimen/_18sdp"
                             android:textStyle="bold" />
 
@@ -78,7 +78,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text=""
-                            android:textColor="@color/white"
+                            android:textColor="@color/alwayswhite"
                             android:textSize="@dimen/_12sdp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -97,6 +97,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/douHeader">
 
+<!--                Setting -->
                 <LinearLayout
                     android:id="@+id/ll_setting"
                     android:layout_width="match_parent"
@@ -111,7 +112,7 @@
                         android:layout_height="wrap_content"
                         android:src="@drawable/baseline_settings_24"
 
-                        app:tint="@color/white" />
+                        app:tint="@color/alwayswhite" />
 
                     <TextView
 
@@ -119,13 +120,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
                         android:text="Setting"
-                        android:textColor="@color/white"
+                        android:textColor="@color/alwayswhite"
                         android:textSize="16sp" />
 
                 </LinearLayout>
 
+<!--                my music -->
                 <LinearLayout
-                    android:id="@+id/ll_shuffle"
+                    android:id="@+id/drawermymusic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="24dp"
@@ -136,21 +138,23 @@
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/shuffle"
-                        app:tint="@color/white" />
+                        android:src="@drawable/notification_music_img"
+                        app:tint="@color/alwayswhite" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
-                        android:text="Shuffle"
-                        android:textColor="@color/white"
+                        android:text="My Music"
+                        android:textColor="@color/alwayswhite"
                         android:textSize="16sp" />
 
                 </LinearLayout>
 
+
+<!--                recent play-->
                 <LinearLayout
-                    android:id="@+id/ll_base"
+                    android:id="@+id/DrawerRecentPlay"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="24dp"
@@ -161,21 +165,132 @@
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/base_setting"
-                        app:tint="@color/white" />
+                        android:src="@drawable/recent_play"
+                        app:tint="@color/alwayswhite" />
 
                     <TextView
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="18dp"
-                        android:text="Base Setting"
-                        android:textColor="@color/white"
+                        android:text="Recent Play"
+                        android:textColor="@color/alwayswhite"
                         android:textSize="16sp" />
 
                 </LinearLayout>
 
+
+<!--                favorite-->
                 <LinearLayout
+                    android:id="@+id/DrawerFavorites"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/favoritefull"
+                        app:tint="@color/alwayswhite" />
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="18dp"
+                        android:text="Favorites"
+                        android:textColor="@color/alwayswhite"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+<!--                help-->
+                <LinearLayout
+                    android:id="@+id/DrawerHelp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/help"
+                        app:tint="@color/alwayswhite" />
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="18dp"
+                        android:text="Help"
+                        android:textColor="@color/alwayswhite"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+<!--                privacy-->
+               <LinearLayout
+                    android:id="@+id/DrawerPrivacy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/privacy_tip_24px"
+                        app:tint="@color/alwayswhite" />
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="18dp"
+                        android:text="Privacy Policy"
+                        android:textColor="@color/alwayswhite"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+<!--                about-->
+               <LinearLayout
+                    android:id="@+id/DrawerAbout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/info_24px"
+                        app:tint="@color/alwayswhite" />
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="18dp"
+                        android:text="About App"
+                        android:textColor="@color/alwayswhite"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+
+<!--                exit-->
+              <LinearLayout
                     android:id="@+id/ll_Exit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -189,7 +304,7 @@
                         android:layout_height="wrap_content"
                         android:src="@drawable/baseline_exit_to_app_24"
 
-                        app:tint="@color/white" />
+                        app:tint="@color/alwayswhite" />
 
                     <TextView
 
@@ -197,7 +312,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
                         android:text="Logout"
-                        android:textColor="@color/white"
+                        android:textColor="@color/alwayswhite"
                         android:textSize="16sp" />
 
                 </LinearLayout>
@@ -214,10 +329,11 @@
                 app:layout_constraintStart_toStartOf="parent">
 
                 <TextView
+                    android:id="@+id/drawerVersion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_16ssp"
+                    android:textColor="#aaa"
+                    android:textSize="@dimen/_12ssp"
                     android:gravity="center"
                     android:text="Version 1.0.0" />
             </LinearLayout>
@@ -242,7 +358,8 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="@drawable/toolbarbg"
                 app:title="@string/app_name"
-                app:menu="@menu/playlist_menu"
+                app:popupTheme="@style/ToolbarPopupTheme"
+                app:theme="@style/AppTheme.Toolbar"
                 app:titleTextColor="@color/alwayswhite"
                 app:layout_collapseMode="pin" />
 

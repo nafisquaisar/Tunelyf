@@ -7,6 +7,7 @@
     android:layout_marginHorizontal="8dp"
     android:clickable="true"
     android:focusable="true"
+    android:backgroundTint="@color/cardbg2"
     android:foreground="?attr/selectableItemBackground"
     android:padding="@dimen/_5sdp"
     app:cardCornerRadius="@dimen/_5sdp"
@@ -33,13 +34,13 @@
             android:layout_weight="1"
             android:text="Playlist Name"
             android:textSize="16sp"
-            android:textColor="@android:color/black" />
+            android:textColor="@color/black" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/checkboxAddToPlaylist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:buttonTint="@color/icon_color"
+            android:buttonTint="@color/secondary_icon_color"
             android:focusable="false"
             android:clickable="false" />
     </LinearLayout>

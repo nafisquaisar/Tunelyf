@@ -103,7 +103,7 @@ class ProfileFragment : Fragment() {
 // Stop playback in repository
                     musicViewModel.cancelStopTimer()
                     musicViewModel.playerRepository.stopCurrentSong()
-                    MusicServiceOnline.isServiceStopped = true
+//                    MusicServiceOnline.isServiceStopped = true
                     musicViewModel.isPlaying.postValue(false)
 
 // Now logout and redirect
@@ -159,11 +159,14 @@ class ProfileFragment : Fragment() {
                 binding.profEmail.text=user.email.ifEmpty { "" }
 
                 if (user.imgUrl.isNotEmpty()) {
-                    Glide.with(requireContext())
-                        .load(user.imgUrl)
-                        .placeholder(R.drawable.profileicon)
-                        .error(R.drawable.profileicon)
-                        .into(binding.circleProfImageView)
+
+                    if (isAdded && context != null && !requireActivity().isDestroyed) {
+                        Glide.with(requireContext())
+                            .load(user.imgUrl)
+                            .placeholder(R.drawable.profileicon)
+                            .error(R.drawable.profileicon)
+                            .into(binding.circleProfImageView)
+                    }
                     // Once loaded
 
                     binding.shimmerProfile.shimmerLayout.stopShimmer()
@@ -222,11 +225,13 @@ class ProfileFragment : Fragment() {
                     updateNumber.setText(user.phone.ifEmpty { "" })
 
                     if (user.imgUrl.isNotEmpty()) {
-                        Glide.with(requireContext())
-                            .load(user.imgUrl)
-                            .placeholder(R.drawable.profileicon)
-                            .error(R.drawable.profileicon)
-                            .into(imgDialog)
+                        if (isAdded && context != null && !requireActivity().isDestroyed) {
+                            Glide.with(requireContext())
+                                .load(user.imgUrl)
+                                .placeholder(R.drawable.profileicon)
+                                .error(R.drawable.profileicon)
+                                .into(imgDialog)
+                        }
 
                     } else {
                         imgDialog.setImageResource(R.drawable.profileicon)
@@ -255,9 +260,11 @@ class ProfileFragment : Fragment() {
                         is Resource.Success -> {
                             Loading.hide()
                             uploadedImageUrl = result.data.toString()
-                            Glide.with(requireContext())
-                                .load(uploadedImageUrl)
-                                .into(imgDialog)
+                            if (isAdded && context != null && !requireActivity().isDestroyed) {
+                                Glide.with(requireContext())
+                                    .load(uploadedImageUrl)
+                                    .into(imgDialog)
+                            }
                             shimmerProfile.stopShimmer()
                             shimmerProfile.visibility = View.GONE
                             imgDialog.visibility= View.VISIBLE
