@@ -181,15 +181,15 @@
             <!-- Empty message -->
             <TextView
                 android:id="@+id/emptyMessage"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:text="No playlists yet.\nTap the ➕ to create one"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="16sp"
-                android:justificationMode="inter_word"
-                android:layout_marginHorizontal="16dp"
-                android:textAlignment="viewStart" />
+                android:lineSpacingExtra="4dp"
+                android:gravity="center"
+                android:padding="10dp" />
+
+
 
         </LinearLayout>
 

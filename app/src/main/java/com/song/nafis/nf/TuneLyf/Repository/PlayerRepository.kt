@@ -18,6 +18,10 @@ import com.song.nafis.nf.TuneLyf.Api.AudiusApi
 import com.song.nafis.nf.TuneLyf.ApplicationClass
 import com.song.nafis.nf.TuneLyf.Model.UnifiedMusic
 import com.song.nafis.nf.TuneLyf.Service.MusicServiceOnline
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Singleton
 import kotlin.getValue
@@ -81,12 +85,30 @@ class PlayerRepository @Inject constructor(
         }
         if (index in playlist.indices) {
             currentIndex = index
-            exoPlayer.seekTo(index, 0)
-            playCurrent()
+            val song = playlist[index]
+
+            if (song.musicPath.isNullOrBlank()) {
+                // 🔄 Fetch the stream URL first
+                CoroutineScope(Dispatchers.IO).launch {
+                    val streamUrl = getStreamUrl(song.musicId) // Assuming you have song.musicId
+
+                    if (!streamUrl.isNullOrBlank()) {
+                        song.musicPath = streamUrl // Update musicPath
+                        withContext(Dispatchers.Main) {
+                            playCurrent()
+                        }
+                    } else {
+                        Timber.e("⛔ Stream URL fetch failed for ${song.musicTitle}")
+                    }
+                }
+            } else {
+                playCurrent()
+            }
         } else {
             Timber.e("⛔ Invalid index: $index")
         }
     }
+
 
 
     private fun playCurrent() {

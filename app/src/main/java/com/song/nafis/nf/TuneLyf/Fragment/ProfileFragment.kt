@@ -119,7 +119,7 @@ class ProfileFragment : Fragment() {
 
             val alertDialog = builder.create()
             alertDialog.show()
-            val color = ContextCompat.getColor(requireContext(), R.color.icon_color)
+            val color = ContextCompat.getColor(requireContext(), R.color.secondary_icon_color)
             alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(color)
             alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(color)
         }

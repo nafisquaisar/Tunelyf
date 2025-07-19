@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.song.nafis.nf.TuneLyf.Entity.PlaylistSongEntity
@@ -34,6 +36,11 @@ class  AddSongPlaylistActivity  : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAddSongPlaylistBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.addSong) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         setSupportActionBar(binding.playlisttoolbar)
         binding.playlisttoolbar.setNavigationOnClickListener { onBackPressed() }
@@ -111,6 +118,14 @@ class  AddSongPlaylistActivity  : AppCompatActivity() {
     }
 
     private fun setupSearch() {
+
+        val searchAutoComplete = binding.searchPlaylistMusic.findViewById<android.widget.AutoCompleteTextView>(
+            androidx.appcompat.R.id.search_src_text
+        )
+        searchAutoComplete.setHintTextColor(ContextCompat.getColor(this, R.color.alwayswhite))
+        searchAutoComplete.setTextColor(ContextCompat.getColor(this, R.color.alwayswhite))
+
+
         binding.searchPlaylistMusic.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean = true
 

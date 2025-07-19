@@ -72,7 +72,7 @@
                     android:layout_marginTop="0dp"
                     android:background="#00000000"
                     android:hint="Enter Your Email"
-                    app:hintTextColor="@color/icon_color">
+                    app:hintTextColor="@color/secondary_icon_color">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etEmail"
@@ -84,7 +84,7 @@
                         android:inputType="textEmailAddress"
                         android:padding="15dp"
                         android:textColor="@android:color/black"
-                        android:textColorHint="@color/icon_color" />
+                        android:textColorHint="@color/secondary_icon_color" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </androidx.cardview.widget.CardView>
@@ -106,7 +106,7 @@
                     android:background="#00000000"
                     android:hint="Enter Your Password"
                     app:endIconMode="password_toggle"
-                    app:hintTextColor="@color/icon_color">
+                    app:hintTextColor="@color/secondary_icon_color">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etPassword"
@@ -115,7 +115,7 @@
                         android:background="@drawable/edit_text_shape"
                         android:inputType="textPassword"
                         android:padding="15dp"
-                        android:textColorHint="@color/icon_color" />
+                        android:textColorHint="@color/secondary_icon_color" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </androidx.cardview.widget.CardView>
@@ -206,7 +206,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_12sdp"
                         android:text="Sign in with Google"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/_14ssp" />
                 </LinearLayout>
 

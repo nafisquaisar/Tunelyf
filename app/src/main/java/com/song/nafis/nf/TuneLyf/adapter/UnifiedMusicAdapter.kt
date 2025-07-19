@@ -66,14 +66,14 @@ class UnifiedMusicAdapter(
 
             Glide.with(context)
                 .load(song.imgUri)
-                .placeholder(R.mipmap.music_icon)
+                .placeholder(R.mipmap.logo_round)
                 .centerCrop()
                 .into(binding.musicphoto)
 
             // Highlight if selected
             val isSelected = selectedItems.contains(song.musicId)
-            val bgColor = if (isSelected) R.color.icon_color else R.color.white
-            val textColor = if (isSelected) R.color.white else R.color.black
+            val bgColor = if (isSelected) R.color.icon_color else R.color.activitybg
+            val textColor = if (isSelected) R.color.alwayswhite else R.color.black
 
             binding.root.setBackgroundColor(ContextCompat.getColor(context, bgColor))
             binding.musicName.setTextColor(ContextCompat.getColor(context, textColor))
@@ -97,11 +97,15 @@ class UnifiedMusicAdapter(
 
         fun bind(song: UnifiedMusic) {
             binding.musicTitle.text = song.musicTitle
-            binding.musicArtist.text = song.musicAlbum
+            if(song.musicAlbum.isNotEmpty()){
+                binding.musicArtist.text = song.musicAlbum
+            }else{
+                binding.musicArtist.text = song.musicArtist
+            }
 
             Glide.with(context)
                 .load(song.imgUri)
-                .placeholder(R.mipmap.music_icon)
+                .placeholder(R.mipmap.logo_round)
                 .centerCrop()
                 .into(binding.musicCover)
 

@@ -5,9 +5,9 @@
             <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
             <item name="colorPrimary">@color/secondary_deep_blue</item>
             <item name="android:statusBarColor">@color/icon_color</item> <!-- or transparent -->
-            <item name="android:navigationBarColor">@color/icon_color</item>
+            <item name="android:navigationBarColor">@color/statusbar</item>
             <item name="android:windowLightStatusBar">false</item>
-            <item name="android:fitsSystemWindows">true</item>
+<!--            <item name="android:fitsSystemWindows">true</item>-->
             <item name="android:windowDrawsSystemBarBackgrounds">true</item>
 
         </style>

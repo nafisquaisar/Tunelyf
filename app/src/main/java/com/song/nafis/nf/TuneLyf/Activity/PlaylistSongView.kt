@@ -12,6 +12,8 @@
     import androidx.appcompat.app.AlertDialog
     import androidx.appcompat.app.AppCompatActivity
     import androidx.core.content.ContextCompat
+    import androidx.core.view.ViewCompat
+    import androidx.core.view.WindowInsetsCompat
     import androidx.recyclerview.widget.LinearLayoutManager
     import com.bumptech.glide.Glide
     import com.bumptech.glide.request.RequestOptions
@@ -54,7 +56,11 @@
             super.onCreate(savedInstanceState)
             binding = ActivityPlaylistSongViewBinding.inflate(layoutInflater)
             setContentView(binding.root)
-
+            ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
+                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+                insets
+            }
             // Receive intent data
             playlistName = intent.getStringExtra("playlist_name") ?: "My Playlist"
             playlistId = intent.getStringExtra("playlist_id") ?: ""

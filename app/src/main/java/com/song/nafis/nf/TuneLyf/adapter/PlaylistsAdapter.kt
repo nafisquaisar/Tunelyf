@@ -49,7 +49,7 @@ class PlaylistsAdapter(
                     playlistIcon.setPadding(0, 0, 0, 0)
                     Glide.with(context)
                         .load(songs.first().image)
-                        .placeholder(R.drawable.musicicon)
+                        .placeholder(R.mipmap.logo_round)
                         .transform(RoundedCorners(20))
                         .into(playlistIcon)
                 } else {
@@ -57,8 +57,8 @@ class PlaylistsAdapter(
                     // ✅ Set padding when real image is used
                     playlistIcon.setPadding(20, 20, 20, 20)  // Adjust padding as needed
                     Glide.with(context)
-                        .load(R.drawable.musicicon)
-                        .placeholder(R.drawable.musicicon)
+                        .load(R.mipmap.logo_round)
+                        .placeholder(R.mipmap.logo_round)
                         .transform(RoundedCorners(20))
                         .into(playlistIcon)
                 }

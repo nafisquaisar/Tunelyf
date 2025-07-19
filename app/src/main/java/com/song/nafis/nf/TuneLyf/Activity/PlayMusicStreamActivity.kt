@@ -25,6 +25,8 @@
     import android.widget.LinearLayout
     import androidx.appcompat.app.AlertDialog
     import androidx.appcompat.widget.AppCompatButton
+    import androidx.core.view.ViewCompat
+    import androidx.core.view.WindowInsetsCompat
     import androidx.recyclerview.widget.LinearLayoutManager
     import androidx.recyclerview.widget.RecyclerView
     import com.google.android.material.card.MaterialCardView
@@ -59,7 +61,11 @@
             super.onCreate(savedInstanceState)
             binding = ActivityPlayMusicStreamBinding.inflate(layoutInflater)
             setContentView(binding.root)
-
+            ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
+                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+                insets
+            }
             val songTitle = intent.getStringExtra("SONG_TITLE") ?: "Unknown"
             val songArtwork = intent.getStringExtra("SONG_TRACK") ?: "Unknown"
 

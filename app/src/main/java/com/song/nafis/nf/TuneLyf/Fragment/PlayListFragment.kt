@@ -2,11 +2,15 @@ package com.song.nafis.nf.TuneLyf.Fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.ImageSpan
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -113,7 +117,30 @@ class PlayListFragment : Fragment() {
         }
 
 
+        setimagetext()
+
         return binding.root
+    }
+
+    private fun setimagetext() {
+        val textView = binding.emptyMessage
+
+        // Create the base text with a placeholder
+        val text = "No playlists yet.\nTap the   to create one"
+        // Load your image as Drawable
+        val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.create_playlist_add_circle)!!
+        drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
+        // Create a SpannableString
+        val spannable = SpannableString(text)
+        // Find the position where to insert image (after "Tap the ")
+        val imagePosition = text.indexOf("  ") + 1  // 1st space to hold image
+        // Insert image
+        val imageSpan = ImageSpan(drawable, ImageSpan.ALIGN_BOTTOM)
+        spannable.setSpan(imageSpan, imagePosition, imagePosition + 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+
+// Set text to TextView
+        textView.text = spannable
+
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {

@@ -9,6 +9,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.song.nafis.nf.TuneLyf.Activity.PlayMusicStreamActivity
 import com.song.nafis.nf.TuneLyf.Model.UnifiedMusic
@@ -31,6 +33,13 @@ class FavoriteMusic : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFavoriteMusicBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.favRoot) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         setSupportActionBar(binding.playlisttoolbar)
         binding.playlisttoolbar.setNavigationOnClickListener { onBackPressed() }

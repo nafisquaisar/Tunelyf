@@ -6,6 +6,8 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -50,6 +52,11 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.register) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         binding.btnCreateAccount.setOnClickListener {
             val name = binding.etName.text.toString().trim()
@@ -93,8 +100,9 @@ class RegisterActivity : AppCompatActivity() {
                             viewModel.saveUserData(name = name, phoneNumber = phone, email = email, password = "")
                         }
 
-                        startActivity(Intent(this@RegisterActivity, DashBoard::class.java))
-                        finish()
+                        val intent = Intent(this@RegisterActivity, DashBoard::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
                     }
 
                     is Resource.Error -> {
@@ -113,12 +121,12 @@ class RegisterActivity : AppCompatActivity() {
             finish()
         }
 
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id)) // Get this from google-services.json
-            .requestEmail()
-            .build()
+             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id)) // Get this from google-services.json
+                .requestEmail()
+                .build()
 
-        googleSignInClient = GoogleSignIn.getClient(this, gso)
+            googleSignInClient = GoogleSignIn.getClient(this, gso)
 
             binding.btnGoogle.setOnClickListener {
                     signInLauncher.launch(googleSignInClient.signInIntent)

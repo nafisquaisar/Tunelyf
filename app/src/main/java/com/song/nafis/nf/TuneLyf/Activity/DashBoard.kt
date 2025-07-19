@@ -64,11 +64,23 @@ class DashBoard : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding= ActivityDashBoardBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        val originalPaddingTop = binding.homecontent.paddingTop
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.icon_color)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.homecontent) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+            view.setPadding(
+                view.paddingLeft,
+                systemBars.top + originalPaddingTop,
+                view.paddingRight,
+                view.paddingBottom
+            )
             insets
         }
+
 
         toolbar = binding.hometoolbar
         setSupportActionBar(toolbar)

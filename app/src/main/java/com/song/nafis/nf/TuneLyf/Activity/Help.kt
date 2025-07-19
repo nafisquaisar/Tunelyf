@@ -18,6 +18,8 @@ class Help : AppCompatActivity() {
 
         binding = ActivityHelpBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.helpToolbar)
+        binding.helpToolbar.setNavigationOnClickListener { onBackPressed() }
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.helpRoot) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -41,7 +43,6 @@ class Help : AppCompatActivity() {
             startActivity(intent)
         }
 
-        setSupportActionBar(binding.helpToolbar)
-        binding.helpToolbar.setNavigationOnClickListener { finish() }
+
     }
 }

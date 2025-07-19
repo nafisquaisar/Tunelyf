@@ -13,6 +13,7 @@
     <color name="secondary_blue">#1f2a40</color>
     <color name="secondary_deep_blue">#1f2a40</color>
     <color name="icon_color">#1f2a40</color>
+    <color name="statusbar">#526192</color>
     <color name="secondary_icon_color">#1f2a40</color>
     <color name="secondary_dark_blue">#1E0094</color>
 
@@ -26,6 +27,10 @@
 
     <color name="darker_gray">#aaa</color>
 
+
+    <color name="startcolor">#2C354F</color>
+    <color name="centercolor">#CDD3DC</color>
+    <color name="bottomcolor">#FFFFFF</color>
 
     <color name="checkbox">#00164E</color>
     <color name="very_light_purple">#616377</color>

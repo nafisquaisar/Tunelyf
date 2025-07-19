@@ -23,6 +23,9 @@ class About : AppCompatActivity() {
             insets
         }
 
+        setSupportActionBar(binding.abouttoolbar)
+        binding.abouttoolbar.setNavigationOnClickListener { onBackPressed() }
+
         val versionName = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             packageManager.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0)).versionName
         } else {

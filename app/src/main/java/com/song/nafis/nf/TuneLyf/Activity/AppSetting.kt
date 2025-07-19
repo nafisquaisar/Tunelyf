@@ -15,6 +15,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.song.nafis.nf.TuneLyf.R
@@ -38,6 +40,14 @@ class AppSetting : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityAppSettingBinding.inflate(LayoutInflater.from(this))
+        setContentView(binding.root)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.settingroot) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         // Load theme before setContentView
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
@@ -46,9 +56,6 @@ class AppSetting : AppCompatActivity() {
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
-
-        binding = ActivityAppSettingBinding.inflate(LayoutInflater.from(this))
-        setContentView(binding.root)
 
         // Toolbar back button
         binding.settingtoolbar.setNavigationOnClickListener { onBackPressed() }

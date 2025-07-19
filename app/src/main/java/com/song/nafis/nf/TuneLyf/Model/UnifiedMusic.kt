@@ -9,7 +9,7 @@ data class UnifiedMusic(
     val musicTitle: String = "",           // For both
     val musicAlbum: String = "",           // For both
     val musicArtist: String = "",          // For both
-    val musicPath: String = "",            // Local: file path, Online: stream URL
+    var musicPath: String = "",            // Local: file path, Online: stream URL
     val duration: Long = 0L,               // For both
     val imgUri: String = "",               // Online: image URL, Local: content URI or embedded image as Base64
     val isLocal: Boolean = true            // True = Local, False = Online

@@ -19,6 +19,8 @@ import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.song.nafis.nf.TuneLyf.Activity.PlayMusicStreamActivity
 import com.song.nafis.nf.TuneLyf.Model.MusicDetail
 import com.song.nafis.nf.TuneLyf.Model.toUnifiedMusic
@@ -53,6 +55,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+        
 
         toolbar = binding.hometoolbar
         setSupportActionBar(toolbar)

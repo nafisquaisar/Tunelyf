@@ -106,7 +106,7 @@ class HomeFragment : Fragment() {
         binding.RecentRecyclerView.adapter = recentAdapter
 
         recentlyPlayedViewModel.recentlyPlayed.observe(viewLifecycleOwner) { recentList ->
-            recentAdapter.updateSongs(recentList)
+            recentAdapter.updateSongs(recentList.take(20))
         }
 
         recentlyPlayedViewModel.loadRecentlyPlayed()

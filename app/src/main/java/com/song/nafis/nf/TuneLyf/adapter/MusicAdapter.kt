@@ -42,7 +42,7 @@ class MusicAdapter(
 
         Glide.with(context)
             .load(song.imgUri)
-            .apply(RequestOptions().placeholder(R.mipmap.music_icon).centerCrop())
+            .apply(RequestOptions().placeholder(R.mipmap.logo_round).centerCrop())
             .into(holder.img)
 
         when {

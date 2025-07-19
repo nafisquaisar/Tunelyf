@@ -25,6 +25,9 @@
     <color name="darker_gray">#aaa</color>
     <color name="checkbox">#00164E</color>
 
+    <color name="startcolor">#2C354F</color>
+    <color name="centercolor">#536289</color>
+    <color name="bottomcolor">#60658C</color>
 
     <color name="very_light_purple">#616377</color>
 
