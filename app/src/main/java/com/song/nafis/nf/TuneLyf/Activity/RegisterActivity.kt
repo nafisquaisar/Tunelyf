@@ -63,17 +63,39 @@ class RegisterActivity : AppCompatActivity() {
             val email = binding.etEmail.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()
             val confirmPassword = binding.etRePassword.text.toString().trim()
+            val phone = binding.etNumber.text.toString().trim()
 
+            // Empty check
             if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
+            // Email format check
+            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                Toast.makeText(this, "Please enter a valid email address", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Password length check
+            if (password.length < 6) {
+                Toast.makeText(this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Password match check
             if (password != confirmPassword) {
                 Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
+            // Optional: Phone number format (at least 10 digits)
+            if (phone.isNotEmpty() && phone.length < 10) {
+                Toast.makeText(this, "Enter a valid phone number", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // If all is valid, proceed
             viewModel.register(email, password)
         }
 
@@ -135,6 +157,9 @@ class RegisterActivity : AppCompatActivity() {
     }
 
 
-
+    override fun onBackPressed() {
+        Loading.hide() //
+        super.onBackPressed()
+    }
 
 }

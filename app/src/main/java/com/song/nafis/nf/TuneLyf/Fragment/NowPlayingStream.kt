@@ -33,7 +33,6 @@
             Timber.d("🎶 NowPlayingStream loaded")
 
             viewModel.refreshNowPlayingUI() // ✅ Force push current info to LiveData
-
             observeNowPlaying()
             observeSeekBar()
             setupClickListeners()
@@ -74,6 +73,17 @@
 
             viewModel.currentPositionMillis.observe(viewLifecycleOwner) { updateProgress() }
             viewModel.currentDurationMillis.observe(viewLifecycleOwner) { updateProgress() }
+
+            // ✅ Single observe, not nested
+            viewModel.isBuffering.observe(viewLifecycleOwner) { buffering ->
+                if (buffering) {
+                    binding.playPauseBtn.visibility = View.GONE
+                    binding.loadingContainer.visibility = View.VISIBLE
+                } else {
+                    binding.loadingContainer.visibility = View.GONE
+                    binding.playPauseBtn.visibility = View.VISIBLE
+                }
+            }
         }
 
 
@@ -121,4 +131,9 @@
             super.onDestroyView()
             _binding = null
         }
+
+        override fun onResume() {
+            super.onResume()
+        }
+
     }

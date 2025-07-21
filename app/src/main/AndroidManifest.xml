@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" /> <!-- Audio Permission for android 13 or higher -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- Notification Permission for Android 14 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -93,20 +94,21 @@
 
         <service
             android:name=".Service.MusicServiceOnline"
-            android:exported="true"
-            android:foregroundServiceType="mediaPlayback">
-            <intent-filter>
-                <action android:name="com.song.nafis.nf.TuneLyf.ACTION_PLAY_PAUSE" />
-                <action android:name="com.song.nafis.nf.TuneLyf.ACTION_NEXT" />
-                <action android:name="com.song.nafis.nf.TuneLyf.ACTION_PREV" />
-                <action android:name="com.song.nafis.nf.TuneLyf.ACTION_EXIT" />
-                <action android:name="android.intent.action.MEDIA_BUTTON" />
-            </intent-filter>
-        </service>
+            android:exported="false"
+            android:stopWithTask="true"
+            android:foregroundServiceType="mediaPlayback"
+        android:permission="android.permission.BIND_MEDIA_SESSION_SERVICE">
+        <intent-filter>
+            <action android:name="android.media.browse.MediaBrowserService" />
+        </intent-filter>
+    </service>
 
 
 
-        <receiver android:name=".BroadReciver.ExoPlaybackReceiver" android:exported="true">
+
+        <receiver
+            android:name=".BroadReciver.ExoPlaybackReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
                 <action android:name="com.song.nafis.nf.TuneLyf.ACTION_PLAY_PAUSE" />
@@ -115,6 +117,8 @@
                 <action android:name="com.song.nafis.nf.TuneLyf.ACTION_EXIT" />
             </intent-filter>
         </receiver>
+
+
 
 
 

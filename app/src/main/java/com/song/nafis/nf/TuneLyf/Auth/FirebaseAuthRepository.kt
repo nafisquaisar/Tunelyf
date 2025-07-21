@@ -36,35 +36,50 @@ class FirebaseAuthRepository(
 
     var lastFetchedUser: Users? = null
 
-    override fun loginWithEmail(email: String, password: String): Flow<Resource<Unit>> = callbackFlow {
-        trySend(Resource.Loading)
+    override fun loginWithEmail(email: String, password: String): Flow<Resource<Unit>> =
+        callbackFlow {
+            trySend(Resource.Loading)
 
-        firebaseAuth.signInWithEmailAndPassword(email, password)
-            .addOnSuccessListener {
-                trySend(Resource.Success(Unit))
-            }
-            .addOnFailureListener { exception ->
-                val message = when (exception) {
-                    is FirebaseAuthInvalidUserException -> "Email not registered"
-                    is FirebaseAuthInvalidCredentialsException -> "Invalid credentials. Check your password."
-                    else -> exception.localizedMessage ?: "Login failed"
+            firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnSuccessListener {
+                    trySend(Resource.Success(Unit))
                 }
-                trySend(Resource.Error(message))
-            }
+                .addOnFailureListener { exception ->
+                    val message = when (exception) {
+                        is FirebaseAuthInvalidUserException -> "Email not registered"
+                        is FirebaseAuthInvalidCredentialsException -> "Invalid credentials. Check your password."
+                        else -> exception.localizedMessage ?: "Login failed"
+                    }
+                    trySend(Resource.Error(message))
+                }
 
-        awaitClose()
-    }
+            awaitClose()
+        }
 
 
+    override fun registerWithEmail(email: String, password: String): Flow<Resource<Unit>> =
+        callbackFlow {
+            trySend(Resource.Loading)
+            firebaseAuth.createUserWithEmailAndPassword(email, password)
+                .addOnSuccessListener { trySend(Resource.Success(Unit))
+                    close()}
+                .addOnFailureListener { e ->
+                    val message = when {
+                        e.message?.contains("network", ignoreCase = true) == true -> {
+                            "Network error. Please check your connection."
+                        }
+                        e.message?.contains("Recaptcha", ignoreCase = true) == true -> {
+                            "Security check failed. Try again later."
+                        }
+                        else -> e.localizedMessage ?: "Registration failed. Try again."
+                    }
+                    trySend(Resource.Error(message))
+                    close()
+                }
 
-    override fun registerWithEmail(email: String, password: String): Flow<Resource<Unit>> = callbackFlow {
-        trySend(Resource.Loading)
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
-            .addOnSuccessListener { trySend(Resource.Success(Unit)) }
-            .addOnFailureListener { trySend(Resource.Error(it.message)) }
 
-        awaitClose()
-    }
+            awaitClose()
+        }
 
     override fun loginWithGoogle(credential: AuthCredential): Flow<Resource<Unit>> = callbackFlow {
         trySend(Resource.Loading)
@@ -79,59 +94,65 @@ class FirebaseAuthRepository(
     }
 
 
+    override fun signInWithPhone(credential: PhoneAuthCredential): Flow<Resource<Unit>> =
+        callbackFlow {
+            trySend(Resource.Loading)
+            firebaseAuth.signInWithCredential(credential)
+                .addOnSuccessListener { trySend(Resource.Success(Unit)) }
+                .addOnFailureListener { trySend(Resource.Error(it.message)) }
 
-    override fun signInWithPhone(credential: PhoneAuthCredential): Flow<Resource<Unit>> = callbackFlow {
-        trySend(Resource.Loading)
-        firebaseAuth.signInWithCredential(credential)
-            .addOnSuccessListener { trySend(Resource.Success(Unit)) }
-            .addOnFailureListener { trySend(Resource.Error(it.message)) }
-
-        awaitClose()
-    }
-
-
-    override fun sendOtp(phoneNumber: String, activity: Activity): Flow<Resource<String>> = callbackFlow {
-        trySend(Resource.Loading)
-
-        val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-            override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-                firebaseAuth.signInWithCredential(credential)
-                    .addOnSuccessListener {
-                        trySend(Resource.Success("Auto verification completed"))
-                    }
-                    .addOnFailureListener { e ->
-                        trySend(Resource.Error(e.message ?: "Unknown error"))
-                    }
-            }
-
-            override fun onVerificationFailed(e: FirebaseException) {
-                trySend(Resource.Error(e.message ?: "Verification failed"))
-            }
-
-            override fun onCodeSent(verificationId: String, token: PhoneAuthProvider.ForceResendingToken) {
-                trySend(Resource.Success(verificationId))
-            }
+            awaitClose()
         }
 
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-            phoneNumber,
-            60,
-            TimeUnit.SECONDS,
-            activity,
-            callbacks
-        )
 
-        awaitClose { /* cleanup if necessary */ }
-    }
-    override fun verifyOtp(verificationId: String, code: String): Flow<Resource<Boolean>> = callbackFlow {
-        trySend(Resource.Loading)
-        val credential = PhoneAuthProvider.getCredential(verificationId, code)
-        firebaseAuth.signInWithCredential(credential)
-            .addOnSuccessListener { trySend(Resource.Success(true)) }  // ✅ change here
-            .addOnFailureListener { trySend(Resource.Error(it.message)) }
+    override fun sendOtp(phoneNumber: String, activity: Activity): Flow<Resource<String>> =
+        callbackFlow {
+            trySend(Resource.Loading)
 
-        awaitClose()
-    }
+            val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+                    firebaseAuth.signInWithCredential(credential)
+                        .addOnSuccessListener {
+                            trySend(Resource.Success("Auto verification completed"))
+                        }
+                        .addOnFailureListener { e ->
+                            trySend(Resource.Error(e.message ?: "Unknown error"))
+                        }
+                }
+
+                override fun onVerificationFailed(e: FirebaseException) {
+                    trySend(Resource.Error(e.message ?: "Verification failed"))
+                }
+
+                override fun onCodeSent(
+                    verificationId: String,
+                    token: PhoneAuthProvider.ForceResendingToken
+                ) {
+                    trySend(Resource.Success(verificationId))
+                }
+            }
+
+            PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                phoneNumber,
+                60,
+                TimeUnit.SECONDS,
+                activity,
+                callbacks
+            )
+
+            awaitClose { /* cleanup if necessary */ }
+        }
+
+    override fun verifyOtp(verificationId: String, code: String): Flow<Resource<Boolean>> =
+        callbackFlow {
+            trySend(Resource.Loading)
+            val credential = PhoneAuthProvider.getCredential(verificationId, code)
+            firebaseAuth.signInWithCredential(credential)
+                .addOnSuccessListener { trySend(Resource.Success(true)) }  // ✅ change here
+                .addOnFailureListener { trySend(Resource.Error(it.message)) }
+
+            awaitClose()
+        }
 
 
     override fun logout() {
@@ -171,6 +192,7 @@ class FirebaseAuthRepository(
                     Log.d("AuthRepository", "Logged out from Google")
                 }
             }
+
             "EmailPassword" -> {
                 // Sign out from Firebase for Email/Password provider
                 firebaseAuth.signOut()
@@ -178,6 +200,7 @@ class FirebaseAuthRepository(
                 // Optionally notify UI about the sign-out
                 Log.d("AuthRepository", "Logged out from Email/Password")
             }
+
             "Phone" -> {
                 // Handle phone authentication if needed (Usually, Firebase sign-out is enough)
                 firebaseAuth.signOut()
@@ -296,7 +319,7 @@ class FirebaseAuthRepository(
         phoneNumber: String,
         email: String,
         password: String,
-        imgUrl:String?
+        imgUrl: String?
     ): Flow<Resource<Unit>> = callbackFlow {
         trySend(Resource.Loading)
 
@@ -332,7 +355,9 @@ class FirebaseAuthRepository(
             "Google" -> Users(
                 userId = userId,
                 name = name.ifEmpty { currentUser.displayName ?: "" },
-                phone = phoneNumber.ifEmpty { currentUser.phoneNumber ?: "" }, // not typically available from Google
+                phone = phoneNumber.ifEmpty {
+                    currentUser.phoneNumber ?: ""
+                }, // not typically available from Google
                 email = email.ifEmpty { currentUser.email ?: "" },
                 password = "", // avoid storing passwords
                 timestamp = timestamp,
@@ -385,14 +410,16 @@ class FirebaseAuthRepository(
             return@callbackFlow
         }
 
-        val emailPrefix = currentUser.email?.substringBefore("@")?.trim()?.replace("\\s+".toRegex(), "_")
+        val emailPrefix =
+            currentUser.email?.substringBefore("@")?.trim()?.replace("\\s+".toRegex(), "_")
         val userId = currentUser.uid
         val modifiedUserId = if (!emailPrefix.isNullOrEmpty()) {
             "$userId-$emailPrefix"
         } else {
             userId // fallback
         }
-        val imageRef = FirebaseStorage.getInstance().getReference("ProfileImages/$modifiedUserId.jpg")
+        val imageRef =
+            FirebaseStorage.getInstance().getReference("ProfileImages/$modifiedUserId.jpg")
 
         imageRef.putFile(imageUri)
             .addOnSuccessListener {
@@ -446,7 +473,8 @@ class FirebaseAuthRepository(
         val currentUser = FirebaseAuth.getInstance().currentUser ?: return
         val uid = currentUser.uid
 
-        val emailPrefix = currentUser.email?.substringBefore("@")?.trim()?.replace("\\s+".toRegex(), "_")
+        val emailPrefix =
+            currentUser.email?.substringBefore("@")?.trim()?.replace("\\s+".toRegex(), "_")
         val modifiedUserId = if (!emailPrefix.isNullOrEmpty()) {
             "$uid-$emailPrefix"
         } else {
@@ -492,8 +520,6 @@ class FirebaseAuthRepository(
     }
 
 
-
-
     override fun forgotPassword(email: String): Flow<Resource<Unit>> = callbackFlow {
         trySend(Resource.Loading)
 
@@ -511,7 +537,6 @@ class FirebaseAuthRepository(
     override fun getCurrentUserImgUrl(): String {
         return lastFetchedUser?.imgUrl ?: ""
     }
-
 
 
 }

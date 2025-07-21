@@ -43,9 +43,50 @@ class MusicServiceOnline : Service() {
     private var audioManager: AudioManager? = null
     private var focusRequest: AudioFocusRequest? = null
     private val notificationScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+    private var wasPlayingBeforeLoss = false
+
+    private val audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
+        when (focusChange) {
+            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
+                // 📞 Temporary loss (e.g., phone call)
+                if (playerRepository.isPlaying()) {
+                    wasPlayingBeforeLoss = true
+                    playerRepository.playPause() // pause
+                    Timber.d("🎧 Audio focus lost temporarily, pausing")
+                }
+            }
+            AudioManager.AUDIOFOCUS_GAIN -> {
+                // ✅ Regained focus
+                if (wasPlayingBeforeLoss) {
+                    playerRepository.playPause() // resume
+                    wasPlayingBeforeLoss = false
+                    Timber.d("🎧 Audio focus regained, resuming")
+                }
+            }
+            AudioManager.AUDIOFOCUS_LOSS -> {
+                // ❌ Permanent loss (e.g., YouTube or another app)
+                playerRepository.playPause()
+                wasPlayingBeforeLoss = false
+                Timber.d("🎧 Audio focus lost permanently, pausing")
+            }
+            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
+                // 🔉 Optionally duck volume
+                Timber.d("🎧 Audio focus lost temporarily (can duck), lowering volume")
+            }
+        }
+    }
+
 
     override fun onCreate() {
         super.onCreate()
+
+        media()
+        createNotificationChannel()
+        observePlayback()
+        requestAudioFocus()
+    }
+
+    private fun media() {
         mediaSession = MediaSessionCompat(this, "TuneLyfSession")
         // ⬆️ This line is crucial for collapsed button behavior
         mediaSession.setMediaButtonReceiver(
@@ -80,11 +121,7 @@ class MusicServiceOnline : Service() {
         })
 
         mediaSession.isActive = true
-        createNotificationChannel()
-        observePlayback()
-        requestAudioFocus()
     }
-
 
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -99,8 +136,20 @@ class MusicServiceOnline : Service() {
             ACTION_EXIT -> stopAndExit()
         }
         showNotification()
-        return START_STICKY
+        return START_NOT_STICKY
     }
+
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+
+        Timber.e("🚫 App removed from recent — stopping music")
+
+        playerRepository.stopCurrentSong()
+
+        stopForeground(true)
+        stopSelf()
+    }
+
 
     private fun observePlayback() {
         playerRepository.isPlaying.observeForever { showNotification() }
@@ -246,16 +295,15 @@ class MusicServiceOnline : Service() {
 
             focusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
                 .setAudioAttributes(audioAttributes)
-                .setOnAudioFocusChangeListener {
-                    if (it == AudioManager.AUDIOFOCUS_LOSS) playerRepository.playPause()
-                }
+                .setAcceptsDelayedFocusGain(true)
+                .setOnAudioFocusChangeListener(audioFocusChangeListener)
                 .build()
 
             audioManager?.requestAudioFocus(focusRequest!!)
         } else {
             @Suppress("DEPRECATION")
             audioManager?.requestAudioFocus(
-                { if (it == AudioManager.AUDIOFOCUS_LOSS) playerRepository.playPause() },
+                audioFocusChangeListener,
                 AudioManager.STREAM_MUSIC,
                 AudioManager.AUDIOFOCUS_GAIN
             )
@@ -264,6 +312,7 @@ class MusicServiceOnline : Service() {
 
     override fun onDestroy() {
 
+        playerRepository.releasePlayer()
         mediaSession.release()
         notificationScope.cancel()
         focusRequest?.let {

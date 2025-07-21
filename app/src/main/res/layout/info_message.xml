@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/infoCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:elevation="6dp"
+    app:cardCornerRadius="16dp"
+    android:backgroundTint="@color/icon_color">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Close Button -->
+        <ImageButton
+            android:id="@+id/closeInfo"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:contentDescription="Close"
+            app:tint="@android:color/white" />
+
+        <!-- Info Icon -->
+        <ImageView
+            android:id="@+id/infoIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="8dp"
+            android:layout_below="@+id/closeInfo"
+            android:src="@android:drawable/ic_dialog_info"
+            app:tint="@android:color/white" />
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/infoTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/infoIcon"
+            android:layout_alignTop="@id/infoIcon"
+            android:layout_marginStart="8dp"
+            android:text="Sorry for the inconvenience"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white" />
+
+        <!-- Message -->
+        <TextView
+            android:id="@+id/infoMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/infoTitle"
+            android:layout_alignStart="@id/infoTitle"
+            android:layout_marginTop="4dp"
+            android:text="These songs are streamed from Audius servers,\nso it may take time to load the first time."
+            android:textSize="14sp"
+            android:textColor="@android:color/white" />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

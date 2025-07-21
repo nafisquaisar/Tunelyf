@@ -82,13 +82,21 @@
             val currentPlaylist = viewModel.playlistLiveData.value
 
             observeData()
+
             val isSameSong = currentSong?.musicId == incomingSong?.musicId
             val isSamePlaylist = currentPlaylist?.map { it.musicId } == songList.map { it.musicId }
 
-            if (!isSamePlaylist || !isSameSong) {
+            val shouldRestart = !(isSameSong && isSamePlaylist)
+
+            if (shouldRestart) {
+                Timber.d("🚀 Updating playlist and index...")
                 viewModel.setPlaylist(songList)
-                viewModel.setInitialIndex(currentIndex,this)
+                viewModel.setInitialIndex(currentIndex, this)
+            } else {
+                Timber.d("✅ Already playing — no need to reinitialize.")
             }
+
+
 
 
             setupUI(songArtwork,songTitle)
@@ -316,14 +324,16 @@
             }
 
             viewModel.isPlaying.observe(this) { isPlaying ->
-                if (!viewModel.isBuffering.value!!) {
+                val buffering = viewModel.isBuffering.value ?: false
+                if (!buffering) {
                     binding.playMusicplaypausebtn.setImageResource(
                         if (isPlaying) R.drawable.pause_button else R.drawable.playbtn
                     )
                 }
             }
 
-                viewModel.currentUnifiedSong.observe(this) { song ->
+
+            viewModel.currentUnifiedSong.observe(this) { song ->
                     if (song != null) {
                         recentlyPlayedViewModel.addToRecentlyPlayed(song)
 

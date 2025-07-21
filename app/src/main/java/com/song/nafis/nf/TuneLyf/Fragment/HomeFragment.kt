@@ -49,32 +49,27 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         binding= FragmentHomeBinding.inflate(inflater,container,false)
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        bannerSet()
+        adapterSet()
+        clickListener()
+        return binding.root
 
+    }
 
-        val videoView = binding.bannerVideo
-        val videoUri = Uri.parse("android.resource://${requireContext().packageName}/raw/homebanner3")
-        videoView.setBackgroundColor(Color.WHITE)
-
-        videoView.setVideoURI(videoUri)
-        videoView.setOnPreparedListener { mp ->
-            mp.isLooping = true
-            mp.setVolume(0f, 0f)
-
-            // Clear background once first frame is rendered
-            videoView.setBackgroundColor(Color.TRANSPARENT)
-
-            videoView.start()
+    private fun clickListener() {
+        binding.clickMoreRecent.setOnClickListener {
+            startActivity(Intent(requireContext(), RecentPlayList::class.java))
         }
+    }
 
-
+    private fun adapterSet() {
         // For Trending RecyclerView (square layout)
         val trendingAdapter = HomeItemAdapter(isArtistLayout = false,
-                onItemClick = { artist ->
+            onItemClick = { artist ->
                 val intent = Intent(requireContext(), ViewSongListActivity::class.java)
                 intent.putExtra("search_query", artist.name) // ✅ Use this for search
                 startActivity(intent)
-        })
+            })
         binding.tredingRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.tredingRecyclerView.adapter = trendingAdapter
         trendingAdapter.submitList(Itemlist.trendingList)
@@ -112,8 +107,6 @@ class HomeFragment : Fragment() {
         recentlyPlayedViewModel.loadRecentlyPlayed()
 
 
-
-
 //         For Artist RecyclerView (artist layout)
         val artistAdapter = HomeItemAdapter(
             isArtistLayout = true,
@@ -127,15 +120,23 @@ class HomeFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.ArtistRecyclerView.adapter = artistAdapter
         artistAdapter.submitList(Itemlist.artistList)
+    }
 
+    private fun bannerSet() {
+        val videoView = binding.bannerVideo
+        val videoUri = Uri.parse("android.resource://${requireContext().packageName}/raw/homebanner3")
+        videoView.setBackgroundColor(Color.WHITE)
 
+        videoView.setVideoURI(videoUri)
+        videoView.setOnPreparedListener { mp ->
+            mp.isLooping = true
+            mp.setVolume(0f, 0f)
 
-        binding.clickMoreRecent.setOnClickListener {
-            startActivity(Intent(requireContext(), RecentPlayList::class.java))
+            // Clear background once first frame is rendered
+            videoView.setBackgroundColor(Color.TRANSPARENT)
+
+            videoView.start()
         }
-
-        return binding.root
-
     }
 
 

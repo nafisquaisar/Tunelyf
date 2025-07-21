@@ -1,6 +1,9 @@
 package com.song.nafis.nf.TuneLyf
 
 import android.app.Application
+import androidx.annotation.OptIn
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.ExoPlayer
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
@@ -19,6 +22,7 @@ class ApplicationClass: Application() {
     @Inject
     lateinit var injectedRepository: PlayerRepository
 
+    @OptIn(UnstableApi::class)
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
@@ -32,7 +36,24 @@ class ApplicationClass: Application() {
         firebaseAppCheck.installAppCheckProviderFactory(
             PlayIntegrityAppCheckProviderFactory.getInstance()
         )
+
+
+//        val loadControl = DefaultLoadControl.Builder()
+//            .setBufferDurationsMs(
+//                5000,   // minBufferMs
+//                15000,  // maxBufferMs
+//                2500,   // bufferForPlaybackMs
+//                5000    // bufferForPlaybackAfterRebufferMs
+//            )
+//            .build()
+//
+//        exoPlayer = ExoPlayer.Builder(this)
+//            .setLoadControl(loadControl)
+//            .build()
+
     }
+
+
 }
 
 

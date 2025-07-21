@@ -82,14 +82,39 @@
         app:layout_constraintBottom_toBottomOf="@id/music_image"
         app:layout_constraintEnd_toStartOf="@id/next_btn_container">
 
-        <ImageButton
-            android:id="@+id/play_pause_btn"
+        <FrameLayout
+            android:id="@+id/playPauseFrame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:padding="4dp"
-            android:src="@drawable/play_notificaiton"
-            app:tint="@color/icon_color" />
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/play_pause_btn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:padding="4dp"
+                android:src="@drawable/play_notificaiton"
+                app:tint="@color/icon_color" />
+
+            <FrameLayout
+                android:id="@+id/loadingContainer"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:visibility="gone">
+
+                <ProgressBar
+                    android:id="@+id/loadingSpinner"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    style="?android:attr/progressBarStyleSmall"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/icon_color"
+                    android:indeterminateTintMode="src_in" />
+            </FrameLayout>
+
+        </FrameLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <!-- Next Button -->

@@ -13,6 +13,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import androidx.media3.common.Player
+import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
 import com.song.nafis.nf.TuneLyf.Api.AudiusApi
 import com.song.nafis.nf.TuneLyf.ApplicationClass
@@ -53,7 +54,9 @@ class PlayerRepository @Inject constructor(
     private var listener: ((position: Long, duration: Long, isPlaying: Boolean) -> Unit)? = null
     private var prepareListener: ((Boolean) -> Unit)? = null
     private var onSongCompleted: (() -> Unit)? = null
-    private var bufferingListener: ((Boolean) -> Unit)? = null
+
+    val isBufferingLiveData = MutableLiveData(false)
+
 
     private val audiusRepository: AudiusRepository by lazy {
         AudiusRepository(api = audiusApi)
@@ -110,8 +113,13 @@ class PlayerRepository @Inject constructor(
     }
 
 
-
+    @OptIn(UnstableApi::class)
     private fun playCurrent() {
+        // Defensive check to prevent crash
+        if (playlist.isEmpty() || currentIndex !in playlist.indices){
+            Log.e("PlayerRepository", "❌ Cannot play track. Track list is empty or index is out of bounds.")
+            return
+        }
         val song = playlist[currentIndex]
 
         preparePlayer(song.musicPath, song.musicTitle, song.imgUri, song) { success ->
@@ -144,6 +152,7 @@ class PlayerRepository @Inject constructor(
             currentTitle.postValue(it.musicTitle)
             currentArtwork.postValue(it.imgUri)
             isPlaying.postValue(exoPlayer.isPlaying)
+
         }
     }
 
@@ -189,12 +198,16 @@ class PlayerRepository @Inject constructor(
                 when (state) {
                     Player.STATE_READY -> {
                         prepareListener?.invoke(true)
-                        bufferingListener?.invoke(false)
+                        isBufferingLiveData.postValue(false)
                         prepareListener = null
+                        // ✅ Only play when ready
+//                        if (!exoPlayer.isPlaying) exoPlayer.play()
                     }
 
 
-                    Player.STATE_BUFFERING -> bufferingListener?.invoke(true)
+                    Player.STATE_BUFFERING -> {
+                        isBufferingLiveData.postValue(true)
+                    }
                     Player.STATE_ENDED -> onSongCompleted?.invoke()
                 }
             }
@@ -212,8 +225,32 @@ class PlayerRepository @Inject constructor(
     }
 
     fun playPause() {
-        if (exoPlayer.isPlaying) exoPlayer.pause() else exoPlayer.play()
+        when (exoPlayer.playbackState) {
+            Player.STATE_ENDED -> {
+                // 🎵 If ended, restart from beginning
+                exoPlayer.seekTo(0)
+                exoPlayer.play()
+            }
+
+            Player.STATE_READY -> {
+                if (exoPlayer.isPlaying) {
+                    exoPlayer.pause()
+                } else {
+                    exoPlayer.play()
+                }
+            }
+
+            Player.STATE_IDLE -> {
+                // 🛠 Re-prepare current song if in idle
+                playCurrent()
+            }
+
+            else -> {
+                exoPlayer.play()
+            }
+        }
     }
+
 
     fun stopCurrentSong() = exoPlayer.stop()
 
@@ -255,9 +292,7 @@ class PlayerRepository @Inject constructor(
         onSongCompleted = callback
     }
 
-    fun setBufferingListener(listener: (Boolean) -> Unit) {
-        bufferingListener = listener
-    }
+
 
     @OptIn(UnstableApi::class)
     fun getAudioSessionId(): Int = exoPlayer.audioSessionId
@@ -276,6 +311,10 @@ class PlayerRepository @Inject constructor(
     fun shouldStartNewSession(): Boolean {
         return exoPlayer.mediaItemCount == 0
 //                || MusicServiceOnline.isServiceStopped
+    }
+
+    fun releasePlayer() {
+        exoPlayer.release()
     }
 
 

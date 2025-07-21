@@ -63,6 +63,18 @@ class LoginActivity : AppCompatActivity() {
             val email = binding.etEmail.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()
 
+            // Email format check
+            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                Toast.makeText(this, "Please enter a valid email address", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Password length check
+            if (password.length < 6) {
+                Toast.makeText(this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             if (email.isNotEmpty() && password.isNotEmpty()) {
                 viewModel.login(email, password)
             } else {

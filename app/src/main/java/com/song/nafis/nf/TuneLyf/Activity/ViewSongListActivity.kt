@@ -153,7 +153,6 @@ class ViewSongListActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        Loading.hide()
         super.onBackPressed()
     }
 }

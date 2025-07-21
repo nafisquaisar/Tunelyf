@@ -28,7 +28,10 @@ class MusicViewModel @Inject constructor(
     // App states
     val isRepeatMode = MutableLiveData(false)
     val timerRunning = MutableLiveData(false)
-    val isBuffering = MutableLiveData(false)
+
+    val isBuffering: LiveData<Boolean> = playerRepository.isBufferingLiveData
+
+
 
     // Expose LiveData from repository
     val currentSongTitle = playerRepository.currentTitle
@@ -41,6 +44,7 @@ class MusicViewModel @Inject constructor(
     val currentDurationMillis = playerRepository.currentDurationMillis
     val playlistLiveData = playerRepository.playlistLiveData
 
+
     private val _playMusicStatus = MutableLiveData<Resource<Pair<String, String>>>()
     val playMusicStatus: LiveData<Resource<Pair<String, String>>> get() = _playMusicStatus
 
@@ -49,6 +53,7 @@ class MusicViewModel @Inject constructor(
     init {
         observePlayer()
     }
+
 
     // Playlist & playback control
     fun setPlaylist(list: List<UnifiedMusic>) = playerRepository.setPlaylist(list)
@@ -65,18 +70,22 @@ class MusicViewModel @Inject constructor(
 
     fun refreshNowPlayingUI() = playerRepository.refreshNowPlaying()
     fun setInitialIndex(index: Int, context: Context) {
+        val currentSong = currentUnifiedSong.value
         playerRepository.setInitialIndex(index)
         val song = playerRepository.getCurrentSong()
-        if (song != null) {
+
+        // ✅ Don't start service again if same song
+        if (song != null && currentSong?.musicId != song.musicId) {
             viewModelScope.launch {
                 val finalSong = getResolvedSong(song) ?: return@launch
-                
-//                MusicServiceOnline.isServiceStopped = false
                 startMusicService(context, finalSong)
-                isPlaying.postValue(true)
+                observePlayer()
             }
+        } else {
+            Timber.d("🎯 Skipped startMusicService — same song already playing")
         }
     }
+
     fun playPauseToggle(context: Context) {
         val song = currentUnifiedSong.value ?: run {
             Timber.e("⚠️ No current song selected to play")
@@ -93,7 +102,7 @@ class MusicViewModel @Inject constructor(
                 playerRepository.playPause()
             }
 
-            isPlaying.value = playerRepository.isPlaying()
+//            isPlaying.value = playerRepository.isPlaying()
         }
     }
 
@@ -111,7 +120,6 @@ class MusicViewModel @Inject constructor(
 
 
     fun seekTo(position: Long) {
-        isBuffering.value = true
         playerRepository.seekTo(position)
     }
 
@@ -130,15 +138,13 @@ class MusicViewModel @Inject constructor(
 
         playerRepository.setOnSongCompletedListener {
             if (isRepeatMode.value == true) {
-                playerRepository.refreshNowPlaying()
+                playerRepository.seekTo(0)
+                playerRepository.exoPlayer.play()
             } else {
                 nextSong()
             }
         }
 
-        playerRepository.setBufferingListener {
-            isBuffering.postValue(it)
-        }
     }
 
     private fun formatTime(ms: Long): String {
@@ -166,7 +172,6 @@ class MusicViewModel @Inject constructor(
 
     private fun stopMusicPlayback() {
         playerRepository.stopCurrentSong()
-        isPlaying.postValue(false)
     }
 
     fun getAudioSessionId(): Int {
