@@ -145,7 +145,7 @@ class MusicViewModel @Inject constructor(
         playerRepository.setOnSongCompletedListener {
             if (isRepeatMode.value == true) {
                 playerRepository.seekTo(0)
-                playerRepository.exoPlayer.play()
+                playerRepository.resumePlayback()
             } else {
                 nextSong()
             }

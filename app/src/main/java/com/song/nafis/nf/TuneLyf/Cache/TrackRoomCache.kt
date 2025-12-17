@@ -16,19 +16,19 @@ class TrackRoomCache @Inject constructor(
             .firstOrNull { it.musicId == trackId }
     }
 
-    suspend fun getTracksForQuery(query: String): List<UnifiedMusic> {
-        return dao.getTracksBySearchKey(query)
-            .map { it.toUnifiedMusic() }
-    }
+
+
+    suspend fun getTracksForQuery(query: String): List<UnifiedMusic> =
+        dao.getTracksBySearchKey(query).map { it.toUnifiedMusic() }
 
     suspend fun saveTracks(query: String, tracks: List<UnifiedMusic>) {
-        val cached = tracks.map { it.toCachedEntity(query) }
+        dao.insertTracks(tracks.map { it.toCachedEntity(query) })
+    }
 
-        cached.forEach {
-            println("💾 saveTracks: saving ${it.id} with streamUrl = ${it.streamUrl}")
-        }
-
-        dao.deleteTracksForSearch(query)
-        dao.insertTracks(cached)
+    suspend fun updateSingleTrack(query: String, track: UnifiedMusic) {
+        val existing = getTracksForQuery(query)
+        val updated = (existing.filterNot { it.musicId == track.musicId } + track)
+            .distinctBy { it.musicId }
+        saveTracks(query, updated)
     }
 }

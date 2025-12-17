@@ -17,7 +17,7 @@ import androidx.core.app.NotificationCompat
 import androidx.media.app.NotificationCompat.MediaStyle
 import androidx.media3.common.util.UnstableApi
 import com.song.nafis.nf.TuneLyf.Activity.PlayMusicStreamActivity
-import com.song.nafis.nf.TuneLyf.Player.PlayerManager
+import com.song.nafis.nf.TuneLyf.BroadReciver.PlaybackControlHolder
 import com.song.nafis.nf.TuneLyf.R
 import com.song.nafis.nf.TuneLyf.Repository.PlayerRepository
 import dagger.hilt.android.AndroidEntryPoint
@@ -277,39 +277,46 @@ class MusicServiceOnline : Service() {
         }
     }
 
-    private val audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
-        when (focusChange) {
-            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
-                // Call ya temporary interruption
-                if (playerRepository.isPlaying()) {
-                    wasPlayingBeforeLoss = true
-                    playerRepository.playPause()  // ✅ Pause music
+    private val audioFocusChangeListener =
+        AudioManager.OnAudioFocusChangeListener { focusChange ->
+
+            when (focusChange) {
+
+                AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
+                    if (playerRepository.isPlaying.value == true) {
+                        wasPlayingBeforeLoss = true
+                        CoroutineScope(Dispatchers.Main).launch {
+                            playerRepository.playPause()
+                        }
+                    }
                 }
-            }
 
-            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
-                // ⚠️ Optional duck — Hume nahi chahiye
-                if (playerRepository.isPlaying()) {
-                    wasPlayingBeforeLoss = true
-                    playerRepository.playPause()  // ✅ Ducking nahi, direct pause
+                AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
+                    if (playerRepository.isPlaying.value == true) {
+                        wasPlayingBeforeLoss = true
+                        CoroutineScope(Dispatchers.Main).launch {
+                            playerRepository.playPause()
+                        }
+                    }
                 }
-            }
 
-            AudioManager.AUDIOFOCUS_LOSS -> {
-                // Permanent loss → pause
-                playerRepository.playPause()
-                wasPlayingBeforeLoss = false
-            }
-
-            AudioManager.AUDIOFOCUS_GAIN -> {
-                // Regain audio focus
-                if (wasPlayingBeforeLoss) {
-                    playerRepository.playPause()  // ✅ Resume music
+                AudioManager.AUDIOFOCUS_LOSS -> {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        playerRepository.playPause()
+                    }
                     wasPlayingBeforeLoss = false
+                }
+
+                AudioManager.AUDIOFOCUS_GAIN -> {
+                    if (wasPlayingBeforeLoss) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            playerRepository.playPause()
+                        }
+                        wasPlayingBeforeLoss = false
+                    }
                 }
             }
         }
-    }
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -333,6 +340,9 @@ class MusicServiceOnline : Service() {
                 audioManager?.abandonAudioFocusRequest(it)
             }
         }
+        PlaybackControlHolder.listener = null
+
+
 
         super.onDestroy()
     }

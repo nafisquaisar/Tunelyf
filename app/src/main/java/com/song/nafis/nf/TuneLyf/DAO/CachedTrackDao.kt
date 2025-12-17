@@ -17,4 +17,7 @@ interface CachedTrackDao {
 
     @Query("DELETE FROM cached_tracks WHERE searchKey = :searchKey")
     suspend fun deleteTracksForSearch(searchKey: String)
+
+
+
 }
