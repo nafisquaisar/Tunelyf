@@ -86,17 +86,25 @@ class PlayerRepository @Inject constructor(
             Timber.e("⛔ Playlist is empty. Cannot set index.")
             return
         }
+
         if (index in playlist.indices) {
-            currentIndex = index
             val song = playlist[index]
 
+            // ✅ If same song is selected and not playing, resume it
+            if (index == currentIndex && !exoPlayer.isPlaying) {
+                Timber.d("🔁 Same song tapped. Forcing play...")
+                playCurrent()
+                return
+            }
+
+            currentIndex = index
+
             if (song.musicPath.isNullOrBlank()) {
-                // 🔄 Fetch the stream URL first
                 CoroutineScope(Dispatchers.IO).launch {
-                    val streamUrl = getStreamUrl(song.musicId) // Assuming you have song.musicId
+                    val streamUrl = getStreamUrl(song.musicId)
 
                     if (!streamUrl.isNullOrBlank()) {
-                        song.musicPath = streamUrl // Update musicPath
+                        song.musicPath = streamUrl
                         withContext(Dispatchers.Main) {
                             playCurrent()
                         }
@@ -134,13 +142,24 @@ class PlayerRepository @Inject constructor(
     fun nextSong() {
         if (playlist.isNotEmpty()) {
             currentIndex = (currentIndex + 1) % playlist.size
+
+            if (restorePlayerIfNeeded()) {
+                Timber.d("⏩ Player restored in nextSong(), now playing...")
+            }
+
             playCurrent()
         }
     }
 
+
     fun previousSong() {
         if (playlist.isNotEmpty()) {
             currentIndex = if (currentIndex - 1 < 0) playlist.size - 1 else currentIndex - 1
+
+            if (restorePlayerIfNeeded()) {
+                Timber.d("⏪ Player restored in previousSong(), now playing...")
+            }
+
             playCurrent()
         }
     }
@@ -203,8 +222,6 @@ class PlayerRepository @Inject constructor(
                         // ✅ Only play when ready
 //                        if (!exoPlayer.isPlaying) exoPlayer.play()
                     }
-
-
                     Player.STATE_BUFFERING -> {
                         isBufferingLiveData.postValue(true)
                     }
@@ -225,6 +242,12 @@ class PlayerRepository @Inject constructor(
     }
 
     fun playPause() {
+        if (exoPlayer.mediaItemCount == 0) {
+            Timber.d("⚠️ Player has no mediaItem. Reloading current song...")
+            playCurrent()
+            return
+        }
+
         when (exoPlayer.playbackState) {
             Player.STATE_ENDED -> {
                 // 🎵 If ended, restart from beginning
@@ -310,12 +333,35 @@ class PlayerRepository @Inject constructor(
 
     fun shouldStartNewSession(): Boolean {
         return exoPlayer.mediaItemCount == 0
-//                || MusicServiceOnline.isServiceStopped
+                || exoPlayer.playbackState == Player.STATE_IDLE
+                || exoPlayer.playbackState == Player.STATE_ENDED
     }
+
 
     fun releasePlayer() {
         exoPlayer.release()
     }
+
+    fun getCurrentIndex(): Int {
+        return currentIndex
+    }
+
+    fun restorePlayerIfNeeded(): Boolean {
+        if (exoPlayer.mediaItemCount == 0 && playlist.isNotEmpty()) {
+            val mediaItems = playlist.map { MediaItem.fromUri(it.musicPath) }
+            exoPlayer.setMediaItems(mediaItems)
+            exoPlayer.prepare()
+            Timber.d("🎶 Player was empty – mediaItems re-added & prepared.")
+            return true
+        }
+        return false
+    }
+
+    fun getPlaylist(): List<UnifiedMusic> {
+        return playlist
+    }
+
+
 
 
 }

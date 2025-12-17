@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/activitybg"
+    android:paddingBottom="@dimen/_80sdp"
     tools:context=".Fragment.ProfileFragment">
 
     <!-- Header Layout -->
@@ -135,7 +136,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:overScrollMode="ifContentScrolls"
-        android:scrollbars="vertical"
+        android:scrollbars="none"
         app:layout_constraintTop_toBottomOf="@id/linearLayout7"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -145,6 +146,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:paddingBottom="@dimen/_60sdp"
             android:paddingHorizontal="@dimen/_10sdp">
 
             <!-- My Music -->

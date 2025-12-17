@@ -7,7 +7,7 @@ import android.content.IntentFilter
 import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.*
-import com.song.nafis.nf.TuneLyf.BroadReciver.ExoPlaybackReceiver
+//import com.song.nafis.nf.TuneLyf.BroadReciver.ExoPlaybackReceiver
 import com.song.nafis.nf.TuneLyf.Model.UnifiedMusic
 import com.song.nafis.nf.TuneLyf.Repository.PlayerRepository
 import com.song.nafis.nf.TuneLyf.Service.MusicServiceOnline
@@ -23,7 +23,7 @@ class MusicViewModel @Inject constructor(
     internal val playerRepository: PlayerRepository
 ) : AndroidViewModel(application) {
 
-    private var exoPlaybackReceiver: ExoPlaybackReceiver? = null
+//    private var exoPlaybackReceiver: ExoPlaybackReceiver? = null
 
     // App states
     val isRepeatMode = MutableLiveData(false)
@@ -70,39 +70,45 @@ class MusicViewModel @Inject constructor(
 
     fun refreshNowPlayingUI() = playerRepository.refreshNowPlaying()
     fun setInitialIndex(index: Int, context: Context) {
-        val currentSong = currentUnifiedSong.value
-        playerRepository.setInitialIndex(index)
-        val song = playerRepository.getCurrentSong()
+        viewModelScope.launch {
+            playerRepository.setInitialIndex(index)
 
-        // ✅ Don't start service again if same song
-        if (song != null && currentSong?.musicId != song.musicId) {
-            viewModelScope.launch {
-                val finalSong = getResolvedSong(song) ?: return@launch
-                startMusicService(context, finalSong)
-                observePlayer()
-            }
-        } else {
-            Timber.d("🎯 Skipped startMusicService — same song already playing")
+            // Get current song to send in service
+            val song = playerRepository.getCurrentSong() ?: return@launch
+            val finalSong = getResolvedSong(song) ?: return@launch
+
+            // ✅ Always start service to ensure notification shows up
+            startMusicService(context, finalSong)
         }
     }
 
     fun playPauseToggle(context: Context) {
-        val song = currentUnifiedSong.value ?: run {
-            Timber.e("⚠️ No current song selected to play")
-            return
-        }
+        val song = currentUnifiedSong.value ?: return
 
         viewModelScope.launch {
             val finalSong = getResolvedSong(song) ?: return@launch
 
-            if (playerRepository.shouldStartNewSession()) {
-//                MusicServiceOnline.isServiceStopped = false
-                startMusicService(context, finalSong)
-            } else {
-                playerRepository.playPause()
+            // ✅ Check if service was fully stopped
+            if (MusicServiceOnline.isServiceStopped) {
+                Timber.d("🚀 Service was stopped — resetting player with current song")
+
+                // Re-prepare player with current song again
+                val playlist = playlistLiveData.value ?: return@launch
+                playerRepository.setPlaylist(playlist) // 🔁 reset all media items
+                playerRepository.setInitialIndex(playerRepository.getCurrentIndex())
+
+                // Reset flag after restarting
+                MusicServiceOnline.isServiceStopped = false
             }
 
-//            isPlaying.value = playerRepository.isPlaying()
+            // Ensure service is started
+            startMusicService(context, finalSong)
+
+            // Safely restore player if empty
+            val restored = playerRepository.restorePlayerIfNeeded()
+
+            // Always toggle now
+            playerRepository.playPause()
         }
     }
 
@@ -178,31 +184,8 @@ class MusicViewModel @Inject constructor(
         return playerRepository.getAudioSessionId()
     }
 
-    fun registerExoReceiver(context: Context) {
-        if (exoPlaybackReceiver == null) {
-            exoPlaybackReceiver = ExoPlaybackReceiver()
-            val filter = IntentFilter("MUSIC_PLAYBACK_STATE_CHANGED")
-            ContextCompat.registerReceiver(
-                context,
-                exoPlaybackReceiver!!,
-                filter,
-                ContextCompat.RECEIVER_NOT_EXPORTED
-            )
-            Timber.d("ExoPlaybackReceiver registered")
-        }
-    }
 
-    override fun onCleared() {
-        exoPlaybackReceiver?.let {
-            try {
-                getApplication<Application>().unregisterReceiver(it)
-                Timber.d("ExoPlaybackReceiver unregistered")
-            } catch (e: Exception) {
-                Timber.e("Error during unregister: ${e.message}")
-            }
-        }
-        exoPlaybackReceiver = null
-    }
+
 
     fun startMusicService(context: Context, song: UnifiedMusic) {
         if (song.musicPath.isNullOrBlank()) {

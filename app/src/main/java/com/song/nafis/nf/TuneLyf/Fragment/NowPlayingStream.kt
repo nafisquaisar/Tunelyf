@@ -1,6 +1,11 @@
     package com.song.nafis.nf.TuneLyf.Fragment
 
+    import android.animation.ArgbEvaluator
+    import android.animation.ValueAnimator
     import android.content.Intent
+    import android.graphics.Color
+    import android.graphics.drawable.ColorDrawable
+    import android.graphics.drawable.GradientDrawable
     import android.os.Bundle
     import android.view.LayoutInflater
     import android.view.View
@@ -13,6 +18,7 @@
     import com.song.nafis.nf.TuneLyf.databinding.FragmentNowPlayingStreamBinding
     import com.song.nafis.nf.TuneLyf.R
     import timber.log.Timber
+    import kotlin.random.Random
 
     class NowPlayingStream : Fragment() {
 
@@ -29,10 +35,12 @@
             return binding.root
         }
 
+        private var colorAnimator: ValueAnimator? = null // add at class level
+
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             Timber.d("🎶 NowPlayingStream loaded")
 
-            viewModel.refreshNowPlayingUI() // ✅ Force push current info to LiveData
+            viewModel.refreshNowPlayingUI()
             observeNowPlaying()
             observeSeekBar()
             setupClickListeners()
@@ -42,6 +50,8 @@
             viewModel.currentSongTitle.observe(viewLifecycleOwner) { title ->
                 Timber.d("🎯 Title LiveData: $title")
                 binding.musicTitle.text = title
+                // 🎨 Change background dynamically on song change
+                animateNowPlayingBackground()
             }
 
 
@@ -129,11 +139,50 @@
 
         override fun onDestroyView() {
             super.onDestroyView()
+            colorAnimator?.cancel()
             _binding = null
         }
 
+
         override fun onResume() {
             super.onResume()
+        }
+
+
+        fun getRandomOpaqueDarkColor(): Int {
+            val random = Random(System.currentTimeMillis())
+
+            while (true) {
+                val r = random.nextInt(0, 100)   // keep red low
+                val g = random.nextInt(0, 150)
+                val b = random.nextInt(0, 150)
+
+                val brightness = r + g + b
+                val isNotPinkish = !(r > g + 30 && r > b + 30) // pink/red tone check
+
+                if (brightness < 250 && isNotPinkish) {
+                    val alpha = 120 // semi-transparent
+                    return Color.argb(alpha, r, g, b)
+                }
+            }
+        }
+
+
+
+        private fun animateNowPlayingBackground() {
+            val drawable = binding.nowPlayingRoot.background as? GradientDrawable ?: return
+            val colorFrom = (drawable.color?.defaultColor ?: Color.TRANSPARENT)
+            val colorTo = getRandomOpaqueDarkColor()
+
+            colorAnimator?.cancel()
+            colorAnimator = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, colorTo).apply {
+                duration = 500
+                addUpdateListener { animator ->
+                    val newColor = animator.animatedValue as Int
+                    drawable.setColor(newColor)
+                }
+                start()
+            }
         }
 
     }

@@ -105,23 +105,6 @@
 
 
 
-
-        <receiver
-            android:name=".BroadReciver.ExoPlaybackReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MEDIA_BUTTON" />
-                <action android:name="com.song.nafis.nf.TuneLyf.ACTION_PLAY_PAUSE" />
-                <action android:name="com.song.nafis.nf.TuneLyf.ACTION_NEXT" />
-                <action android:name="com.song.nafis.nf.TuneLyf.ACTION_PREV" />
-                <action android:name="com.song.nafis.nf.TuneLyf.ACTION_EXIT" />
-            </intent-filter>
-        </receiver>
-
-
-
-
-
     </application>
 
 </manifest>

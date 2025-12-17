@@ -20,5 +20,4 @@ interface AudiusApi {
     @GET("audius-stream")
     suspend fun getStreamRedirect(@Query("trackId") trackId: String): Response<StreamUrlResponse>
 
-
 }

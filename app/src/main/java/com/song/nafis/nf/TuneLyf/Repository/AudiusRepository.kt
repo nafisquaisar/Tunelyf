@@ -37,7 +37,7 @@ class AudiusRepository @Inject constructor(
                 Timber.d("🎧 Stream URL for $trackId: $url")
                 url
             } else {
-                Timber.e("❌ Failed to fetch stream URL: ${response.errorBody()?.string()}")
+                Timber.e("Failed to fetch stream URL: ${response.errorBody()?.string()}")
                 null
             }
         } catch (e: Exception) {

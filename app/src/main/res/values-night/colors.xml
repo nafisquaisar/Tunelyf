@@ -31,4 +31,7 @@
 
     <color name="very_light_purple">#616377</color>
 
+
+    <color name="colorActive">#4FC3F7</color>       <!-- Active color -->
+    <color name="colorInactive">#B0BEC5</color>
 </resources>
