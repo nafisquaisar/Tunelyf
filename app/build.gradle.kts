@@ -93,11 +93,15 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.56.2")
     implementation("androidx.navigation:navigation-fragment:2.9.0")
     implementation("androidx.navigation:navigation-ui:2.9.0")
+    implementation("androidx.hilt:hilt-common:1.3.0")
+    implementation("androidx.work:work-runtime-ktx:2.11.0")
     ksp("com.google.dagger:hilt-android-compiler:2.56.2")
 
     // Replace old lifecycle-viewmodel
     implementation("androidx.hilt:hilt-navigation-fragment:1.2.0")
     ksp("androidx.hilt:hilt-compiler:1.2.0")  // Changed from kapt to ksp
+    implementation("androidx.hilt:hilt-work:1.3.0")
+
 
     // Glide (image loading)
     implementation("com.github.bumptech.glide:glide:4.16.0")
@@ -148,5 +152,9 @@ dependencies {
 
     // Add this line if missing
     implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
+
+
+// Hilt + WorkManager integration
 
 }

@@ -14,6 +14,7 @@ import com.song.nafis.nf.TuneLyf.Model.UnifiedMusic
 import com.song.nafis.nf.TuneLyf.Model.toUnifiedMusic
 import com.song.nafis.nf.TuneLyf.R
 import com.song.nafis.nf.TuneLyf.UI.AudiusViewModel
+import com.song.nafis.nf.TuneLyf.UI.HomeViewModel
 import com.song.nafis.nf.TuneLyf.adapter.SongAdapter
 import com.song.nafis.nf.TuneLyf.databinding.ActivityViewSongListBinding
 import com.song.nafis.nf.TuneLyf.resource.Loading
@@ -26,6 +27,9 @@ import timber.log.Timber
 class ViewSongListActivity : AppCompatActivity() {
 
     private val audiusViewModel: AudiusViewModel by viewModels()
+
+    private val homeViewModel: HomeViewModel by viewModels()
+
     private lateinit var binding: ActivityViewSongListBinding
     private lateinit var songAdapter: SongAdapter
 
@@ -37,25 +41,36 @@ class ViewSongListActivity : AppCompatActivity() {
         binding = ActivityViewSongListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
-        binding.emptyAnimation.visibility = View.VISIBLE
-        binding.emptyAnimation.playAnimation()
-        setupToolbar()
-        setupRecyclerView()
-        observeViewModel()
-
+        // 🔥 1️⃣ FIRST: extract query
         val searchQuery = intent.getStringExtra("search_query")
         val artistName = intent.getStringExtra("artist_name")
         finalQuery = (searchQuery ?: artistName).orEmpty()
+
         val toolbarTitle = artistName ?: searchQuery ?: "Songs"
         binding.hometoolbar.title = toolbarTitle
 
-        audiusViewModel.search(finalQuery)
+
+        binding.swipeRefresh.setOnRefreshListener {
+            // ❗ logic same: DB → fallback → API
+            binding.shimmerLayout.visibility = View.VISIBLE
+            binding.shimmerLayout.startShimmer()
+            binding.musicListRecyclerView.visibility = View.GONE
+            binding.emptyAnimation.visibility = View.GONE
+
+            isLoading = false
+            homeViewModel.loadHomeSections()
+        }
+
+
+        setupToolbar()
+        setupRecyclerView()
+
+        // 3️⃣ LOAD DB + OBSERVE
+        homeViewModel.loadHomeSections()
+        observeHomePreload()
+
+        // 4️⃣ ALSO observe API result (next issue)
+        observeAudiusResult()
     }
 
     private fun setupToolbar() {
@@ -79,62 +94,78 @@ class ViewSongListActivity : AppCompatActivity() {
         })
     }
 
-    private fun observeViewModel() {
-        audiusViewModel.tracksResource.observe(this) { resource ->
-            when (resource) {
-                is Resource.Loading -> {
-                    if (songAdapter.itemCount == 0) {
-                        // Show shimmer
-                        binding.shimmerLayout.visibility = View.VISIBLE
-                        binding.shimmerLayout.startShimmer()
+    private fun observeHomePreload() {
 
-                        // Hide actual views
-                        binding.musicListRecyclerView.visibility = View.GONE
-                        binding.emptyAnimation.visibility = View.GONE
-                    } else {
-                        binding.bottomLoader.visibility = View.VISIBLE
-                    }
-                }
+        homeViewModel.homeSections.observe(this) { sections ->
 
-                is Resource.Success -> {
-                    binding.shimmerLayout.stopShimmer()
-                    binding.shimmerLayout.visibility = View.GONE
+            val songs = sections[finalQuery].orEmpty()
 
-                    val newList = resource.data ?: emptyList()
+            if (songs.isNotEmpty()) {
+                songAdapter.submitList(songs.take(15))
 
-                    if (songAdapter.itemCount == 0 && newList.isEmpty()) {
-                        binding.musicListRecyclerView.visibility = View.GONE
-                        binding.emptyAnimation.visibility = View.VISIBLE
-                        binding.bottomLoader.visibility = View.GONE
-                        isLoading = false
-                        return@observe
-                    }
+                binding.shimmerLayout.stopShimmer()
+                binding.shimmerLayout.visibility = View.GONE
+                binding.musicListRecyclerView.visibility = View.VISIBLE
+                binding.emptyAnimation.visibility = View.GONE
+                binding.swipeRefresh.isRefreshing = false
 
-                    val updatedList = (songAdapter.currentList + newList)
-                        .distinctBy { it.musicId }
-
-                    songAdapter.submitList(updatedList)
-
-                    binding.musicListRecyclerView.visibility = View.VISIBLE
-                    binding.emptyAnimation.visibility = View.GONE
-                    binding.bottomLoader.visibility = View.GONE
-                    isLoading = false
-                }
-
-                is Resource.Error -> {
-                    binding.shimmerLayout.stopShimmer()
-                    binding.shimmerLayout.visibility = View.GONE
-
-                    isLoading = false
-                    binding.bottomLoader.visibility = View.GONE
-                    binding.musicListRecyclerView.visibility = View.VISIBLE
-
-                    Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
-                    Timber.tag("error").e("Error loading tracks: ${resource.message}")
-                }
+                isLoading = false
+        } else {
+                // ❗ DB empty → fallback to API
+                audiusViewModel.search(finalQuery)
             }
         }
     }
+
+
+    private fun observeAudiusResult() {
+        audiusViewModel.tracksResource.observe(this) { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+
+                }
+
+                is Resource.Success -> {
+                    val songs = resource.data
+                    if (songs.isNotEmpty()) {
+                        songAdapter.submitList(songs)
+
+                        binding.shimmerLayout.stopShimmer()
+                        binding.shimmerLayout.visibility = View.GONE
+                        binding.musicListRecyclerView.visibility = View.VISIBLE
+                        binding.emptyAnimation.visibility = View.GONE
+                        binding.swipeRefresh.isRefreshing = false
+
+                        isLoading = false
+                    } else {
+                        showEmpty()
+                    }
+
+            }
+
+
+                is Resource.Error -> {
+                    isLoading = false
+                    binding.shimmerLayout.stopShimmer()
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.musicListRecyclerView.visibility = View.GONE
+                    binding.swipeRefresh.isRefreshing = false
+
+                    showEmpty()
+                }
+
+            }
+        }
+    }
+
+    private fun showEmpty() {
+        binding.emptyAnimation.visibility = View.VISIBLE
+        if (!binding.emptyAnimation.isAnimating) {
+            binding.emptyAnimation.playAnimation()
+        }
+    }
+
+
 
     private fun playUnifiedMusicTrack(track: UnifiedMusic) {
         val trackList = songAdapter.currentList

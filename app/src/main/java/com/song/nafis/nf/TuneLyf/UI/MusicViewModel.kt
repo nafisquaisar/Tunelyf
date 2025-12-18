@@ -115,7 +115,7 @@ class MusicViewModel @Inject constructor(
     private suspend fun getResolvedSong(song: UnifiedMusic): UnifiedMusic? {
         if (!song.musicPath.isNullOrBlank()) return song
 
-        val url = playerRepository.getStreamUrl(song.musicId)
+        val url = playerRepository.getStreamUrl(song)
         return if (url.isNullOrBlank()) {
             Timber.e("❌ Failed to fetch stream URL for ${song.musicTitle}")
             null

@@ -28,7 +28,8 @@ import javax.inject.Singleton
 @Singleton
 class PlayerRepository @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val audiusApi: AudiusApi
+    private val audiusApi: AudiusApi,
+    private val audiusRepository: AudiusRepository   // ✅ inject
 ) {
 
     // 🔒 Single ExoPlayer instance owned ONLY by PlayerRepository
@@ -58,9 +59,7 @@ class PlayerRepository @Inject constructor(
     private var onSongCompleted: (() -> Unit)? = null
 
     // ===== STREAM REPO =====
-    private val audiusRepository by lazy {
-        AudiusRepository(api = audiusApi)                     // fetch stream url
-    }
+
 
     // ===== PLAYLIST SETUP =====
     fun setPlaylist(songs: List<UnifiedMusic>) {
@@ -86,7 +85,7 @@ class PlayerRepository @Inject constructor(
         // fetch stream url if missing
         if (song.musicPath.isNullOrBlank()) {
             CoroutineScope(Dispatchers.IO).launch {
-                val url = getStreamUrl(song.musicId)
+                val url = getStreamUrl(song)
                 if (!url.isNullOrBlank()) {
                     song.musicPath = url
                     withContext(Dispatchers.Main) { playCurrent() }
@@ -228,9 +227,11 @@ class PlayerRepository @Inject constructor(
     }
 
     // ===== STREAM URL =====
-    suspend fun getStreamUrl(trackId: String): String? {
-        return audiusRepository.getStreamUrl(trackId)
+    suspend fun getStreamUrl(song: UnifiedMusic): String? {
+        return audiusRepository.getStreamUrl(song)
     }
+
+
 
     // ===== CALLBACKS =====
     fun setOnSongCompletedListener(callback: () -> Unit) {

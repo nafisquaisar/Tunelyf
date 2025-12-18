@@ -19,5 +19,9 @@ interface CachedTrackDao {
     suspend fun deleteTracksForSearch(searchKey: String)
 
 
+    @Query("UPDATE cached_tracks SET streamUrl = :url WHERE id = :trackId")
+    suspend fun updateStreamUrl(trackId: String, url: String)
+
+
 
 }

@@ -4,6 +4,7 @@ import com.song.nafis.nf.TuneLyf.DAO.CachedTrackDao
 import com.song.nafis.nf.TuneLyf.Model.UnifiedMusic
 import com.song.nafis.nf.TuneLyf.Model.toCachedEntity
 import com.song.nafis.nf.TuneLyf.Model.toUnifiedMusic
+import timber.log.Timber
 import javax.inject.Inject
 
 class TrackRoomCache @Inject constructor(
@@ -31,4 +32,10 @@ class TrackRoomCache @Inject constructor(
             .distinctBy { it.musicId }
         saveTracks(query, updated)
     }
+
+    suspend fun updateStreamUrl(trackId: String, url: String) {
+        Timber.d("💾 DB UPDATE → trackId=$trackId")
+        dao.updateStreamUrl(trackId, url)
+    }
+
 }

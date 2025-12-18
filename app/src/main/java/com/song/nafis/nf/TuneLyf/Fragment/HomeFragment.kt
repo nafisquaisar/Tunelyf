@@ -19,6 +19,7 @@ import com.song.nafis.nf.TuneLyf.Model.Itemlist
 import com.song.nafis.nf.TuneLyf.R
 import com.song.nafis.nf.TuneLyf.UI.ArtistViewModel
 import com.song.nafis.nf.TuneLyf.UI.AudiusViewModel
+import com.song.nafis.nf.TuneLyf.UI.HomeViewModel
 import com.song.nafis.nf.TuneLyf.UI.RecentlyPlayedViewModel
 import com.song.nafis.nf.TuneLyf.adapter.HomeItemAdapter
 import com.song.nafis.nf.TuneLyf.adapter.UnifiedMusicAdapter
@@ -31,6 +32,9 @@ class HomeFragment : Fragment() {
     private val artistViewModel: ArtistViewModel by viewModels()
     private val audiusViewModel: AudiusViewModel by viewModels()
     private val recentlyPlayedViewModel: RecentlyPlayedViewModel by viewModels()
+
+    private val homeViewModel: HomeViewModel by viewModels()
+
 
 
     private lateinit var recentAdapter: UnifiedMusicAdapter
@@ -74,8 +78,6 @@ class HomeFragment : Fragment() {
         binding.tredingRecyclerView.adapter = trendingAdapter
         trendingAdapter.submitList(Itemlist.trendingList)
 
-
-
         recentAdapter = UnifiedMusicAdapter(
             context = requireContext(),
             songs = emptyList(),
@@ -95,6 +97,8 @@ class HomeFragment : Fragment() {
             },
             isSquareLayout = true // ✅ Set this to enable square layout
         )
+
+
 
         binding.RecentRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -145,6 +149,8 @@ class HomeFragment : Fragment() {
         val searchItem = menu.findItem(R.id.search_playlist)
         searchItem?.isVisible = false // Hide search in this fragment
     }
+
+
     override fun onResume() {
         super.onResume()
         binding.bannerVideo.start()
