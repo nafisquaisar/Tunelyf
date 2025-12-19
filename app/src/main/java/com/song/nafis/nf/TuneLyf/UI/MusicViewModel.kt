@@ -186,4 +186,9 @@ class MusicViewModel @Inject constructor(
         return playerRepository.getAudioSessionId()
     }
 
+    fun seekBy(ms: Long) {
+        playerRepository.seekBy(ms)
+    }
+
+
 }

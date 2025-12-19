@@ -1,5 +1,6 @@
     package com.song.nafis.nf.TuneLyf.Activity
 
+    import android.Manifest
     import android.content.Context
     import android.content.Intent
     import android.media.AudioManager
@@ -22,10 +23,14 @@
     import dagger.hilt.android.AndroidEntryPoint
     import timber.log.Timber
     import android.os.Handler
+    import android.os.VibrationEffect
+    import android.os.Vibrator
     import android.widget.ImageView
     import android.widget.LinearLayout
+    import androidx.annotation.RequiresPermission
     import androidx.appcompat.app.AlertDialog
     import androidx.appcompat.widget.AppCompatButton
+    import androidx.core.content.FileProvider
     import androidx.core.view.ViewCompat
     import androidx.core.view.WindowInsetsCompat
     import androidx.recyclerview.widget.LinearLayoutManager
@@ -44,6 +49,7 @@
     import com.song.nafis.nf.TuneLyf.UI.PlaylistViewModel
     import com.song.nafis.nf.TuneLyf.UI.RecentlyPlayedViewModel
     import com.song.nafis.nf.TuneLyf.adapter.PlaylistSelectAdapter
+    import java.io.File
 
     @AndroidEntryPoint
     class PlayMusicStreamActivity : AppCompatActivity() {
@@ -54,10 +60,6 @@
         private val playlistViewModel: PlaylistViewModel by viewModels()
         private val favoriteViewModel: FavoriteViewModel by viewModels()
         private val recentlyPlayedViewModel: RecentlyPlayedViewModel by viewModels()
-
-        private var stopMusicHandler: Handler? = null
-        private var stopRunnable: Runnable? = null
-
         private var serviceStarted = false
 
 
@@ -166,13 +168,16 @@
             binding.playMusicTitle.isSelected = true
 
             binding.playMusicplaypausebtn.setOnClickListener {
+                vibrate(this)
                 viewModel.playPauseToggle(this)
             }
             binding.playMusicNextbtn.setOnClickListener {
                 Timber.tag("test").d("Next button clicked")
+                vibrate(this)
                 viewModel.nextSong()
             }
             binding.playMusicPreviousbtn.setOnClickListener {
+                vibrate(this)
                 Timber.tag("test").d("Previous button clicked")
                 viewModel.previousSong()
             }
@@ -203,25 +208,61 @@
             }
 
             binding.sharebtn.setOnClickListener {
-                val songTitle = viewModel.currentSongTitle.value ?: "My Favorite Song"
-                val currentAudio = viewModel.playMusicStatus.value
-                var songUrl = ""
 
-                if (currentAudio is Resource.Success) {
-                    songUrl = currentAudio.data.first
+                val song = viewModel.currentUnifiedSong.value
+
+                if (song == null) {
+                    Toast.makeText(this, "No song is playing", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
                 }
 
-                if (songUrl.isNotBlank()) {
-                    val shareIntent = Intent().apply {
-                        action = Intent.ACTION_SEND
-                        putExtra(Intent.EXTRA_TEXT, "$songTitle - Listen now: $songUrl")
-                        type = "text/plain"
+                val songTitle = song.musicTitle.ifBlank { "My Favorite Song" }
+
+                // ✅ LOCAL SONG → share audio file
+                if (song.isLocal) {
+
+                    val audioFile = File(song.musicPath)
+                    if (!audioFile.exists()) {
+                        Toast.makeText(this, "File not found", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
                     }
+
+                    val audioUri = FileProvider.getUriForFile(
+                        this,
+                        "${packageName}.provider",
+                        audioFile
+                    )
+
+                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                        type = "audio/*"
+                        putExtra(Intent.EXTRA_STREAM, audioUri)
+                        putExtra(Intent.EXTRA_TEXT, songTitle)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+
                     startActivity(Intent.createChooser(shareIntent, "Share song via"))
-                } else {
-                    Toast.makeText(this, "No song is playing", Toast.LENGTH_SHORT).show()
+
+                }
+                // ✅ ONLINE SONG → share app link
+                else {
+
+                    val playStoreLink =
+                        "https://play.google.com/store/apps/details?id=com.song.nafis.nf.TuneLyf"
+
+                    val shareText =
+                        "🎵 $songTitle\n\n" +
+                                "Is song ko sunne ke liye TuneLyf app download kijiye 👇\n" +
+                                playStoreLink
+
+                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_TEXT, shareText)
+                    }
+
+                    startActivity(Intent.createChooser(shareIntent, "Share song via"))
                 }
             }
+
 
             binding.stopTimer.setOnClickListener {
                 val isTimerRunning = viewModel.timerRunning.value == true
@@ -263,13 +304,26 @@
                 }
             }
 
+            binding.seekBackBtn.setOnClickListener {
+                vibrate(this)
+                viewModel.seekBy(-5000) // ⏪ 5 sec
+            }
 
-    // 🔥 Set the listener after ViewModel is ready
+            binding.seekForwardBtn.setOnClickListener {
+                vibrate(this)
+                viewModel.seekBy(5000) // ⏩ 5 sec
+            }
+
+
+
+            // 🔥 Set the listener after ViewModel is ready
 
             Glide.with(this)
                 .load(songArtwork)
-                .placeholder(R.mipmap.music_icon)
+                .placeholder(R.mipmap.logo)   // loading ke time
+                .error(R.mipmap.logo)         // ❗ 404 / broken URL ke liye
                 .into(binding.playmusicImg)
+
 
             binding.playMusicSeek.max = 0
             binding.musicEndTime.text = "00:00"
@@ -603,6 +657,25 @@
             super.finish()
             overridePendingTransition(R.anim.no_animation, R.anim.slide_down)
         }
+
+
+
+        fun vibrate(context: Context) {
+            val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
+                ?: return
+
+            if (!vibrator.hasVibrator()) return
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(
+                    VibrationEffect.createOneShot(35, VibrationEffect.DEFAULT_AMPLITUDE)
+                )
+            } else {
+                @Suppress("DEPRECATION")
+                vibrator.vibrate(35)
+            }
+        }
+
 
 
     }

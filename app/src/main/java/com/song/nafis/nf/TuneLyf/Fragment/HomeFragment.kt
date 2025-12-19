@@ -61,10 +61,13 @@ class HomeFragment : Fragment() {
             startActivity(Intent(requireContext(), RecentPlayList::class.java))
         }
 
-        binding.bannerAnimation.apply {
-            playAnimation()
-            repeatCount = LottieDrawable.INFINITE
+        binding.bannerAnimation.post {
+            binding.bannerPlaceholder.visibility = View.GONE
+            binding.bannerAnimation.visibility = View.VISIBLE
+            binding.bannerAnimation.playAnimation()
         }
+
+
 
     }
 

@@ -87,7 +87,7 @@
             toolbar = binding.hometoolbar
             setSupportActionBar(toolbar)
 
-            messageForDelayDialog()
+//            messageForDelayDialog()
             clickbtn()
             drawer()
             setprofile()
@@ -159,29 +159,29 @@
         }
 
 
-        private fun messageForDelayDialog() {
-            val prefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
-            val shown = prefs.getBoolean("audius_first_time_msg_shown", false)
-
-            if (!shown) {
-                val dialogView = layoutInflater.inflate(R.layout.info_message, null)
-                val dialog = android.app.AlertDialog.Builder(this)
-                    .setView(dialogView)
-                    .setCancelable(false)
-                    .create()
-
-                val closeBtn = dialogView.findViewById<ImageButton>(R.id.closeInfo)
-                closeBtn.setOnClickListener {
-                    dialog.dismiss()
-                    prefs.edit().putBoolean("audius_first_time_msg_shown", true).apply()
-                }
-
-                dialog.show()
-
-                // 💡 This removes extra square corners
-                dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-            }
-        }
+//        private fun messageForDelayDialog() {
+//            val prefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
+//            val shown = prefs.getBoolean("audius_first_time_msg_shown", false)
+//
+//            if (!shown) {
+//                val dialogView = layoutInflater.inflate(R.layout.info_message, null)
+//                val dialog = android.app.AlertDialog.Builder(this)
+//                    .setView(dialogView)
+//                    .setCancelable(false)
+//                    .create()
+//
+//                val closeBtn = dialogView.findViewById<ImageButton>(R.id.closeInfo)
+//                closeBtn.setOnClickListener {
+//                    dialog.dismiss()
+//                    prefs.edit().putBoolean("audius_first_time_msg_shown", true).apply()
+//                }
+//
+//                dialog.show()
+//
+//                // 💡 This removes extra square corners
+//                dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+//            }
+//        }
 
 
         private fun versionSet() {

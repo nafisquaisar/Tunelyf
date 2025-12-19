@@ -33,6 +33,8 @@ class ViewSongListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityViewSongListBinding
     private lateinit var songAdapter: SongAdapter
 
+    private var apiInProgress = false
+
     private var isLoading = false
     private var finalQuery = ""
 
@@ -58,7 +60,8 @@ class ViewSongListActivity : AppCompatActivity() {
             binding.emptyAnimation.visibility = View.GONE
 
             isLoading = false
-            homeViewModel.loadHomeSections()
+            apiInProgress = false
+            audiusViewModel.search(finalQuery)
         }
 
 
@@ -88,6 +91,7 @@ class ViewSongListActivity : AppCompatActivity() {
             override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
                 if (!recyclerView.canScrollVertically(1) && !isLoading) {
                     isLoading = true
+                    apiInProgress = true
                     audiusViewModel.loadNextPage(finalQuery)
                 }
             }
@@ -111,8 +115,10 @@ class ViewSongListActivity : AppCompatActivity() {
 
                 isLoading = false
         } else {
-                // ❗ DB empty → fallback to API
-                audiusViewModel.search(finalQuery)
+                if (songs.isEmpty() && !apiInProgress) {
+                    apiInProgress = true
+                    audiusViewModel.search(finalQuery)
+                }
             }
         }
     }
@@ -137,6 +143,7 @@ class ViewSongListActivity : AppCompatActivity() {
                         binding.swipeRefresh.isRefreshing = false
 
                         isLoading = false
+                        apiInProgress = false
                     } else {
                         showEmpty()
                     }
@@ -146,6 +153,7 @@ class ViewSongListActivity : AppCompatActivity() {
 
                 is Resource.Error -> {
                     isLoading = false
+                    apiInProgress = false
                     binding.shimmerLayout.stopShimmer()
                     binding.shimmerLayout.visibility = View.GONE
                     binding.musicListRecyclerView.visibility = View.GONE

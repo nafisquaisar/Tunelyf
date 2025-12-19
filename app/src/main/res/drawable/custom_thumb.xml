@@ -4,7 +4,7 @@
     <size
         android:width="16dp"
         android:height="16dp" />
-    <solid android:color="@color/primary_dark_purple" />
+    <solid android:color="@color/icon_color" />
     <stroke
         android:color="#FFFFFF"
         android:width="2dp" />

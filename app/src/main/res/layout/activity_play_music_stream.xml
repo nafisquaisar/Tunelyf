@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:backgroundTint="@color/activitybg"
-    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    android:backgroundTint="@color/activitybg"
     tools:context=".Activity.PlayMusicStreamActivity">
 
 
@@ -26,8 +26,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:src="@drawable/down_arrow"
             android:contentDescription="@string/back_music_btn"
+            android:src="@drawable/down_arrow"
             app:tint="@color/secondary_icon_color" />
 
         <TextView
@@ -45,8 +45,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:src="@drawable/empty_heart"
-            android:contentDescription="@string/favorite_btn" />
+            android:contentDescription="@string/favorite_btn"
+            android:src="@drawable/empty_heart" />
 
         <ImageButton
             android:id="@+id/playMusicequiliserbtn"
@@ -58,15 +58,15 @@
             android:src="@drawable/base_setting"
             app:tint="@color/secondary_icon_color" />
 
-<!--        <ImageButton-->
-<!--            android:id="@+id/moreInMusic"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="5dp"-->
-<!--            android:background="@android:color/transparent"-->
-<!--            android:src="@drawable/baseline_more_vert_24"-->
-<!--            android:contentDescription="@string/equiliser_btn"-->
-<!--            app:tint="@color/primary_purple" />-->
+        <!--        <ImageButton-->
+        <!--            android:id="@+id/moreInMusic"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="5dp"-->
+        <!--            android:background="@android:color/transparent"-->
+        <!--            android:src="@drawable/baseline_more_vert_24"-->
+        <!--            android:contentDescription="@string/equiliser_btn"-->
+        <!--            app:tint="@color/primary_purple" />-->
     </LinearLayout>
 
 
@@ -74,8 +74,6 @@
         android:id="@+id/playmusicImg"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        app:strokeColor="@color/white_purple"
-        app:strokeWidth="2dp"
         android:src="@mipmap/logo"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
         app:layout_constraintEnd_toEndOf="parent"
@@ -83,22 +81,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
         app:layout_constraintVertical_bias="0.24"
-        app:shapeAppearanceOverlay="@style/curved" />
+        app:shapeAppearanceOverlay="@style/curved"
+        app:strokeColor="@color/white_purple"
+        app:strokeWidth="4dp" />
 
     <TextView
         android:id="@+id/playMusicTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
         android:layout_marginHorizontal="10dp"
-        android:text="@string/song_name"
-        android:textSize="20sp"
-        android:textColor="@color/secondary_icon_color"
-        android:textStyle="bold"
-        android:singleLine="true"
+        android:layout_marginTop="40dp"
         android:ellipsize="marquee"
-        android:scrollHorizontally="true"
         android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:text="@string/song_name"
+        android:textColor="@color/secondary_icon_color"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playmusicImg" />
@@ -116,24 +116,34 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
+            android:layout_marginHorizontal="5dp"
             android:layout_marginTop="30dp"
             android:gravity="center"
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/playMusicPreviousbtn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:id="@+id/seekBackBtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="@android:color/transparent"
+                android:contentDescription="Seek back 5 sec"
                 android:scaleType="centerCrop"
-                android:src="@drawable/previous_play"
-                android:contentDescription="@string/previous_btn" />
+                android:src="@drawable/backdoublearrow" />
+
+            <ImageButton
+                android:id="@+id/playMusicPreviousbtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="20dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/previous_btn"
+                android:scaleType="centerCrop"
+                android:src="@drawable/previous_play" />
 
             <FrameLayout
                 android:id="@+id/playPauseContainer"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginStart="30dp">
 
                 <ImageButton
@@ -141,44 +151,51 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@android:color/transparent"
+                    android:contentDescription="@string/play_btn"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/playbtn"
-                    android:contentDescription="@string/play_btn" />
+                    android:src="@drawable/playbtn" />
 
                 <FrameLayout
                     android:id="@+id/loadingContainer"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:background="@drawable/bg_loading_circle"
-                    android:visibility="gone"
                     android:clipChildren="false"
-                    android:clipToPadding="false">
+                    android:clipToPadding="false"
+                    android:visibility="gone">
 
                     <ProgressBar
                         android:id="@+id/loadingSpinner"
+                        style="?android:attr/progressBarStyle"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center"
-                        style="?android:attr/progressBarStyle"
                         android:indeterminate="true"
                         android:indeterminateTint="@android:color/white"
                         android:indeterminateTintMode="src_in" />
                 </FrameLayout>
-
             </FrameLayout>
-
 
             <ImageButton
                 android:id="@+id/playMusicNextbtn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginStart="30dp"
                 android:background="@android:color/transparent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/nextsongplay"
                 android:contentDescription="@string/next_btn"
-                />
+                android:scaleType="centerCrop"
+                android:src="@drawable/nextsongplay" />
+
+            <ImageButton
+                android:id="@+id/seekForwardBtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="20dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="Seek forward 5 sec"
+                android:scaleType="centerCrop"
+                android:src="@drawable/forwarddoublearrow" />
         </LinearLayout>
 
         <LinearLayout
@@ -220,7 +237,7 @@
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            
+
             android:orientation="horizontal">
 
             <ImageButton
@@ -228,9 +245,9 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/shuffle_btn"
                 android:scaleType="centerCrop"
                 android:src="@drawable/baseline_repeat_24"
-                android:contentDescription="@string/shuffle_btn"
                 app:tint="@color/secondary_icon_color" />
 
             <ImageButton
@@ -239,9 +256,9 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="30dp"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/timer_btn"
                 android:scaleType="centerCrop"
                 android:src="@drawable/stop_play_timer"
-                android:contentDescription="@string/timer_btn"
                 app:tint="@color/secondary_icon_color" />
 
             <ImageButton
@@ -250,9 +267,9 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="30dp"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/volume_btn"
                 android:scaleType="centerCrop"
                 android:src="@drawable/sound_increace"
-                android:contentDescription="@string/volume_btn"
                 app:tint="@color/secondary_icon_color" />
             <!-- New button to add song to playlist -->
             <ImageButton
@@ -261,9 +278,9 @@
                 android:layout_height="30dp"
                 android:layout_marginStart="30dp"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/add_to_playlist_btn"
                 android:scaleType="centerCrop"
                 android:src="@drawable/create_playlist"
-                android:contentDescription="@string/add_to_playlist_btn"
                 app:tint="@color/secondary_icon_color" />
 
             <ImageButton
@@ -272,11 +289,11 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="30dp"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/share_btn"
                 android:scaleType="centerCrop"
                 android:src="@drawable/sharebtn"
-                android:contentDescription="@string/share_btn"
                 app:tint="@color/secondary_icon_color" />
-                 </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

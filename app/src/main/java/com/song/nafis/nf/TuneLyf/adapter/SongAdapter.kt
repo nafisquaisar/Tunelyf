@@ -63,9 +63,16 @@ class SongAdapter(
 
 
                 Glide.with(itemView.context)
-                    .load(music.imgUri)
-                    .placeholder(R.mipmap.music_icon)
+                    .asBitmap() // 🔥 VERY IMPORTANT
+                    .load(
+                        if (music.imgUri.isNullOrBlank() || !music.imgUri.startsWith("http"))
+                            null
+                        else music.imgUri
+                    )
+                    .placeholder(R.mipmap.logo)
+                    .error(R.mipmap.logo)
                     .into(artworkImage)
+
 
                 itemView.setOnClickListener {
                     if (isSelectionMode) {
