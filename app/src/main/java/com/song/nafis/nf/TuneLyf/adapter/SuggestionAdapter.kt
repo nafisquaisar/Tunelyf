@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.song.nafis.nf.TuneLyf.R
 
 class SuggestionAdapter(
-    private val suggestions: List<String>,
+    private val suggestions: MutableList<String>,
     private val onClick: (String) -> Unit
 ) : RecyclerView.Adapter<SuggestionAdapter.SuggestionViewHolder>() {
 
@@ -30,4 +30,10 @@ class SuggestionAdapter(
     }
 
     override fun getItemCount() = suggestions.size
+
+    fun update(newSuggestions: List<String>) {
+        suggestions.clear()
+        suggestions.addAll(newSuggestions)
+        notifyDataSetChanged()
+    }
 }

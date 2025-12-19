@@ -27,14 +27,11 @@ import javax.inject.Singleton
 
 @Singleton
 class PlayerRepository @Inject constructor(
+    private val exoPlayer: ExoPlayer,          // 🔥 DI se aaya hua
     @ApplicationContext private val context: Context,
     private val audiusApi: AudiusApi,
     private val audiusRepository: AudiusRepository   // ✅ inject
 ) {
-
-    // 🔒 Single ExoPlayer instance owned ONLY by PlayerRepository
-    private val exoPlayer: ExoPlayer
-        get() = (context.applicationContext as ApplicationClass).exoPlayer
 
     // ===== UI STATE =====
     val currentSong = MutableLiveData<UnifiedMusic?>()        // current playing song

@@ -18,6 +18,12 @@
 
         private val inFlight = mutableSetOf<String>()
 
+        private val TRENDING_KEY = "TRENDING"
+
+        private val NEW_UPLOADS_KEY = "NEW_UPLOADS"
+
+
+
         /* ---------------- SEARCH = METADATA ONLY ---------------- */
 
         suspend fun search(
@@ -49,31 +55,37 @@
 
         suspend fun getStreamUrl(track: UnifiedMusic): String? {
 
+            // ✅ already cached → direct play
             if (!track.musicPath.isNullOrBlank()) {
+                Timber.d("📦 STREAM URL FROM DB → ${track.musicId}")
                 return track.musicPath
             }
 
-            if (inFlight.contains(track.musicId)) return null
-            inFlight.add(track.musicId)
+            // ✅ only block parallel calls
+            if (!inFlight.add(track.musicId)) {
+                Timber.d("⏳ Stream fetch already running for ${track.musicId}")
+                return null
+            }
 
             return try {
+                Timber.d("🌐 API CALL → stream for ${track.musicId}")
                 val response = api.getStreamRedirect(track.musicId)
+
                 if (response.isSuccessful) {
                     val url = response.body()?.streamUrl
                     if (!url.isNullOrBlank()) {
                         trackRoomCache.updateStreamUrl(track.musicId, url)
+                        Timber.d("✅ Stream URL saved → ${track.musicId}")
                     }
                     url
-                } else null
-            }catch (e: SocketTimeoutException) {
-                    Timber.e(e, "⏱️ Stream URL timeout")
+                } else {
+                    Timber.e("❌ Stream API failed → ${track.musicId}")
                     null
-            } catch (e: IOException) {
-                    Timber.e(e, "🌐 Network error")
-                    null
+                }
+
             } catch (e: Exception) {
-                    Timber.e(e, "❌ Unknown error")
-                    null
+                Timber.e(e, "❌ Stream fetch error → ${track.musicId}")
+                null
             } finally {
                 inFlight.remove(track.musicId)
             }
@@ -165,6 +177,63 @@
                 trackRoomCache.saveTracks(section, tracks)
             }
         }
+
+
+        suspend fun loadTrending(limit: Int = 20): List<UnifiedMusic> {
+
+            // 1️⃣ DB first
+            val cached = trackRoomCache.getTracksForQuery(TRENDING_KEY)
+            if (cached.isNotEmpty()) {
+                Timber.d("📦 TRENDING FROM CACHE")
+                return cached
+            }
+
+            // 2️⃣ API call
+            Timber.d("🌐 TRENDING API CALL")
+            val response = api.getTrendingTracks(limit)
+
+            if (!response.isSuccessful) return emptyList()
+
+            val tracks = response.body()?.data
+                ?.map { it.toUnifiedMusic() }
+                .orEmpty()
+
+            if (tracks.isNotEmpty()) {
+                trackRoomCache.saveTracks(TRENDING_KEY, tracks)
+            }
+
+            return tracks
+        }
+
+
+
+
+        suspend fun loadNewUploads(limit: Int = 20): List<UnifiedMusic> {
+
+            // 1️⃣ DB first
+            val cached = trackRoomCache.getTracksForQuery(NEW_UPLOADS_KEY)
+            if (cached.isNotEmpty()) {
+                Timber.d("📦 NEW UPLOADS FROM CACHE")
+                return cached
+            }
+
+            // 2️⃣ API
+            Timber.d("🌐 API CALL → NEW UPLOADS")
+            val response = api.getNewUploads(limit)
+
+            if (!response.isSuccessful) return emptyList()
+
+            val tracks = response.body()?.data
+                ?.map { it.toUnifiedMusic() }
+                .orEmpty()
+
+            if (tracks.isNotEmpty()) {
+                trackRoomCache.saveTracks(NEW_UPLOADS_KEY, tracks)
+            }
+
+            return tracks
+        }
+
 
     }
 

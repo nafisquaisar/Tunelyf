@@ -28,16 +28,4 @@ object AuthModule {
     ): AuthRepository {
         return FirebaseAuthRepository(firebaseAuth, context)
     }
-
-//    @Provides
-//    @Singleton
-//    fun provideMusicRepository(api: JioSaavnApi): MusicRepository {
-//        return MusicRepository(api)
-//    }
-
-    @Provides
-    @Singleton
-    fun provideExoPlayer(@ApplicationContext context: Context): ExoPlayer {
-        return ExoPlayer.Builder(context).build()
-    }
 }

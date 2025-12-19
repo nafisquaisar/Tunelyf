@@ -68,7 +68,9 @@ class MusicViewModel @Inject constructor(
         currentUnifiedSong.postValue(playerRepository.getCurrentSong())
     }
 
+
     fun refreshNowPlayingUI() = playerRepository.refreshNowPlaying()
+
     fun setInitialIndex(index: Int, context: Context) {
         viewModelScope.launch {
             playerRepository.setInitialIndex(index)
@@ -78,7 +80,7 @@ class MusicViewModel @Inject constructor(
             val finalSong = getResolvedSong(song) ?: return@launch
 
             // ✅ Always start service to ensure notification shows up
-            startMusicService(context, finalSong)
+//            startMusicService(context, finalSong)
         }
     }
 
@@ -102,13 +104,13 @@ class MusicViewModel @Inject constructor(
             }
 
             // Ensure service is started
-            startMusicService(context, finalSong)
 
             // Safely restore player if empty
             val restored = playerRepository.restorePlayerIfNeeded()
 
             // Always toggle now
             playerRepository.playPause()
+//            startMusicService(context, finalSong)
         }
     }
 
@@ -183,34 +185,5 @@ class MusicViewModel @Inject constructor(
     fun getAudioSessionId(): Int {
         return playerRepository.getAudioSessionId()
     }
-
-
-
-
-    fun startMusicService(context: Context, song: UnifiedMusic) {
-        if (song.musicPath.isNullOrBlank()) {
-            Timber.e("❌ startMusicService aborted: musicPath is null or blank for ${song.musicTitle}")
-            return
-        }
-
-        val intent = Intent(context, MusicServiceOnline::class.java).apply {
-            putExtra("title", song.musicTitle)
-            putExtra("artist", song.musicArtist ?: "Unknown Artist")
-            putExtra("image", song.imgUri)
-            putExtra("url", song.musicPath)
-            putExtra("isLocal", song.isLocal)
-        }
-
-        Timber.d("🎧 Starting MusicServiceOnline with URL: ${song.musicPath}")
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            ContextCompat.startForegroundService(context, intent)
-        } else {
-            context.startService(intent)
-        }
-    }
-
-
-
 
 }

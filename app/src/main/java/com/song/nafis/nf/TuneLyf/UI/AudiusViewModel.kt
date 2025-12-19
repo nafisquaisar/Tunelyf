@@ -58,19 +58,25 @@ class AudiusViewModel @Inject constructor(
         onUrlReady: (String?) -> Unit
     ) {
         viewModelScope.launch {
+
             val url = repository.getStreamUrl(track)
 
-            if (!url.isNullOrBlank()) {
-                _updatedTrack.postValue(track.copy(musicPath = url))
+            if (url.isNullOrBlank()) {
+                Timber.e("❌ Play failed, retry allowed: ${track.musicId}")
+                onUrlReady(null)
+                return@launch
             }
+
+            _updatedTrack.postValue(track.copy(musicPath = url))
             onUrlReady(url)
 
-            // 🔥 NEXT SONG PREFETCH (ONLY ONE)
+            // prefetch next
             val list = (tracksResource.value as? Resource.Success)?.data ?: return@launch
             val index = list.indexOfFirst { it.musicId == track.musicId }
             repository.prefetchNext(titleKey, index, list)
         }
     }
+
 
     fun loadNextPage(query: String) {
         viewModelScope.launch {
@@ -80,4 +86,58 @@ class AudiusViewModel @Inject constructor(
             }
         }
     }
+
+
+    fun loadTrending() {
+        viewModelScope.launch {
+            _tracksResource.value = Resource.Loading
+            val result = repository.loadTrending()
+            if (result.isNotEmpty()) {
+                _tracksResource.value = Resource.Success(result)
+            } else {
+                _tracksResource.value = Resource.Error("No trending songs")
+            }
+        }
+
+    }
+
+
+    fun loadNewUploads() {
+        viewModelScope.launch {
+            _tracksResource.value = Resource.Loading
+            val result = repository.loadNewUploads()
+            if (result.isNotEmpty()) {
+                _tracksResource.value = Resource.Success(result)
+            } else {
+                _tracksResource.value = Resource.Error("No new uploads")
+            }
+        }
+    }
+
+
+
+    fun fetchSuggestions(query: String, onResult: (List<String>) -> Unit) {
+        viewModelScope.launch {
+            if (query.length < 3) {
+                onResult(emptyList())
+                return@launch
+            }
+
+            Timber.d("🔍 fetchSuggestions called with = $query")
+
+
+
+            val result = repository.search(query, limit = 7)
+            Timber.d("📦 suggestion result size = ${result.size}")
+
+            val titles = result
+                .mapNotNull { it.musicTitle }
+                .distinct()
+
+            onResult(titles)
+        }
+    }
+
+
+
 }

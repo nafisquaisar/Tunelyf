@@ -20,4 +20,19 @@ interface AudiusApi {
     @GET("audius-stream")
     suspend fun getStreamRedirect(@Query("trackId") trackId: String): Response<StreamUrlResponse>
 
+
+    // ✅ ADD THIS
+    @GET("audius-trending")
+    suspend fun getTrendingTracks(
+        @Query("limit") limit: Int = 20
+    ): Response<AudiusResponse>
+
+
+    @GET("audius-new")
+    suspend fun getNewUploads(
+        @Query("limit") limit: Int = 20
+    ): Response<AudiusResponse>
+
+
+
 }

@@ -1,7 +1,15 @@
 package com.song.nafis.nf.TuneLyf.DI
 
 import android.content.Context
+import androidx.annotation.OptIn
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.datasource.DefaultDataSource
+import androidx.media3.datasource.DefaultHttpDataSource
+import androidx.media3.datasource.cache.CacheDataSource
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import com.song.nafis.nf.TuneLyf.Api.AudiusApi
+import com.song.nafis.nf.TuneLyf.Cache.AudioCache
 import com.song.nafis.nf.TuneLyf.Repository.PlayerRepository
 import dagger.Module
 import dagger.Provides
@@ -56,6 +64,44 @@ object NetworkModule {
     fun provideAudiusApi(@Named("Audius") retrofit: Retrofit): AudiusApi {
         return retrofit.create(AudiusApi::class.java)
     }
+
+
+    @OptIn(UnstableApi::class)
+    @Provides
+    @Singleton
+    fun provideAudioCache(
+        @ApplicationContext context: Context
+    ): AudioCache {
+        return AudioCache(context)
+    }
+
+
+    @OptIn(UnstableApi::class)
+    @Provides
+    @Singleton
+    fun provideExoPlayer(
+        @ApplicationContext context: Context,
+        audioCache: AudioCache
+    ): ExoPlayer {
+
+        val httpDataSourceFactory = DefaultHttpDataSource.Factory()
+
+        val defaultDataSourceFactory =
+            DefaultDataSource.Factory(context, httpDataSourceFactory)
+
+        val cacheDataSourceFactory = CacheDataSource.Factory()
+            .setCache(audioCache.simpleCache)
+            .setUpstreamDataSourceFactory(defaultDataSourceFactory)
+            .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
+
+        val mediaSourceFactory =
+            DefaultMediaSourceFactory(cacheDataSourceFactory)
+
+        return ExoPlayer.Builder(context)
+            .setMediaSourceFactory(mediaSourceFactory)
+            .build()
+    }
+
 
 //    @Provides
 //    @Singleton

@@ -4,6 +4,7 @@
     import android.content.Intent
     import android.media.AudioManager
     import android.media.audiofx.AudioEffect
+    import android.os.Build
     import android.os.Bundle
     import android.view.View
     import android.widget.SeekBar
@@ -38,6 +39,7 @@
     import com.song.nafis.nf.TuneLyf.Entity.FavoriteEntity
     import com.song.nafis.nf.TuneLyf.Entity.PlaylistEntity
     import com.song.nafis.nf.TuneLyf.Entity.PlaylistSongEntity
+    import com.song.nafis.nf.TuneLyf.Service.MusicServiceOnline
     import com.song.nafis.nf.TuneLyf.UI.FavoriteViewModel
     import com.song.nafis.nf.TuneLyf.UI.PlaylistViewModel
     import com.song.nafis.nf.TuneLyf.UI.RecentlyPlayedViewModel
@@ -55,6 +57,10 @@
 
         private var stopMusicHandler: Handler? = null
         private var stopRunnable: Runnable? = null
+
+        private var serviceStarted = false
+
+
 
 
         override fun onCreate(savedInstanceState: Bundle?) {
@@ -133,7 +139,28 @@
                 }
             }
 
+
+            ensureService()   // ✅ yahin call
+
         }
+
+
+
+        private fun ensureService() {
+            if (serviceStarted) return
+
+            val intent = Intent(this, MusicServiceOnline::class.java)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                ContextCompat.startForegroundService(this, intent)
+            } else {
+                startService(intent)
+            }
+
+            serviceStarted = true
+        }
+
+
 
         private fun setupUI(songArtwork: String, songTitle: String) {
             binding.playMusicTitle.isSelected = true
@@ -247,6 +274,9 @@
             binding.playMusicSeek.max = 0
             binding.musicEndTime.text = "00:00"
             binding.musicTimeStart.text = "00:00"
+
+            binding.playMusicTitle.isSelected = true
+
 
             binding.playMusicSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(sb: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -363,10 +393,7 @@
                             }
                         }
                         // ✅ Compare with current playing song
-                        val currentlyPlayingId = viewModel.currentUnifiedSong.value?.musicId
-                        if (currentlyPlayingId != song.musicId) {
-                            viewModel.startMusicService(this, song)
-                        }
+
                     }
                 }
 

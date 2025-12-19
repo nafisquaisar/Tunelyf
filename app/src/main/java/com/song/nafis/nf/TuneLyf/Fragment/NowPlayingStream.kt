@@ -51,6 +51,7 @@
                 Timber.d("🎯 Title LiveData: $title")
                 binding.musicTitle.text = title
                 // 🎨 Change background dynamically on song change
+                binding.musicTitle.isSelected = true
                 animateNowPlayingBackground()
             }
 
@@ -59,7 +60,7 @@
                 Timber.d("🖼️ Artwork LiveData: $url")
                 Glide.with(this)
                     .load(url)
-                    .placeholder(R.drawable.music_img)
+                    .placeholder(R.mipmap.logo)
                     .into(binding.musicImage)
             }
 

@@ -15,18 +15,18 @@ import javax.inject.Inject
 @HiltAndroidApp
 class ApplicationClass : Application(), Configuration.Provider {
 
+    companion object {
+        var isColdStart = true
+    }
+
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
-
-    lateinit var exoPlayer: ExoPlayer
-        private set
 
     override fun onCreate() {
         super.onCreate()
 
         Timber.plant(Timber.DebugTree())
 
-        exoPlayer = ExoPlayer.Builder(this).build()
 
         FirebaseApp.initializeApp(this)
 

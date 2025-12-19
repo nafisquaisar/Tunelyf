@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.VideoView
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.airbnb.lottie.LottieDrawable
 import com.song.nafis.nf.TuneLyf.Activity.PlayMusicStreamActivity
 import com.song.nafis.nf.TuneLyf.Activity.RecentPlayList
 import com.song.nafis.nf.TuneLyf.Activity.ViewSongListActivity
@@ -20,6 +21,7 @@ import com.song.nafis.nf.TuneLyf.R
 import com.song.nafis.nf.TuneLyf.UI.ArtistViewModel
 import com.song.nafis.nf.TuneLyf.UI.AudiusViewModel
 import com.song.nafis.nf.TuneLyf.UI.HomeViewModel
+import com.song.nafis.nf.TuneLyf.UI.MusicViewModel
 import com.song.nafis.nf.TuneLyf.UI.RecentlyPlayedViewModel
 import com.song.nafis.nf.TuneLyf.adapter.HomeItemAdapter
 import com.song.nafis.nf.TuneLyf.adapter.UnifiedMusicAdapter
@@ -29,15 +31,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
-    private val artistViewModel: ArtistViewModel by viewModels()
-    private val audiusViewModel: AudiusViewModel by viewModels()
     private val recentlyPlayedViewModel: RecentlyPlayedViewModel by viewModels()
-
-    private val homeViewModel: HomeViewModel by viewModels()
-
-
-
     private lateinit var recentAdapter: UnifiedMusicAdapter
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,7 +49,7 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         binding= FragmentHomeBinding.inflate(inflater,container,false)
 
-        bannerSet()
+//        bannerSet()
         adapterSet()
         clickListener()
         return binding.root
@@ -64,6 +60,12 @@ class HomeFragment : Fragment() {
         binding.clickMoreRecent.setOnClickListener {
             startActivity(Intent(requireContext(), RecentPlayList::class.java))
         }
+
+        binding.bannerAnimation.apply {
+            playAnimation()
+            repeatCount = LottieDrawable.INFINITE
+        }
+
     }
 
     private fun adapterSet() {
@@ -126,22 +128,31 @@ class HomeFragment : Fragment() {
         artistAdapter.submitList(Itemlist.artistList)
     }
 
-    private fun bannerSet() {
-        val videoView = binding.bannerVideo
-        val videoUri = Uri.parse("android.resource://${requireContext().packageName}/raw/homebanner3")
-        videoView.setBackgroundColor(Color.WHITE)
-
-        videoView.setVideoURI(videoUri)
-        videoView.setOnPreparedListener { mp ->
-            mp.isLooping = true
-            mp.setVolume(0f, 0f)
-
-            // Clear background once first frame is rendered
-            videoView.setBackgroundColor(Color.TRANSPARENT)
-
-            videoView.start()
-        }
-    }
+//    private fun bannerSet() {
+//        val videoView = binding.bannerVideo
+//        val videoUri = Uri.parse("android.resource://${requireContext().packageName}/raw/homebanner3")
+//        videoView.setBackgroundColor(Color.WHITE)
+//
+//        videoView.setVideoURI(videoUri)
+//        videoView.setOnPreparedListener { mp ->
+//            mp.isLooping = true
+//            mp.setVolume(0f, 0f)
+//
+//            if (android.os.Build.VERSION.SDK_INT >= 26) {
+//                mp.setAudioAttributes(
+//                    android.media.AudioAttributes.Builder()
+//                        .setUsage(android.media.AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+//                        .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION)
+//                        .build()
+//                )
+//            }
+//
+//            // Clear background once first frame is rendered
+//            videoView.setBackgroundColor(Color.TRANSPARENT)
+//
+//            videoView.start()
+//        }
+//    }
 
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -153,7 +164,7 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        binding.bannerVideo.start()
+
     }
 
 

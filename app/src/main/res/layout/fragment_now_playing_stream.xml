@@ -29,11 +29,11 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:ellipsize="marquee"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:marqueeRepeatLimit="marquee_forever"
         android:singleLine="true"
         android:scrollHorizontally="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:text="Song Title"
         android:textStyle="bold"
         android:textColor="@color/alwayswhite"
@@ -45,6 +45,7 @@
         app:layout_constraintEnd_toStartOf="@id/prev_btn_container"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
+
 
     <!-- Previous Button -->
     <com.google.android.material.card.MaterialCardView
