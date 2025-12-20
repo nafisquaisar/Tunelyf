@@ -52,7 +52,7 @@
     import java.io.File
 
     @AndroidEntryPoint
-    class PlayMusicStreamActivity : AppCompatActivity() {
+    class PlayMusicStreamActivity : BaseActivity() {
 
         private lateinit var binding: ActivityPlayMusicStreamBinding
         // With this:
@@ -69,11 +69,10 @@
             super.onCreate(savedInstanceState)
             binding = ActivityPlayMusicStreamBinding.inflate(layoutInflater)
             setContentView(binding.root)
-            ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
-                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-                insets
-            }
+
+            applyStatusBarScrim(binding.statusBarScrim)
+
+
             val songTitle = intent.getStringExtra("SONG_TITLE") ?: "Unknown"
             val songArtwork = intent.getStringExtra("SONG_TRACK") ?: "Unknown"
 

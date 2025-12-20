@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.song.nafis.nf.TuneLyf.Activity.BaseActivity
 import com.song.nafis.nf.TuneLyf.Activity.PlayMusicStreamActivity
 import com.song.nafis.nf.TuneLyf.Model.UnifiedMusic
 import com.song.nafis.nf.TuneLyf.Model.toJamendoTrack
@@ -22,7 +23,7 @@ import com.song.nafis.nf.TuneLyf.databinding.ActivityFavoriteMusicBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FavoriteMusic : AppCompatActivity() {
+class FavoriteMusic : BaseActivity() {
 
     private lateinit var binding: ActivityFavoriteMusicBinding
     private lateinit var adapter: SongAdapter
@@ -35,14 +36,13 @@ class FavoriteMusic : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.favRoot) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        setSupportActionBar(binding.appbar.toolbar)
+        binding.appbar.toolbar.setNavigationOnClickListener { onBackPressed() }
 
-        setSupportActionBar(binding.playlisttoolbar)
-        binding.playlisttoolbar.setNavigationOnClickListener { onBackPressed() }
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            title = "Favorite"
+        }
 
         setupObserver()
         setupRecyclerView()

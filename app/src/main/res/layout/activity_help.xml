@@ -9,22 +9,24 @@
     android:background="@color/activitybg"
     tools:context=".Activity.Help">
 
-    <!-- Toolbar -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/helpToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/toolbarbg"
-        app:title="Help &amp; Support"
-        app:titleTextColor="@color/alwayswhite"
-        app:navigationIcon="@drawable/back_arrow" />
+
+
+    <include
+        android:id="@+id/appbar"
+        layout="@layout/layout_app_bar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
 
     <!-- Scrollable Content -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:scrollbars="none"
         android:padding="16dp">
+
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -9,7 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.song.nafis.nf.TuneLyf.databinding.ActivityFrontBinding
 
-class FrontActivity : AppCompatActivity() {
+class FrontActivity : BaseActivity() {
 
     private lateinit var binding: ActivityFrontBinding
 
@@ -20,7 +20,7 @@ class FrontActivity : AppCompatActivity() {
         binding = ActivityFrontBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root) // ✅ Use the inflated view
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets

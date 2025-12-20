@@ -1,0 +1,17 @@
+<com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/appBar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true"
+    android:background="@color/icon_color">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/toolbarbg"
+        app:titleTextColor="@color/alwayswhite"
+        app:popupTheme="@style/ToolbarPopupTheme"
+        app:theme="@style/AppTheme.Toolbar"/>
+</com.google.android.material.appbar.AppBarLayout>

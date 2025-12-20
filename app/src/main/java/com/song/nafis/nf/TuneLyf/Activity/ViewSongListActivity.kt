@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
-class ViewSongListActivity : AppCompatActivity() {
+class ViewSongListActivity : BaseActivity() {
 
     private val audiusViewModel: AudiusViewModel by viewModels()
 
@@ -32,6 +32,7 @@ class ViewSongListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityViewSongListBinding
     private lateinit var songAdapter: SongAdapter
+
 
     private var apiInProgress = false
 
@@ -43,13 +44,14 @@ class ViewSongListActivity : AppCompatActivity() {
         binding = ActivityViewSongListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         // 🔥 1️⃣ FIRST: extract query
         val searchQuery = intent.getStringExtra("search_query")
         val artistName = intent.getStringExtra("artist_name")
         finalQuery = (searchQuery ?: artistName).orEmpty()
 
         val toolbarTitle = artistName ?: searchQuery ?: "Songs"
-        binding.hometoolbar.title = toolbarTitle
+        binding.appbar.toolbar.title = toolbarTitle
 
 
         binding.swipeRefresh.setOnRefreshListener {
@@ -77,9 +79,9 @@ class ViewSongListActivity : AppCompatActivity() {
     }
 
     private fun setupToolbar() {
-        binding.hometoolbar.setNavigationIcon(R.drawable.back_arrow)
-        binding.hometoolbar.setTitleTextColor(resources.getColor(R.color.alwayswhite))
-        binding.hometoolbar.setNavigationOnClickListener { onBackPressed() }
+        binding.appbar.toolbar.setNavigationIcon(R.drawable.back_arrow)
+        binding.appbar.toolbar.setTitleTextColor(resources.getColor(R.color.alwayswhite))
+        binding.appbar.toolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
     private fun setupRecyclerView() {

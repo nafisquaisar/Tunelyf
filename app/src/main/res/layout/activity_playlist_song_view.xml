@@ -9,20 +9,15 @@
     android:background="@color/activitybg"
     tools:context=".Activity.PlaylistSongView">
 
+
+
     <!-- Toolbar -->
-    <androidx.appcompat.widget.Toolbar
+    <include
         android:id="@+id/playlisttoolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/toolbarbg"
-        android:elevation="4dp"
-        app:navigationIcon="@drawable/back_arrow"
-        app:menu="@menu/more_option"
-        app:titleTextColor="@color/alwayswhite"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        layout="@layout/layout_app_bar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <!-- Playlist Header -->
     <LinearLayout

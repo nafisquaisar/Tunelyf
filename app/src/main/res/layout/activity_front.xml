@@ -8,6 +8,7 @@
     android:background="@drawable/frontbg"
     tools:context=".Activity.FrontActivity">
 
+
     <!-- Top Title -->
     <TextView
         android:id="@+id/titleText"

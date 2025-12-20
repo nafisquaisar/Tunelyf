@@ -29,7 +29,7 @@
     import dagger.hilt.android.AndroidEntryPoint
 
     @AndroidEntryPoint
-    class PlaylistSongView : AppCompatActivity() {
+    class PlaylistSongView : BaseActivity() {
 
         private lateinit var binding: ActivityPlaylistSongViewBinding
         private lateinit var adapter: SongAdapter
@@ -56,10 +56,12 @@
             super.onCreate(savedInstanceState)
             binding = ActivityPlaylistSongViewBinding.inflate(layoutInflater)
             setContentView(binding.root)
-            ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
-                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-                insets
+
+            setSupportActionBar(binding.playlisttoolbar.toolbar)
+            binding.playlisttoolbar.toolbar.setNavigationOnClickListener { onBackPressed() }
+            supportActionBar?.apply {
+                setDisplayHomeAsUpEnabled(true)
+                title = "Play List"
             }
             // Receive intent data
             playlistName = intent.getStringExtra("playlist_name") ?: "My Playlist"
@@ -113,16 +115,16 @@
 
 
         private fun setupToolbar() {
-            setSupportActionBar(binding.playlisttoolbar)
-            binding.playlisttoolbar.setNavigationOnClickListener {
+            setSupportActionBar(binding.playlisttoolbar.toolbar)
+            binding.playlisttoolbar.toolbar.setNavigationOnClickListener {
                 if (isInSelectionMode) {
                     // Exit selection mode
                     adapter.enableSelectionMode(false)
                     isInSelectionMode = false
 
                     // Reset toolbar
-                    binding.playlisttoolbar.menu.clear()
-                    onCreateOptionsMenu(binding.playlisttoolbar.menu)  // Inflate original menu again
+                    binding.playlisttoolbar.toolbar.menu.clear()
+                    onCreateOptionsMenu(binding.playlisttoolbar.toolbar.menu)  // Inflate original menu again
                     setupToolbar()
                 } else {
                     onBackPressed()
@@ -212,12 +214,12 @@
                 adapter.enableSelectionMode(true)
                 Toast.makeText(this, "Tap on songs to select. Click again to delete.", Toast.LENGTH_SHORT).show()
                 isInSelectionMode = true
-                binding.playlisttoolbar.menu.clear()
-                binding.playlisttoolbar.inflateMenu(R.menu.menu_selection)
-                val deleteIcon = binding.playlisttoolbar.menu.findItem(R.id.deleteSelected)?.icon
+                binding.playlisttoolbar.toolbar.menu.clear()
+                binding.playlisttoolbar.toolbar.inflateMenu(R.menu.menu_selection)
+                val deleteIcon = binding.playlisttoolbar.toolbar.menu.findItem(R.id.deleteSelected)?.icon
                 deleteIcon?.setTint(ContextCompat.getColor(this, android.R.color.white))
 
-                binding.playlisttoolbar.setOnMenuItemClickListener { item ->
+                binding.playlisttoolbar.toolbar.setOnMenuItemClickListener { item ->
                     when (item.itemId) {
                         R.id.deleteSelected -> {
                             val selectedSongs = adapter.getSelectedSongs()
@@ -314,8 +316,8 @@
                 isInSelectionMode = false
 
                 // Reset toolbar
-                binding.playlisttoolbar.menu.clear()
-                onCreateOptionsMenu(binding.playlisttoolbar.menu)  // Inflate original menu again
+                binding.playlisttoolbar.toolbar.menu.clear()
+                onCreateOptionsMenu(binding.playlisttoolbar.toolbar.menu)  // Inflate original menu again
                 setupToolbar()
             } else {
                 super.onBackPressed()

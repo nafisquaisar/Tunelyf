@@ -8,16 +8,10 @@
     android:background="@color/activitybg"
     tools:context=".Activity.ViewSongListActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/hometoolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/toolbarbg"
-        app:layout_collapseMode="pin"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:titleTextColor="@color/alwayswhite" />
+
+    <include
+        android:id="@+id/appbar"
+        layout="@layout/layout_app_bar"/>
 
     <TextView
         android:id="@+id/textView2"
@@ -29,7 +23,7 @@
         android:textColor="@color/black"
         android:textSize="@dimen/_18sdp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/hometoolbar"
+        app:layout_constraintTop_toBottomOf="@id/appbar"
         app:layout_constraintStart_toStartOf="parent" />
 
     <!-- 🔹 SWIPE + LIST -->

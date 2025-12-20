@@ -21,6 +21,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.song.nafis.nf.TuneLyf.Activity.BaseActivity
 import com.song.nafis.nf.TuneLyf.Activity.PlayMusicStreamActivity
 import com.song.nafis.nf.TuneLyf.Model.MusicDetail
 import com.song.nafis.nf.TuneLyf.Model.toUnifiedMusic
@@ -30,7 +31,7 @@ import com.song.nafis.nf.TuneLyf.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var toolbar: Toolbar
@@ -56,11 +57,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        applyStatusBarScrim(binding.statusBarScrim)
+
         
 
         toolbar = binding.hometoolbar

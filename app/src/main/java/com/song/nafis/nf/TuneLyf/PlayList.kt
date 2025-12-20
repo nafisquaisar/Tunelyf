@@ -11,10 +11,11 @@ import com.song.nafis.nf.TuneLyf.Model.Playlistdata
 import com.song.nafis.nf.TuneLyf.databinding.ActivityPlayListBinding
 import com.song.nafis.nf.TuneLyf.databinding.PlaylistCreateDailogBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.song.nafis.nf.TuneLyf.Activity.BaseActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PlayList : AppCompatActivity() {
+class PlayList : BaseActivity() {
 
     private lateinit var binding: ActivityPlayListBinding
     private lateinit var playAdapter: PlaylistAdapter
@@ -27,8 +28,13 @@ class PlayList : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayListBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
-        setSupportActionBar(binding.playlisttoolbar)
-        binding.playlisttoolbar.setNavigationOnClickListener { onBackPressed() }
+
+        setSupportActionBar(binding.playlisttoolbar.toolbar)
+        binding.playlisttoolbar.toolbar.setNavigationOnClickListener { onBackPressed() }
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            title = "Play List"
+        }
         setAdapter()
         binding.createPlaylistbtn.setOnClickListener { showCreatePlaylistDialog() }
 

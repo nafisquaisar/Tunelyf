@@ -23,7 +23,7 @@ import com.song.nafis.nf.TuneLyf.databinding.ActivityRecentPlayListBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class RecentPlayList : AppCompatActivity() {
+class RecentPlayList : BaseActivity() {
 
     private lateinit var binding: ActivityRecentPlayListBinding
     private lateinit var adapter: UnifiedMusicAdapter
@@ -34,23 +34,23 @@ class RecentPlayList : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivityRecentPlayListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-        val navIcon = binding.recentToolbar.navigationIcon
+
+
+        val navIcon = binding.appbar.toolbar.navigationIcon
         navIcon?.setTint(ContextCompat.getColor(this, android.R.color.white))
-        binding.recentToolbar.navigationIcon = navIcon
+        binding.appbar.toolbar.navigationIcon = navIcon
 
 
-        setSupportActionBar(binding.recentToolbar)
-        binding.recentToolbar.setNavigationOnClickListener { finish() }
-        supportActionBar?.title = "Recent Play"
+        setSupportActionBar(binding.appbar.toolbar)
+        binding.appbar.toolbar.setNavigationOnClickListener { finish() }
+
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            title = "Recent Play"
+        }
 
         setupRecyclerView()
         observeRecentlyPlayed()

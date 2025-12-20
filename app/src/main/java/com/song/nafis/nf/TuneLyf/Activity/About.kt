@@ -10,21 +10,22 @@ import androidx.core.view.WindowInsetsCompat
 import com.song.nafis.nf.TuneLyf.R
 import com.song.nafis.nf.TuneLyf.databinding.ActivityAboutBinding
 
-class About : AppCompatActivity() {
+class About : BaseActivity() {
     private lateinit var binding: ActivityAboutBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivityAboutBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+
+        setSupportActionBar(binding.appbar.toolbar)
+
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            title = "About"
         }
 
-        setSupportActionBar(binding.abouttoolbar)
-        binding.abouttoolbar.setNavigationOnClickListener { onBackPressed() }
+        binding.appbar.toolbar.setNavigationOnClickListener { onBackPressed() }
 
         val versionName = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             packageManager.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0)).versionName

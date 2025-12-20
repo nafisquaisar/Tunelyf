@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.song.nafis.nf.TuneLyf.Activity.BaseActivity
 import com.song.nafis.nf.TuneLyf.Entity.PlaylistSongEntity
 import com.song.nafis.nf.TuneLyf.Model.UnifiedMusic
 import com.song.nafis.nf.TuneLyf.UI.PlaylistViewModel
@@ -25,25 +27,42 @@ import com.song.nafis.nf.TuneLyf.databinding.ActivityAddSongPlaylistBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class  AddSongPlaylistActivity  : AppCompatActivity() {
+class  AddSongPlaylistActivity  : BaseActivity() {
 
     private lateinit var binding: ActivityAddSongPlaylistBinding
     private lateinit var adapter: UnifiedMusicAdapter
     private var fullUnifiedList = arrayListOf<UnifiedMusic>()
     private lateinit var playlistViewModel: PlaylistViewModel
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.playlist_menu, menu)
+
+        val searchItem = menu.findItem(R.id.search_playlist)
+        val searchView = searchItem.actionView as SearchView
+
+        setupSearch(searchView)
+        return true
+    }
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddSongPlaylistBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.addSong) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        setSupportActionBar(binding.playlisttoolbar.toolbar)
+        binding.playlisttoolbar.toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
         }
 
-        setSupportActionBar(binding.playlisttoolbar)
-        binding.playlisttoolbar.setNavigationOnClickListener { onBackPressed() }
+
+
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            title = "Add Song In Playlist"
+        }
+
         playlistViewModel = ViewModelProvider(this)[PlaylistViewModel::class.java]
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_AUDIO)
@@ -54,7 +73,6 @@ class  AddSongPlaylistActivity  : AppCompatActivity() {
 
 
         setupAdapter()
-        setupSearch()
 
         binding.doneaddsong.setOnClickListener {
             val selectedSongs = adapter.getSelectedSongs()
@@ -117,26 +135,41 @@ class  AddSongPlaylistActivity  : AppCompatActivity() {
         toggleEmptyStateAndDoneButton(fullUnifiedList.isEmpty())
     }
 
-    private fun setupSearch() {
+    private fun setupSearch(searchView: SearchView) {
 
-        val searchAutoComplete = binding.searchPlaylistMusic.findViewById<android.widget.AutoCompleteTextView>(
-            androidx.appcompat.R.id.search_src_text
+        val searchAutoComplete =
+            searchView.findViewById<android.widget.AutoCompleteTextView>(
+                androidx.appcompat.R.id.search_src_text
+            )
+
+        // Text colors
+        searchAutoComplete.setTextColor(
+            ContextCompat.getColor(this, R.color.alwayswhite)
         )
-        searchAutoComplete.setHintTextColor(ContextCompat.getColor(this, R.color.alwayswhite))
-        searchAutoComplete.setTextColor(ContextCompat.getColor(this, R.color.alwayswhite))
+        searchAutoComplete.setHintTextColor(
+            ContextCompat.getColor(this, R.color.alwayswhite)
+        )
 
+        searchView.queryHint = "Search Music"
 
-        binding.searchPlaylistMusic.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean = true
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return true
+            }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                val query = newText?.lowercase() ?: ""
-                val filtered = fullUnifiedList.filter {
-                    it.musicTitle.lowercase().contains(query)
-                }
-                adapter.updateSongs(filtered)
+                val query = newText?.trim()?.lowercase() ?: ""
 
-                // 🔥 Show/hide views based on filtered list
+                val filtered = if (query.isEmpty()) {
+                    fullUnifiedList
+                } else {
+                    fullUnifiedList.filter {
+                        it.musicTitle.lowercase().contains(query)
+                    }
+                }
+
+                adapter.updateSongs(filtered)
                 toggleEmptyStateAndDoneButton(filtered.isEmpty())
                 return true
             }

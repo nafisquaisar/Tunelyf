@@ -60,12 +60,20 @@ class HomeFragment : Fragment() {
         binding.clickMoreRecent.setOnClickListener {
             startActivity(Intent(requireContext(), RecentPlayList::class.java))
         }
+        // 1️⃣ Image dikhao
+        binding.bannerPlaceholder.visibility = View.GONE
+        binding.bannerAnimation.visibility = View.VISIBLE
 
-        binding.bannerAnimation.post {
+        // 2️⃣ Infinite loop set karo
+        binding.bannerAnimation.repeatCount = LottieDrawable.INFINITE
+        binding.bannerAnimation.repeatMode = LottieDrawable.RESTART
+
+        // 3️⃣ Thoda delay ke baad start karo (UI stable hone ke liye)
+        binding.bannerAnimation.postDelayed({
             binding.bannerPlaceholder.visibility = View.GONE
-            binding.bannerAnimation.visibility = View.VISIBLE
             binding.bannerAnimation.playAnimation()
-        }
+        }, 800)
+
 
 
 

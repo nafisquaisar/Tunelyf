@@ -350,9 +350,10 @@
         android:tag="content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="@color/icon_color">
 
-        <!-- Top Toolbar -->
+
+<!--        &lt;!&ndash; Top Toolbar &ndash;&gt;-->
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/hometoolbar"
                 android:layout_width="match_parent"
@@ -363,6 +364,15 @@
                 app:theme="@style/AppTheme.Toolbar"
                 app:titleTextColor="@color/alwayswhite"
                 app:layout_collapseMode="pin" />
+
+
+<!--        <include-->
+<!--            android:id="@+id/appbar"-->
+<!--            layout="@layout/layout_app_bar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentTop="true" />-->
+
 
         <FrameLayout
             android:id="@+id/container"

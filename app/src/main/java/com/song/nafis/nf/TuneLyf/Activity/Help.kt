@@ -9,22 +9,22 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.song.nafis.nf.TuneLyf.databinding.ActivityHelpBinding
 
-class Help : AppCompatActivity() {
+class Help : BaseActivity() {
     private lateinit var binding: ActivityHelpBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-
         binding = ActivityHelpBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(binding.helpToolbar)
-        binding.helpToolbar.setNavigationOnClickListener { onBackPressed() }
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.helpRoot) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+
+        setSupportActionBar(binding.appbar.toolbar)
+        binding.appbar.toolbar.setNavigationOnClickListener { onBackPressed() }
+
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            title = "Help & Support"
         }
 
         // 📧 Email click to open email client

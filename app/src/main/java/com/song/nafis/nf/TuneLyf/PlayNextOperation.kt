@@ -12,6 +12,12 @@ class PlayNextOperation : AppCompatActivity() {
         binding= ActivityPlayNextOperationBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
-        binding.playlisttoolbar.setNavigationOnClickListener { onBackPressed() }
+
+        setSupportActionBar(binding.playlisttoolbar.toolbar)
+        binding.playlisttoolbar.toolbar.setNavigationOnClickListener { onBackPressed() }
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            title = "Play Next Operation"
+        }
     }
 }

@@ -10,6 +10,7 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -29,13 +30,9 @@ import kotlin.getValue
 
 
 @AndroidEntryPoint
-class AppSetting : AppCompatActivity() {
+class AppSetting : BaseActivity() {
     private lateinit var binding: ActivityAppSettingBinding
     private lateinit var sharedPreferences: SharedPreferences
-    private val musicViewModel: MusicViewModel by viewModels()
-    private val viewModel: AuthViewModel by viewModels()
-
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,11 +40,14 @@ class AppSetting : AppCompatActivity() {
         binding = ActivityAppSettingBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.settingroot) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        setSupportActionBar(binding.appbar.toolbar)
+
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            title = "Settings"
         }
+
 
         // Load theme before setContentView
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
@@ -58,7 +58,7 @@ class AppSetting : AppCompatActivity() {
         }
 
         // Toolbar back button
-        binding.settingtoolbar.setNavigationOnClickListener { onBackPressed() }
+        binding.appbar.toolbar.setNavigationOnClickListener { onBackPressed() }
         val currentQuality = sharedPreferences.getString("audio_quality", "High")
         findViewById<TextView>(R.id.audioQualityValue).text = currentQuality
         // Version display

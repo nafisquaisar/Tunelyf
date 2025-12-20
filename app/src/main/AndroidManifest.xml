@@ -23,6 +23,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BlissfulVibes"
         tools:targetApi="31">
+
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="remove" />
+
+        <activity
+            android:name=".Activity.BaseActivity"
+            android:exported="false" />
         <activity
             android:name=".Activity.RecentPlayList"
             android:exported="false" />
@@ -96,26 +107,23 @@
         <service
             android:name=".Service.MusicServiceOnline"
             android:exported="false"
-            android:stopWithTask="true"
             android:foregroundServiceType="mediaPlayback"
-        android:permission="android.permission.BIND_MEDIA_SESSION_SERVICE">
-        <intent-filter>
-            <action android:name="android.media.browse.MediaBrowserService" />
-        </intent-filter>
-    </service>
-
+            android:permission="android.permission.BIND_MEDIA_SESSION_SERVICE"
+            android:stopWithTask="true">
+            <intent-filter>
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
 
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.song.nafis.nf.TuneLyf.provider"
             android:exported="false"
             android:grantUriPermissions="true">
-
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>

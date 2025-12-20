@@ -39,7 +39,9 @@
     import nl.psdcompany.duonavigationdrawer.widgets.DuoDrawerToggle
     import timber.log.Timber
     import android.Manifest
+    import android.graphics.Color
     import android.widget.ImageButton
+    import androidx.activity.enableEdgeToEdge
     import androidx.cardview.widget.CardView
     import androidx.core.view.ViewCompat
     import androidx.core.view.WindowCompat
@@ -64,24 +66,23 @@
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
+            enableEdgeToEdge()
             binding= ActivityDashBoardBinding.inflate(LayoutInflater.from(this))
             setContentView(binding.root)
-            WindowCompat.setDecorFitsSystemWindows(window, false)
 
-            val originalPaddingTop = binding.homecontent.paddingTop
-            WindowCompat.setDecorFitsSystemWindows(window, true)
-            window.statusBarColor = ContextCompat.getColor(this, R.color.icon_color)
 
-            ViewCompat.setOnApplyWindowInsetsListener(binding.homecontent) { view, insets ->
+
+            ViewCompat.setOnApplyWindowInsetsListener(binding.homecontent) { v, insets ->
                 val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                view.setPadding(
-                    view.paddingLeft,
-                    systemBars.top + originalPaddingTop,
-                    view.paddingRight,
-                    view.paddingBottom
-                )
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
                 insets
             }
+
+            val controller = WindowInsetsControllerCompat(window, window.decorView)
+                controller.isAppearanceLightStatusBars = false
+
+
+
 
 
             toolbar = binding.hometoolbar
