@@ -1,33 +1,99 @@
-# Music Player App 🎵
+# 🎵 TuneLyf – Music Streaming App
 
-Welcome to the Music Player App! This Android application provides a seamless and user-friendly experience for playing and managing your favorite music tracks. With a sleek design and robust features, it is the perfect companion for music lovers.
+TuneLyf is a modern Android music streaming application designed for smooth audio playback, playlist management, and background listening.  
+The app supports both online streaming and local playback, focusing on performance, clean architecture, and a user-friendly experience.
 
-## Features 🚀
+---
 
-- **Intuitive UI/UX**: A clean, modern, and easy-to-navigate interface that makes browsing and playing music a joy.
-- **Playlists**: Create and manage your own playlists to organize your music just the way you like it.
-- **Notification Controls**: Easily control playback from the notification bar, without having to open the app.
-- **Offline Playback**: Enjoy your music even when you're offline.
-- **Shuffle and Repeat**: Customize your listening experience with shuffle and repeat modes.
-- **Background Play**: Keep your music playing in the background while you use other apps.
+## 📲 Available on Google Play
 
-## Technologies Used 💻
+Download the live production app from the Play Store:  
+👉 https://play.google.com/store/apps/details?id=com.song.nafis.nf.TuneLyf
 
-- **Kotlin**: Core development languages for the Android app.
-- **Android Studio**: The primary IDE used for development.
-- **SharedPreferences**: For storing user settings and preferences.
-- **MediaPlayer API**: For handling audio playback.
+---
+
+## 📱 App Screenshots
 
 <p align="center">
-    <img src="https://github.com/user-attachments/assets/7ec8c9df-47c6-47a1-be40-e6a7d8c999cb" alt="Description of image" width="150" height="300" style="margin-right: 20px;">
-    <img src="https://github.com/user-attachments/assets/3c75b1a7-21f5-4ba0-ad19-714a1bc28d94" alt="Description of image" width="150" height="300" style="margin-right: 20px;">
-    <img src="https://github.com/user-attachments/assets/59bb1a8a-d548-416b-b7ee-bcd38927a287" alt="Description of image" width="150" height="300" style="margin-right: 20px;">
+  <img src="https://github.com/user-attachments/assets/6b4c6d38-03ec-456e-b403-ed3aedc71c86" width="180"/>
+  <img src="https://github.com/user-attachments/assets/6fce7792-a20c-4d02-a48f-ea307b33c436" width="180"/>
+  <img src="https://github.com/user-attachments/assets/552e4a68-3e8e-4075-8d87-b18063647d30" width="180"/>
 </p>
 
 <p align="center">
-    <img src="https://github.com/user-attachments/assets/4193d463-a045-4905-8a0e-465aaad64587" alt="Description of image" width="150" height="300" style="margin-right: 20px;">
-    <img src="https://github.com/user-attachments/assets/641eeb1f-05d2-4b1c-9b1d-e096dc271780" alt="Description of image" width="150" height="300" style="margin-right: 20px;">
-    <img src="https://github.com/user-attachments/assets/bd2169bc-7b18-4922-bfca-07e80846e0ad" alt="Description of image" width="150" height="300" style="margin-right: 20px;">
+  <img src="https://github.com/user-attachments/assets/a4b6e64f-5bb0-4427-bdbb-439a5f2d058c" width="180"/>
+  <img src="https://github.com/user-attachments/assets/6b72a5db-171d-4774-918b-fd778d320ecc" width="180"/>
+  <img src="https://github.com/user-attachments/assets/dafd8057-b4b3-400e-bd64-b08a2347f478" width="180"/>
 </p>
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/c572fc9a-460c-4ad0-ac66-0f7a2fae2615" width="180"/>
+  <img src="https://github.com/user-attachments/assets/c629bebc-1a2d-4cea-98f8-8f72af059d29" width="180"/>
+  <img src="https://github.com/user-attachments/assets/b8e85fdd-c955-41e7-b7a7-dfed90211614" width="180"/>
+</p>
+
+---
+
+## 🎥 App Demo Video
+
+https://github.com/user-attachments/assets/9f97f148-c505-415f-8328-a0fb084856ac
+
+---
+
+## 🚀 Features
+
+- Online music streaming and local audio playback
+- Background playback using foreground service
+- Media controls via notification (play, pause, next, previous)
+- Create and manage playlists
+- Shuffle and repeat playback modes
+- Smooth UI with real-time playback state updates
+
+---
+
+## 🛠 Tech Stack
+
+- **Language**: Kotlin
+- **Architecture**: MVVM
+- **Audio Engine**: ExoPlayer
+- **Networking**: Retrofit (REST APIs)
+- **Database**: Room Database
+- **Authentication**: Firebase (Google & Email login)
+- **UI**: XML (Material Design)
+
+---
+
+## 🧠 Why I Built This App
+
+I built TuneLyf to gain hands-on experience in developing a complete Android media application using modern tools and architecture.  
+This project helped me understand real-world challenges such as background playback, service lifecycle management, notification synchronization, and scalable app architecture.
+
+Publishing the app on the Play Store gave me practical exposure to production deployment and app maintenance.
+
+---
+
+## 🎶 Playlists
+
+- Users can create and manage custom playlists
+- Playlists support both online streaming and local audio files
+- Playlist data is persisted using Room Database
+- Smooth switching between tracks and playlists
+
+---
+## 🔒 License & Usage
+
+This project is protected by a restricted license.
+Source code is provided for educational purposes only.
+Commercial use or redistribution is not allowed without permission.
+
+Copyright (c) 2025 Nafis Quaisar
+
+Permission is granted to view and study this source code for
+educational and personal learning purposes only.
+
+Commercial use, redistribution, modification, or publishing
+of this project or its parts is strictly prohibited without
+prior written permission from the author.
+
 
 
