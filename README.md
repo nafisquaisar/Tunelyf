@@ -36,10 +36,10 @@ Download the live production app from the Play Store:
 
 ## 🎥 App Demo Video
 
+## 🎥 App Demo Video
+
 <p align="center">
-  <a href="https://youtu.be/YOUR_VIDEO_LINK">
-    <img src="https://img.youtube.com/vi/YOUR_VIDEO_ID/0.jpg" width="320"/>
-  </a>
+  https://github.com/user-attachments/assets/9f97f148-c505-415f-8328-a0fb084856ac
 </p>
 
 ---
